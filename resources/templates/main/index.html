@@ -1,0 +1,237 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title th:text="|${shop.shopName} |">갤럭시아</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+
+    <style>
+        #brandSearchDiv{
+            display: none;
+        }
+        #brandSearchBtn{
+            display: inline !important;
+        }
+    </style>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="index page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+
+        <th:block th:each="ms, i : ${mainSection}">
+            <section class="padding-section padding-none" th:if="${ms.msType.name()} == '배너'">
+                <th:block th:replace="/design/bannerGroup.html" ></th:block>
+            </section>
+
+            <section class="padding-section padding-none" th:if="${ms.msType.name()} == '대분류아이콘'">
+                <th:block th:replace="/product/categorySearch.html"></th:block>
+                <th:block th:replace="/product/brandSearch.html"></th:block>
+            </section>
+
+            <section class="padding-section" th:if="${ms.msType.name()} == '이벤트'">
+                <th:block th:replace="/design/eventGroup.html"></th:block>
+            </section>
+
+            <section class="padding-section" th:if="${ms.msType.name()} == '상품'">
+                <th:block th:replace="/design/productGroup.html"></th:block>
+            </section>
+        </th:block>
+    </div>
+
+    <!-- MAIN POPUP -->
+    <div class="display-flex mainPopup">
+        <th:block th:if="${not popupGroup.isEmpty }" th:each="popup, i : ${popupGroup}">
+            <div class="main-popup-wrap" th:if="${#temporals.format(popup.popEnd, 'yyyyMMdd') > #calendars.format(#calendars.createNow(), 'yyyyMMdd')}" style="display: none;">
+                    <div class="mainPopup_cont width-100"  th:each="popImage, j : ${popup.popupImages}">
+                        <a th:href="${popImage.popiUrl}"><img th:src="${popImage.popiImage}" alt="" style="width: 300px;"/></a>
+                    </div>
+                <input type="hidden" th:name="pop_idx" th:value="${popup.popIdx}">
+                <div class="mainPopup_btn full">
+                    <div class="close_btn">
+                        <div class="chk-styled">
+                            <label class="custom-chk-wrap width-100 display-block no-margin">
+                                오늘 그만보기
+                                <input type="checkbox" class="custom-input" name="closeToday">
+                                <span class="custom-checkmark chk_agr text-sm-medium font-weight-500"></span>
+                            </label>
+                        </div>
+                        <button type="button" onclick="closePopup(this)" class="btn text-transform-uppercase">close</button>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+    <!-- // MAIN POPUP -->
+
+    <th:block th:replace="/part/footer.html"></th:block>
+
+    <th:block th:replace="/part/loading.html"></th:block>
+
+    <th:block th:replace="/part/js.html"></th:block>
+
+<script th:inline="javascript">
+    function loadProductGroup(pgIdx,cfIdx){
+
+    }
+
+    function clickBrandSearch(){
+        //브랜드 검색 조건
+        var param='?cfIdx='+$($('.cfLi.active')[0]).attr('cf_idx');
+
+        var brandIdxs=$('.brandSearchLi.active');
+        for(var b=0;b<brandIdxs.length;b++){
+            param+='&b_idx='+$(brandIdxs[b]).attr('b_idx');
+        }
+
+        //가격 설정
+        var priceLi=$('.priceLi.active')[0];
+        param+='&min='+$(priceLi).attr('min');
+        param+='&max='+$(priceLi).attr('max');
+
+        location.href=[[@{/product/list}]]+param;
+    }
+
+
+    function loadProductGroup(pgIdx, cf_idx, display){
+        var cfIdx = cf_idx;
+        if(cfIdx == -1){
+            cfIdx = $("#prodTab_"+pgIdx).val();
+            if(cfIdx == ''){
+                cfIdx = -1;
+            }
+        }
+
+        var param = 'pgIdx='+pgIdx+'&cfIdx='+cfIdx+'&display='+display;
+        console.log('param == ' + param)
+        $("#"+pgIdx+"_"+display).load([[@{/product/load/group.load?}]]+param);
+    }
+
+    // 오늘 그만보기
+    function closePopupToday(obj){
+        var popIdx = $($(obj).parents('div')[2]).find('input').val();
+        var expires = new Date();
+        expires.setHours(expires.getHours() + 24);
+
+        var year = expires.getFullYear()+'';
+        var month = expires.getMonth()+'';
+        var date = expires.getDate()+'';
+        var hours = expires.getHours()+'';
+        var minutes = expires.getMinutes()+'';
+        var seconds = expires.getSeconds()+'';
+
+        if(month.length == 1){
+            month = 0+month;
+        }
+        if(date.length == 1){
+            date = 0+date;
+        }
+        if(hours.length == 1){
+            hours = 0+hours;
+        }
+        if(minutes.length == 1){
+            minutes = 0+minutes;
+        }
+        if(seconds.length == 1){
+            seconds = 0+seconds;
+        }
+        var fullDate = year+month+date+hours+minutes+seconds;
+        window.localStorage.setItem(popIdx, fullDate);
+    }
+    //닫기
+    function closePopup(obj){
+        var chk = $($(obj).parents('div')[0]).children('div').find('input').is(':checked');
+        if(chk){
+            closePopupToday(obj);
+        }
+
+        $($(obj).parents('div')[2]).hide();
+    }
+</script>
+<script th:inline="javascript">
+window.onload=function(){
+    //팝업
+    var popIdxArr = $('input[name="pop_idx"]');
+    var today = new Date();
+    var today_year = today.getFullYear()+'';
+    var today_month = today.getMonth()+'';
+    var today_date = today.getDate()+'';
+    var today_hours = today.getHours()+'';
+    var today_minutes = today.getMinutes()+'';
+    var today_seconds = today.getSeconds()+'';
+
+    if(today_month.length == 1){
+        today_month = 0+today_month;
+    }
+    if(today_date.length == 1){
+        today_date = 0+today_date;
+    }
+    if(today_hours.length == 1){
+        today_hours = 0+today_hours;
+    }
+    if(today_minutes.length == 1){
+        today_minutes = 0+today_minutes;
+    }
+    if(today_seconds.length == 1){
+        today_seconds = 0+today_seconds;
+    }
+    var fullDate = today_year+today_month+today_date+today_hours+today_minutes+today_seconds;
+
+    for(var i = 0; i < popIdxArr.length; i++){
+        var myStorage = window.localStorage.getItem($(popIdxArr[i]).val());
+
+        if(myStorage == null || myStorage < fullDate){
+            window.localStorage.removeItem($(popIdxArr[i]).val());
+            $(popIdxArr[i]).parent().show();
+        }
+    }
+
+
+    //슬라이드 재생/정지
+    $.each($(".swiper-container-main"), function(){
+        var idx = $(this).attr('id');
+        eval(
+            "var swiperMulti_"+idx+" = new Swiper("
+            +"    '#"+idx+"'"
+            +"    , {"
+            +"        slidesPerView: 1,"
+            +"        spaceBetween: 20,"
+            +"        centeredSlides: false,"
+            +"        loop: false,"
+            +"        autoplay: {"
+            +"            delay: 2500,"
+            +"            disableOnInteraction: false,"
+            +"        },"
+            +"        navigation: {"
+            +"            nextEl: '.swiper-button-next',"
+            +"            prevEl: '.swiper-button-prev'"
+            +"        },"
+            +"        pagination: {"
+            +"            el: '.swiper-pagination',"
+            +"            type: 'fraction',"
+            +"        },"
+            +"    }"
+            +");"
+        );
+
+        $('.start_'+idx).on('click',function(){
+            eval("swiperMulti_"+idx+".autoplay.start();");
+        });
+
+        $('.stop_'+idx).on('click',function(){
+            eval("swiperMulti_"+idx+".autoplay.stop();");
+        });
+    });
+}
+</script>
+<script>
+    $('.pause-btn').on('click',function(){
+      $('.pause-btn').removeClass('active');
+      $(this).addClass('active');
+    });
+
+    $('.pause-btn-mo').on('click',function(){
+      $('.pause-btn-mo').removeClass('active');
+      $(this).addClass('active');
+    });
+</script>
+</body>
+</html>
