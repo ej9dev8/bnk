@@ -1,0 +1,148 @@
+/* header class */
+.header_logo_content,
+.header_menu_content,
+.header_search_content,
+.header_login_group_content,
+.header_banner_content{
+    display: none;
+}
+
+.header_logo_content.open,
+.header_menu_content.open,
+.header_search_content.open,
+.header_login_group_content.open,
+.header_banner_content.open{
+    display: block !important;
+}
+
+/* product select search layout */
+
+.product_search_wrap{
+    height: 180px;
+    overflow: hidden;
+}
+.product_search_content{
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+
+.product_search_row{
+    display: table;
+    height: 112px;
+}
+
+.product_search_row .select-multi-btn{
+    width: 150px;
+    float: none;
+    display: table-cell;
+    white-space: nowrap;
+    }
+
+.select-multi-btn input[type="checkbox"],
+.select-multi-btn input[type="radio"]{
+    border: none;
+    display: none;
+}
+
+.select-multi-btn input[type="checkbox"]:checked + label,
+.select-multi-btn input[type="radio"]:checked + label {
+    border: 3px solid #014C86;
+    font-weight: 600;
+    color: #014C86;
+}
+.select-multi-btn input[type="checkbox"]:hover + label,
+.select-multi-btn input[type="radio"]:hover + label {
+    border: 3px solid #014C86;
+    font-weight: 600;
+    color: #014C86;
+}
+
+.select-multi-btn input[type="checkbox"] + label,
+.select-multi-btn input[type="radio"] + label {
+    width: 100%;
+    display: inline-block;
+    background: none;
+    border: 2px solid #dfdfdf;
+    padding: 20px 10px;
+    text-align: center;
+    line-height: 33px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #333;
+    border-radius: 8px;
+}
+.price-select{
+    position: absolute;
+    left: 0;
+    bottom: -65px;
+    background: #efefef;
+    padding: 15px;
+    visibility: hidden;
+    }
+
+input[type="radio"]:checked + label .price-select{
+    visibility: visible;
+    }
+
+.price-select input[type="text"]{
+    width: 100px;
+    }
+
+/* product Thumbnail */
+.sale-event-icon {
+position: absolute;
+right: 10px;
+top: 10px;
+width: 60px !important;
+height: auto;
+}
+
+.brk-sc-masonry_main-590 {
+    height: 590px;
+}
+
+.brk-sc-masonry_small-285 {
+    height: 285px;
+}
+.brk-sc-masonry-two {
+    position: relative;
+    box-shadow: 0 25px 50px rgb(0 0 0 / 10%);
+    overflow: hidden;
+    border-radius: 5px;
+    transition: all .3s ease-in-out;
+    background-color: var(--white);
+}
+
+.brk-sc-masonry-one, .brk-sc-masonry-two__thumbnail {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.brk-sc-masonry-two__thumbnail {
+    position: absolute;
+    top: calc(50% + 40px);
+    left: 0;
+    width: 100%;
+    max-height: 100%;
+    transform: translateY(-50%);
+    padding: 30px 0;
+    transition: all .5s ease-in-out;
+    text-align: right;
+    z-index: 1;
+}
+
+brk-sc-masonry-two__container, .brk-sc-masonry-two__layer {
+    position: relative;
+    height: 100%;
+    z-index: 2;
+}
+.d-flex {
+    display: flex!important;
+}
+.flex-wrap {
+    flex-wrap: wrap!important;
+}
+.align-content-between {
+    align-content: space-between!important;
+}

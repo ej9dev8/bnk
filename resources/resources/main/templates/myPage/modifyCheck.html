@@ -1,0 +1,131 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>마이페이지 내 회원정보</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <th:block th:replace="/myPage/comp/menu.html"></th:block>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 center-col">
+                                <section class="padding-section">
+                                    <div class="">
+                                        <form name="modifyCheckForm" id="modifyCheckForm" method="post">
+                                            <fieldset>
+                                                <div class="area_title board">
+                                                    <h2>비밀번호 확인</h2>
+                                                </div>
+                                                <h5 class="margin-20-bottom text-gray">
+                                                    회원님의 정보를 안전하게 보호하기 위하여 비밀번호를 다시 한번 입력해주세요.
+                                                </h5>
+
+                                                <legend class="hidden">개인정보 수정 비밀번호 확인</legend>
+                                                <div class="input_wrap input-rounded small-rounded input-line-gray">
+                                                    <div class="form_group_area">
+                                                        <div class="form-group">
+                                                            <label for="cuId" class="hidden">아이디</label>
+                                                            <input type="text" class="form-control" id="cuId" name="cuId" th:value="${@sessionInfo.getCuId()}" readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="check" class="hidden">비밀번호</label>
+                                                            <input type="password" class="form-control" id="check" name="cuPw" placeholder="비밀번호" autofocus onkeyup="if(event.keyCode == 13) modifyCheck();">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </section>
+                                <section class="padding-section">
+                                    <div class="width-100 text-center">
+                                        <button type="button" class="btn btn-xlg btn-point width-150px xs-width-100" onclick="modifyCheck()">확인</button>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+    <script th:inline="javascript">
+
+        function modifyCheck(){
+            document.modifyCheckForm.action = [[@{/myPage/modify}]]
+            document.modifyCheckForm.submit();
+        }
+    </script>
+
+    <script th:inline="javascript">
+        //숫자만입력
+        function onlyNum(obj){
+            var val = $(obj).val();
+            obj.value = val.replace(/[^0-9\.\,\-]/gi, '');
+        }
+        //자동 하이픈 입력 (핸드폰)
+        function autoHipenTel(obj) {
+            var str = $(obj).val();
+            str = str.replace(/[^0-9]/g, '');
+
+            var tmp = '';
+            if( str.length < 4){
+                tmp = str;
+            } else if(str.length < 7){
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3);
+            } else if(str.length == 7){
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3);
+            } else if(str.length == 8){
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3, 4);
+                tmp += '-';
+                tmp += str.substr(7);
+            } else if(str.length == 9){
+                tmp += str.substr(0, 2);
+                tmp += '-';
+                tmp += str.substr(2, 3);
+                tmp += '-';
+                tmp += str.substr(5);
+            } else if(str.length == 10){
+                if(str.indexOf('02') == 0) {
+                    tmp += str.substr(0, 2);
+                    tmp += '-';
+                    tmp += str.substr(2, 4);
+                    tmp += '-';
+                    tmp += str.substr(6);
+                } else {
+                    tmp += str.substr(0, 3);
+                    tmp += '-';
+                    tmp += str.substr(3, 3);
+                    tmp += '-';
+                    tmp += str.substr(6);
+                }
+            } else if(str.length == 12){ //인터넷 팩스번호
+                tmp += str.substr(0, 4);
+                tmp += '-';
+                tmp += str.substr(4, 4);
+                tmp += '-';
+                tmp += str.substr(8);
+            } else {
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3, 4);
+                tmp += '-';
+                tmp += str.substr(7);
+            }
+            $(obj).val(tmp);
+        }
+    </script>
+</body>
+</html>

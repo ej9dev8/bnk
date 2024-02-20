@@ -1,0 +1,76 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>자주 묻는 질문</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <th:block th:replace="/board/comp/menu.html"></th:block>
+                    <section class="padding-section section-title-padding">
+
+                        <div class="area_title">
+                            <h2>FAQ 통합검색</h2>
+                        </div>
+                        <form method="post" name="faq_search" id="faq_search" class="faq_search bg-light border-default" th:onsubmit="|faqSearch(${idx}); return false;|">
+                            <div class="search-box xs-width-80 input-rounded small-rounded">
+                                <fieldset class="input position-relative">
+                                    <input type="text" id="search_word" name="search" placeholder="검색어를 입력해주세요." value="" class="form-control" th:value="${search != '' ? search : ''}">
+                                    <input type="hidden" name="idx" th:value="${idx}">
+                                    <button type="button" class="search-btn" title="검색하기" th:onclick="|faqSearch(${idx});|"><i class="ti-search"></i></button>
+                                </fieldset>
+                            </div>
+                        </form>
+                    </section>
+                    <section class="padding-section">
+                        <div class="faq_nav_wrap tab_menu_wrap">
+                            <ul class="tab_menu clearfix">
+                                <li class="li" th:each="ft , i : ${T(galaxia.shop.constant.board.FaqType).values()}" th:classappend="${idx} == ${ft.getIdx()} ? 'active':''">
+                                    <div class="display-table width-100">
+                                        <a class="display-table-cell vertical-align-middle" th:onclick="|faqSearch(${ft.getIdx()});|">
+                                            <span th:text="${ft.getName()}">타입명</span>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div th:if="${#lists.isEmpty(faqList)}" class="data_none"><p>FAQ가 없습니다.</p></div>
+                        <div th:if="${not #lists.isEmpty(faqList)}">
+                            <div class="panel_group accordion_style" th:each="faq, i : ${faqList}" th:id="|tab${i.count}|">
+                                <div class="panel" id="panel58">
+                                    <div class="panel-heading">
+                                        <a th:href="|#tab${idx}_link${faq.faqIdx}|" th:data-parent="|#tab${i.count}|" data-toggle="collapse" class="collapsed" aria-expanded="false">
+                                            <span class="circle">Q</span>
+                                            <span class="tit" th:text="${faq.faqTitle}">제목</span>
+                                            <span class="arrow"><i class="ti-plus"></i></span>
+                                        </a>
+                                    </div>
+                                    <div th:id="|tab${idx}_link${faq.faqIdx}|" class="panel-collapse collapse " aria-expanded="false">
+                                        <div class="panel-body">
+                                            <span class="circle">A</span>
+                                            <span class="cont" th:utext="${faq.faqContent}">내용</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+    <th:block th:replace="/part/js.html"></th:block>
+    <script th:inline="javascript">
+        function faqSearch(idx){
+            $("input[name=idx]").val(idx);
+            document.faq_search.action="/board/faq";
+            document.faq_search.submit();
+        }
+    </script>
+</body>
+</html>

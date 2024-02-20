@@ -1,0 +1,60 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>이용안내</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <th:block th:replace="/board/comp/menu.html"></th:block>
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table table_view">
+                            <thead>
+                                <tr>
+                                    <th class="text-left view_tit">이용안내 제목</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="view_content text-left">
+                                        <div class="content"><p>본문내용</p></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <ul class="prev_next">
+                            <li class="list_prev">
+                                <span class="prev">이전글</span>
+                                <a href="/board/useMethodView" class="text-cut">이용안내 제목2</a>
+                            </li>
+                            <li class="list_next">
+                                <span class="next">다음글</span>
+                                <a href="/board/useMethodView" class="text-cut">이용안내 제목3</a>
+                            </li>
+                        </ul>
+                        <div class="text-center margin-60-top xs-margin-30-top">
+                            <a href="/board/useMethod" class="btn btn-point">목록</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+</body>
+</html>

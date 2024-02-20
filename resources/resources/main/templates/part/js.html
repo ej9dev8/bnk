@@ -1,0 +1,232 @@
+<!-- jQuery 기본 js파일 -->
+<script type="text/javascript" src="/js/core/jquery.js"></script>
+
+<!-- jQuery UI 라이브러리 js파일 -->
+<script src="/js/core/jquery-ui.js"></script>
+
+<!-- file input -->
+<script type="text/javascript" src="/js/core/bootstrap-fileinput.js"></script>
+<script type="text/javascript" src="/js/core/bootstrap.min.js"></script>
+
+<!-- Swiper -->
+<script type="text/javascript" src="/js/core/swiper.min.js"></script>
+
+
+
+<!-- 슬라이더 : 좌우 항목 보이기 -->
+<script>
+    var swiper = new Swiper(
+        ".banner-prev .swiper-container-main-prev", {
+            slidesPerView: 2,
+            spaceBetween: 20,
+            centeredSlides: true,
+            loop: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: true,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                dynamicBullets: true,
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            }
+        }
+    );
+
+</script>
+
+<!-- 슬라이더 : 수동재생 -->
+<script>
+    var swiper = new Swiper(
+        ".swiper-container-main-non-auto",
+        {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            centeredSlides: false,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            }
+        }
+    );
+</script>
+<script>
+    var swiper = new Swiper( <!-- (이중 슬라이드) 탭 버튼에서 사용 -->
+        ".swiper-tab-wrap", {
+            slidesPerView: 'auto',
+            grabCursor: true,
+            navigation: false,
+            observer: true,
+            observeParents: true,
+        }
+    );
+</script>
+
+<!-- 슬라이더 : 탭 버튼(상세페이지) -->
+<script>
+    <!-- 대분류 -->
+    var DetailSwiperTab = new Swiper(
+        ".swiper-detail-list-tab", {
+            slidesPerView: 'auto',
+            grabCursor: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            },
+            observer: true,
+            observeParents: true,
+        }
+    );
+</script>
+
+<!-- 슬라이더 : 메인메뉴 -->
+<script>
+    //메인 메뉴
+    var mainswiper = new Swiper(
+        ".swiper-container-list-menu", {
+            slidesPerView: 'auto',
+            grabCursor: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            },
+            observer: true,
+            observeParents: true,
+        }
+    );
+
+    //선택 시 active 클래스 추가/삭제
+    $(function(){
+        var sBtn = $("ul > li");
+        sBtn.find("picture").click(function(){
+            sBtn.removeClass("active");
+            $(this).parent().addClass("active");
+        });
+    });
+</script>
+
+
+
+<!-- 슬라이더 : 메뉴 선택 리스트 1 -->
+<script>
+    <!-- 대분류 -->
+    var SearchSwiperView = new Swiper(
+        ".swiper-container-list-view", {
+            slidesPerView: 'auto',
+            grabCursor: true,
+            observer: true,
+            observeParents: true,
+        }
+    );
+</script>
+
+
+<script>
+    var SearchSwiper = new Swiper(
+        ".swiper-container-list", {
+            slidesPerView: 'auto',
+            grabCursor: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            },
+            observer: true,
+            observeParents: true,
+        }
+    );
+
+    <!--선택 시 active 클래스 추가/삭제-->
+    $(function(){
+        var sBtn = $("ul > li");
+        sBtn.find("picture").click(function(){
+            sBtn.removeClass("active");
+            $(this).parent().addClass("active");
+        });
+    });
+</script>
+
+<!-- 슬라이더 : vertical (1) -->
+<script>
+    var swiper = new Swiper(
+        ".swiper-container-vertical", {
+            direction: "vertical",
+            slidesPerView: "auto",
+            grabCursor: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+            },
+            observer: true,
+            observeParents: true,
+        }
+    );
+</script>
+
+<!-- 슬라이더 : 전체 항목 한 장씩 보이기 -->
+
+<!--섹션 순서 변경 시 padding값 자동 변경-->
+<script>
+    jQuery(document).ready(function(){
+        jQuery('section[class*="bg-"]').parent().css('padding-bottom', 'red');
+    });
+</script>
+<!-- common -->
+<script type="text/javascript" th:src="@{|/js/common.js|}"></script>
+
+<!-- 다음 주소 api -->
+<script type="text/javascript" th:src="@{|/js/daum_address.js|}"></script>
+
+<!-- datepicker -->
+<script type="text/javascript" th:src="@{|/js/datepicker.js|}"></script>
+
+
+<script th:inline="javascript" th:if="${shop != null}">
+    //최근 본 상품
+    function recentViewProd(){
+        let useFloating = [[${shop.shopUseFloating}]]
+        if(useFloating == true){
+            if(localStorage.getItem('rvList') == null){
+                $('#fbLi').remove();
+            }else{
+                let fbDiv = '';
+                let rvList = JSON.parse(localStorage.getItem('rvList'));
+                for(var i=0; i<rvList.length; i++){
+                    let spidx = rvList[i].spIdx;
+                    let pThumnbail = rvList[i].pThumnbail;
+                    let spName = rvList[i].spName;
+                    fbDiv +='<li class="swiper-slide">\n';
+                    fbDiv += '<a href="/product/detail/'+spidx+'" class="login-group-large font-weight-600 recent">\n';
+                    fbDiv += '<img src="'+pThumnbail+'" alt="'+spName+'">\n';
+                    fbDiv += '</a>\n';
+                    fbDiv += '</li>';
+                }
+                $("#fbUl").append(fbDiv);
+            }
+        }
+    }
+</script>
+<script th:if="${shop != null}">
+    $(document).ready(function() {
+        recentViewProd();
+    });
+</script>
+
+<script>
+    var swiperPause = new Swiper('.swiper-container-pause', {
+        loop:'true',
+        autoplay: {
+            delay: 2500,
+            disableOnInteraction: false,
+        },
+        pagination : {
+            el : '.swiper-pagination',
+            clickable : true,
+        },
+    });
+</script>
+
+

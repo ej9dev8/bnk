@@ -1,0 +1,31 @@
+<th:block th:each="mso, j : ${ms.getMainSectionOrders()}" th:if="${mso.eventGroup != null}">
+    <!--WEB-->
+<!--    <div th:if="${mso.eventGroup.egDesign != null && mso.eventGroup.egDesign == '타입A'}">-->
+<!--        <th:block th:replace="/design/event/web/web-prd-type-a.html"></th:block>-->
+<!--    </div>-->
+    <div th:if="${mso.eventGroup.egDesign != null && mso.eventGroup.egDesign == '타입B'}">
+        <th:block th:replace="/design/event/web/web-prd-type-b.html"></th:block>
+    </div>
+    <div th:if="${mso.eventGroup.egDesign != null && mso.eventGroup.egDesign == '타입C'}">
+        <th:block th:replace="/design/event/web/web-prd-type-c.html"></th:block>
+    </div>
+    <div th:if="${mso.eventGroup.egDesign != null && mso.eventGroup.egDesign == '타입D'}">
+        <th:block th:replace="/design/event/web/web-prd-type-d.html"></th:block>
+    </div>
+    <div th:if="${mso.eventGroup.egDesign != null && mso.eventGroup.egDesign == '타입E'}">
+        <th:block th:replace="/design/event/web/web-prd-type-e.html"></th:block>
+    </div>
+    <!--/WEB-->
+
+    <!--MOBILE-->
+    <div th:if="${mso.eventGroup.egDesignMobile != null && mso.eventGroup.egDesignMobile == '타입A'}">
+        <th:block th:replace="/design/event/mobile/mo-prd-type-a.html"></th:block>
+    </div>
+    <div th:if="${mso.eventGroup.egDesignMobile != null && mso.eventGroup.egDesignMobile == '타입B'}">
+        <th:block th:replace="/design/event/mobile/mo-prd-type-b.html"></th:block>
+    </div>
+    <div th:if="${mso.eventGroup.egDesignMobile != null && mso.eventGroup.egDesignMobile == '타입C'}">
+        <th:block th:replace="/design/event/mobile/mo-prd-type-c.html"></th:block>
+    </div>
+    <!--/MOBILE-->
+</th:block>

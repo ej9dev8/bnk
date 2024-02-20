@@ -1,0 +1,274 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>선물하기</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop != null ? shop.shopCss.getBodyClass() : ''}">
+<div class="page-container">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <section class="padding-section"></section>
+                <section class="padding-section">
+                    <div class="area_title board">
+                        <h2>주문정보</h2>
+                    </div>
+                    <!-- 주문내역(모바일) -->
+                    <div class="sm_prod_view_wrap display-none sm-display-block">
+                        <!-- 반복되는 블록 -->
+                        <div class="sm_prod_view" th:each="op, i: ${prodList}">
+                            <div class="order_box title_none">
+                                <p class="order_box_text">
+                                    <span><b th:text="${order.oProdType.name()}">배송상품</b></span>
+                                </p>
+                            </div>
+                            <div class="prod_box">
+                                <div class="prod_img">
+                                    <img th:src="${op.P_THUMBNAIL}" th:alt="${op.SP_NAME}" data-no-retina="">
+                                </div>
+                                <div class="prod_detail">
+                                    <p class="text-gray small" th:text="${odp.shopProduct.product.brand.bName}">CU</p>
+                                    <p th:text="${op.SP_NAME}">쇼핑몰 상품명</p>
+                                    <p class="text-gray small" th:if="${#maps.containsKey(op, 'OP_OPTION')}">옵션: <span th:text="${op.OP_OPTION}">옵션명</span></p>
+                                </div>
+                            </div>
+                            <div class="order-price-box">
+                                <b class="val-tit">수량</b>
+                                <span>
+                                    <b th:text="${op.PHONE_LEN}">3</b>
+                                </span>
+                            </div>
+                            <div class="order-price-box display-block" th:if="${not #maps.isEmpty(odp.shopProduct.product.pOption)}">
+                                <b class="val-tit">옵션</b>
+                                <p th:text="${op.OP_OPTION}">옵션</p>
+                                <div class="nomal_double_select_wrap margin-10-top" th:if="${delModify}">
+                                    <div class="select-rounded small-rounded">
+                                        <select class="form-control reason" th:each="opt, i: ${odp.shopProduct.product.pOption}">
+                                            <option value="" th:text="|${opt.key} 옵션 선택|">옵션1 옵션 선택</option>
+                                            <option th:each="subopt : ${opt.value}" th:text="${subopt}">서브 옵션</option>
+                                        </select>
+                                    </div>
+                                    <div class="margin-10-top" th:if="${not #maps.isEmpty(odp.shopProduct.product.pOption) && delModify}">
+                                        <button type="button" class="btn btn-sm width-100" th:onclick="|changeOption(${odp.opIdx});|">변경</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- // 반복되는 블록 -->
+                    </div>
+                    <!-- // 주문내역(모바일) -->
+                    <!-- 주문내역(웹) -->
+                    <table class="table sm-display-none sm_prod_view">
+                        <thead>
+                        <tr>
+                            <th style="width:auto">제품 정보</th>
+                            <th style="width:200px">수량</th>
+                            <th style="width:300px" th:if="${not #maps.isEmpty(odp.shopProduct.product.pOption)}" th:colspan="${delModify ? '2':'1'}">옵션</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="op, i: ${prodList}">
+                            <td class="text-left sm_prod_view">
+                                <div class="prod_box">
+                                    <div class="prod_img">
+                                        <img th:src="${op.P_THUMBNAIL}" th:alt="${op.SP_NAME}" data-no-retina="">
+                                    </div>
+                                    <div class="prod_detail">
+                                        <p class="text-gray small" th:if="${not #strings.isEmpty(odp.shopProduct.product.brand.bName)}" th:text="${odp.shopProduct.product.brand.bName}">CU</p>
+                                        <p th:text="${op.SP_NAME}" class="tit">쇼핑몰 상품명</p>
+                                        <p class="text-gray small" th:if="${#maps.containsKey(op, 'OP_OPTION')}">옵션: <span th:text="${op.OP_OPTION}">옵션명</span></p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span th:text="${op.PHONE_LEN}">3</span>
+                            </td>
+                            <td th:if="${not #maps.isEmpty(odp.shopProduct.product.pOption)}" >
+                                <p th:text="${odp.opOption}">옵션</p>
+                                <form th:id="optionForm" th:name="optionForm" th:if="${delModify}">
+                                    <div class="nomal_double_select_wrap">
+                                        <div class="select-rounded small-rounded">
+                                            <select class="form-control reason" th:each="opt, i: ${odp.shopProduct.product.pOption}" th:name="optGroup">
+                                                <option value="" th:text="|${opt.key} 옵션 선택|">옵션1 옵션 선택</option>
+                                                <option th:each="subopt : ${opt.value}" th:text="${subopt}">서브 옵션</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="op" th:value="${issueno}">
+                                </form>
+                            </td>
+                            <td th:if="${not #maps.isEmpty(odp.shopProduct.product.pOption) && delModify}">
+                                <button type="button" class="btn btn-md" th:onclick="|changeOption(${odp.opIdx});|">변경</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!-- // 주문내역(웹) -->
+                    <div class="margin-30-top">
+                        <h4 class="text-dark-gray font-weight-600  font-style-italic margin-5-bottom">
+                            from.<span th:text="${order.oName}">보낸이</span>
+                        </h4>
+                        <p class="table-message" th:if="${odp.opMessage}">
+                            <i class="ti-pencil-alt"></i>
+                            <b class="text" th:text="${odp.opMessage}">메세지</b>
+                        </p>
+                    </div>
+                </section>
+                <section class="padding-section" th:if="${delModify}">
+                    <div class="area_title justify-content-flex-start xs-display-block">
+                        <h2>배송지 입력</h2>
+                        <p class="margin-15-left xs-no-margin-left xs-margin-5-top">
+                            <span class="label label-danger margin-mi-2-top" th:text="${#temporals.format(expiredDate, 'yyyy년 MM월 dd일')}"></span>
+                            <small>까지 배송지 입력 및 수정 가능</small>
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="payArea bg-light showMyDelivery">
+                        <form name="deliveryForm" method="post">
+                            <input type="hidden" name="O_IDX" th:value="${order.oIdx}">
+                            <input type="hidden" name="op" th:value="${issueno}">
+                            <th:block th:replace="order/comp/delivery.html"></th:block>
+                        </form>
+                    </div>
+                    <div class="width-100 text-center margin-30-top">
+
+                    </div>
+                </section>
+                <section class="padding-section" th:if="${!delModify && delivery != null}">
+                    <div class="area_title">
+                        <h2>배송 정보</h2>
+                    </div>
+                    <div class="order_pay_method none input_wrap input_val">
+                        <div class="input_col">
+                            <div class="input_row">
+                                <div class="input_tit">배송주소</div>
+                                <div class="input_cont" th:text="|[${delivery.dPost}] ${delivery.getAddr()}|">배송주소</div>
+                            </div>
+                        </div>
+                        <div class="input_col">
+                            <div class="input_row">
+                                <div class="input_tit">배송상태</div>
+                                <div class="input_cont" th:text="${odp.opDelState.name()}">배송상태</div>
+                            </div>
+                        </div>
+                        <div class="input_col" th:if="${delivery.dCompany}">
+                            <div class="input_row">
+                                <div class="input_tit">택배사</div>
+                                <div class="input_cont" th:text="${delivery.dCompany}">택배사</div>
+                            </div>
+                        </div>
+                        <div class="input_col" ><!--th:if="${delivery.dNum}"-->
+                            <div class="input_row">
+                                <div class="input_tit">송장번호</div>
+                                <div class="input_cont">
+                                    <span th:text="${delivery.dNum}">000000000000</span>
+                                    <button onclick="alert('미구현');" class="btn btn-sm btn-transparent-light-gray">배송조회</button>
+                                </div>
+                            </div>
+                        </div>
+                        <form name="deliveryForm" method="post" th:unless="${delModify}">
+                            <input type="hidden" name="O_IDX" th:value="${order.oIdx}">
+                            <input type="hidden" name="op" th:value="${issueno}">
+                        </form>
+                    </div>
+                </section>
+                <section class="padding-section">
+                    <div class="fixed_btn_bottom_wrap two">
+                        <div class="fixed_btn_bottom">
+                            <div class="fixed_btn" th:classappend="${delModify ? '':'width-100'}">
+                                <a class="btn" onclick="reject();">거절하기</a>
+                            </div>
+                            <div class="fixed_btn" th:if="${delModify}">
+                                <a class="btn btn-point" onclick="saveDelivery();" th:text="${delivery != null ? '주소 수정':'선물받기'}">선물받기</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="/part/js.html"></th:block>
+<script th:inline="javascript">
+    //배송지 저장
+    function saveDelivery(){
+        $.ajax({
+            url : '/present/address.rest',
+            type : 'post',
+            data : $("form[name=deliveryForm]").serialize(),
+            success : function(data) {
+                alert(data.message);
+                if(data.location == null){
+                    location.reload();
+                }else{
+                    location.href=data.location;
+                }
+            },
+            error : function(data, status, er) {
+                alert("잠시 후 시도해주세요");
+            }
+        });
+    }
+
+
+    //선물하기 거절
+    function reject(){
+        if(confirm('거절하시겠습니까?')){
+            $.ajax({
+                url : '/present/reject.rest',
+                type : 'post',
+                data : $("form[name=deliveryForm]").serialize(),
+                success : function(data) {
+                    alert(data.message);
+                    if(data.location == null){
+                        location.reload();
+                    }else{
+                        location.href=data.location;
+                    }
+                },
+                error : function(data, status, er) {
+                    alert("잠시 후 시도해주세요");
+                }
+            });
+        }
+    }
+
+    //옵션 변경
+    function changeOption(opIdx){
+        var bool = true;
+        $.each($("select[name=optGroup]"), function(){
+           var option = $(this);
+           if(option.val() == ''){
+               alert('상품 옵션을 선택해주세요.');
+               option.focus();
+               bool = false;
+               return false;
+           }
+        });
+
+
+        if(bool && confirm('옵션을 변경하시겠습니까?')){
+            $.ajax({
+                url : '/present/change/option/'+opIdx+'.rest',
+                type : 'post',
+                data : $("form[name=optionForm]").serialize(),
+                success : function(data) {
+                    alert(data.message);
+                    if(data.location == null){
+                        location.reload();
+                    }else{
+                        location.href=data.location;
+                    }
+                },
+                error : function(data, status, er) {
+                    alert("잠시 후 시도해주세요");
+                }
+            });
+        }
+    }
+
+</script>
+</body>
+</html>

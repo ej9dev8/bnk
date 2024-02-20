@@ -1,0 +1,38 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title th:text="|계좌 추가 - ${shop.getShopName()}|">갤럭시아</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+<div class="page-container">
+    <section class="padding-10-top">
+        <div class="col-xs-12">
+            <div class="padding-30-all xs-padding-15-lr">
+                <div class="page_title_medium text-center">
+                    <h1 class="text-extra-dark-gray">회원탈퇴</h1>
+                </div>
+                <ul class="text-left margin-30-top margin-20-left list-style-auto line-height-24">
+                    <li>회원탈퇴 시 회원전용 웹 서비스 이용이 불가합니다.</li>
+                    <li>회원탈퇴 후 재가입은 가능하지만, 동일 아이디는 사용할 수 없습니다.</li>
+                    <li>거래정보가 있는 경우, 전자상거래 등에서의 소비자 보호에 관한 법률에 따라 계약 또는 청약철회에 관한 기록, 대금결제 및 재화 등의 공급에 관한 기록은
+                        5년동안 보존됩니다.</li>
+                    <li>회원탈퇴 후 입력하신 상품문의 및 후기는 삭제되지 않으며, 회원정보 삭제로 인해 작성자 본인을 확인할 수 없어 수정 및 삭제처리가 원천적으로 불가능
+                        합니다.<br>
+                        상품문의 및 후기, 댓글 삭제를 원하시는 경우에는 먼저 해당 게시물을 삭제하신 후 탈퇴를 신청하시기 바랍니다.</li>
+                    <li>이미 결제가 완료된 건은 탈퇴로 취소되지 않습니다.</li>
+                </ul>
+                <div class="margin-30-top text-center">
+                    <button type="button" class="btn btn-lg btn-point width-150px xs-width-100" onclick="Modify.memberDelete()">회원탈퇴</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="page-container">
+
+
+    </div>
+</div>
+    <th:block th:replace="/part/js.html" />
+</body>
+</html>

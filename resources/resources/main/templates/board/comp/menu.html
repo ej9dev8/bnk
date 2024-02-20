@@ -1,0 +1,13 @@
+<section class="padding-section page-title-padding">
+    <div class="page-title color-title">
+        <h1>고객센터</h1>
+    </div>
+</section>
+<section class="padding-section padding-menu">
+    <ul class="page_sub_menu menu3">
+        <li class="li" th:classappend="${subActive} == 'notice' ? active"><a href="/board/notice" title="공지사항">공지사항</a></li>
+        <li class="li" th:classappend="${subActive} == 'faq' ? active"><a href="/board/faq" title="자주 묻는 질문">자주 묻는 질문</a></li>
+        <li class="li" th:classappend="${subActive} == 'qna' ? active"><a href="/board/qna" title="1:1 문의">1:1 문의</a></li>
+        <!--/*<li class="li" th:classappend="${subActive} == 'useMethod' ? active"><a href="/board/useMethod" title="이용안내">이용안내</a></li>*/-->
+    </ul>
+</section>

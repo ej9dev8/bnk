@@ -1,0 +1,39 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<!--/*
+  entity
+*/-->
+<div class="prod_thumb_link animate-thumb-shad">
+    <a th:href="@{/product/detail/__${pgi.shopProduct.spIdx}__}" class="display-block">
+        <img th:src="${pgi.shopProduct.product.pThumbnail}" th:alt="${pgi.shopProduct.spName}">
+
+        <div class="label-container list" th:if="${not pgi.shopProduct.spTag.isEmpty and pgi.shopProduct.isSale()}">
+            <label class="label label-icon" th:each="tag : ${pgi.shopProduct.spTag}" th:classappend="${tag.get('STYLE')}" th:text="${tag.get('TEXT')}"></label>
+        </div>
+        <div class="bg-thumb"></div>
+        <div class="prod_sold_out" th:unless="${pgi.shopProduct.isSale()}">
+            <div class="display-table width-100 height-100">
+                <div class="display-table-cell vertical-align-middle text-center">
+                    <span class="sold-out-text">품절</span>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+<div class="prod_detail_box padding-0-bottom">
+    <p class="disc" th:text="${pgi.shopProduct.product.brand?.bName}">브랜드</p>
+    <h1 class="tit">
+        <a th:href="@{/product/detail/__${pgi.shopProduct.spIdx}__}" th:title="${pgi.shopProduct.spName}" th:text="${pgi.shopProduct.spName}">shop상품명</a>
+    </h1>
+    <!-- 쇼핑몰 일반 -->
+    <div class="price">
+        <div class="display-table-cell vertical-align-middle">
+            <th:block th:if="${pgi.shopProduct.spPrice != pgi.shopProduct.product.pPrice}">
+                <strong class="price_sale_percent text-red"><span th:if="${pgi.shopProduct.spPercent != null && pgi.shopProduct.spPercent != 0}" th:text="${#numbers.formatInteger(pgi.shopProduct.spPercent,0)}">퍼센트</span>%</strong>
+                <strong class="original_price" th:text="${#numbers.formatInteger(pgi.shopProduct.product.pPrice, 0, 'COMMA')}">판매가</strong>
+            </th:block>
+
+            <strong class="price_from" th:text="${#numbers.formatInteger(pgi.shopProduct.spPrice, 0, 'COMMA')}">분양몰상품가격</strong>
+        </div>
+    </div>
+</div>
+</html>

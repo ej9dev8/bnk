@@ -1,0 +1,90 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>임시 비밀번호 변경</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 margin-40-top">
+                        <form id="temporaryForm" name="temporaryForm" method="post" >
+                            <fieldset class="text-center">
+                                <legend class="hidden">임시 비밀번호 변경</legend>
+                                <div class="page_title_medium margin-10-bottom">
+                                    <h1>임시 비밀번호 변경</h1>
+                                </div>
+                                <p class="text-15 xs-text-sm-medium">회원님의 정보를 안전하게 보호하기 위하여 새로운 비밀번호를 입력해주세요.</p>
+                                <div class="width-40 sm-width-60 xs-width-100 margin-lr-auto margin-50-top">
+                                    <div class="form_group_area">
+                                        <div class="form-group">
+                                            <label for="cuId" class="hidden">아이디</label>
+                                            <input type="text" class="form-control" id="cuId" name="cuId"  readonly value="test@test.com"> <!-- th:value="${@sessionInfo.getCuId()}" -->
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cuPw" class="hidden">비밀번호</label>
+                                            <input type="password" class="form-control" id="cuPw" name="cuPw" onkeyup="pwCheck();" placeholder="비밀번호" autofocus>
+                                            <p id="pwCheck" class="text-red"></p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cuPw" class="hidden">비밀번호 확인</label>
+                                            <input type="password" class="form-control" id="cuPwCheck" name="cuPwCheck" onkeyup="pwCheck();" placeholder="비밀번호 확인">
+                                            <p id="pwCheck2" class="text-red"></p>
+                                        </div>
+                                        <input type="hidden" name="referer" th:value="${referer}">
+                                    </div>
+                                    <div class="width-100 text-center margin-40-top">
+                                        <button type="button" class="btn btn-xlg btn-point width-150px xs-width-100" onclick="temporary();">확인</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+    <script type="text/javascript" src="/js/customer.js"></script>
+    <script>
+        function temporary(){
+            var cuPw = $("#cuPw");
+            var cuPwCheck = $("#cuPwCheck");
+            var check = pwCheck();
+
+            if(cuPw.val()==''){
+                alert('비밀번호를 입력해주세요.');
+                cuPw.focus();
+                return false;
+            }
+            if(cuPwCheck.val()==''){
+                alert('비밀번호 확인을 입력해주세요.');
+                cuPwCheck.focus();
+                return false;
+            }
+            if(check!='OK'){
+                alert(check);
+                return false;
+            }
+
+            var formData = $("#temporaryForm").serialize();
+            $.ajax({
+                url : '/customer/temporary.rest',
+                type : 'post',
+                data : formData,
+            }).done(function(data){
+                ("message == " + data.message);
+                alert(data.message);
+                if(data.location != null){
+                    location.href=data.location;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>ERROR</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body class="">
+    <div class="page-container flex-full-center">
+        <div class="container">
+            <div class="error-wrapper text-center bg-light-gray radius-20 width-100">
+                <h1 class="no-margin">
+                    <span class="error-icon ti-na text-red"></span>
+                </h1>
+                <th:block th:unless="${message == null}">
+                    <h1 class="margin-25-top letter-spacing-minus-2" th:text="${message}">요청하신 페이지를 찾을 수 없습니다</h1>
+                </th:block>
+                <th:block th:if="${message == null}">
+                    <h1 class="margin-25-top letter-spacing-minus-2">요청하신 페이지를 찾을 수 없습니다</h1>
+                    <h4 class="margin-20-top margin-10-bottom line-height-24">방문하시려는 페이지의 주소가 잘못 입력되었거나, 삭제되어 사용하실 수 없습니다.<br>입력하신 주소가 정확한지 다시 한번 확인해 주세요.</h4>
+                </th:block>
+                <div class="margin-35-top">
+                    <a href="/index" class="btn btn-lg btn-black">메인 페이지</a>
+                    <a href="javascript:history.back();" class="btn btn-lg btn-transparent-dark-gray margin-5-left">이전 페이지</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

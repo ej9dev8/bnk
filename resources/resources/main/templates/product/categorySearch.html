@@ -1,0 +1,146 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <!-- 1. 아이콘 버전: 클래스명 'search-icon' -->
+  <div class="search-icon sm-lr-fit">
+      <div class="pd-search-tab position-relative">
+        <div class="swiper-container-list-view swiper-container-btn overflow-hidden width-auto margin-auto">
+          <ul class="swiper-wrapper nav tab_menu clearfix height-auto width-fit-content margin-auto">
+            <th:block  th:each="cfs, i : ${cf}">
+              <li class="swiper-slide sub-color-hover sub-color-active cfLi width-auto" th:attr="cf_idx=|${cfs.CF_IDX}|, onclick=|clickCategoryFirst(${cfs.CF_IDX})|">
+                <a class="icon-deco">
+                  <img th:src="${cfs.CF_ICON}">
+                  <div class="icon-deco-tr-bg"></div>
+                </a>
+                <p th:text="${cfs.CF_NAME}">대분류명</p>
+              </li>
+            </th:block>
+          </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 테두리 버전: 클래스명 'search-border' -->
+  <!--<div class="search-border">
+    <div class="pd-search-tab position-relative">
+      <div class="swiper-container-list-view swiper-container-btn overflow-hidden width-auto margin-auto">
+        <ul class="swiper-wrapper nav tab_menu clearfix height-auto width-fit-content margin-auto">
+          &lt;!&ndash;/**전체보기*/&ndash;&gt;
+          <th:block th:each="cfs, i : ${cf}" th:if="${cfs.CF_IDX == -1}">
+            <li class="swiper-slide sub-color-hover sub-color-active cfLi width-auto" th:attr="cf_idx=|${cfs.CF_IDX}|, onclick=|clickCategoryFirst(${cfs.CF_IDX})|">
+              <a class="icon-deco">
+                <img src="/image/icon/brand_all_check.png">
+              </a>
+              <p>전체보기</p>
+            </li>
+          </th:block>
+          &lt;!&ndash;/**나머지*/&ndash;&gt;
+          <th:block  th:each="cfs, i : ${cf}" th:unless="${cfs.CF_IDX == -1}">
+            <li class="swiper-slide sub-color-hover sub-color-active cfLi width-auto" th:attr="cf_idx=|${cfs.CF_IDX}|, onclick=|clickCategoryFirst(${cfs.CF_IDX})|">
+              <a class="icon-deco">
+                <img th:src="${cfs.CF_ICON}">
+              </a>
+              <p th:text="${cfs.CF_NAME}">대분류명</p>
+            </li>
+          </th:block>
+        </ul>
+      </div>
+    </div>
+  </div>-->
+
+  <!-- 3. 아이콘+테두리+배경 버전: 클래스명 'search-multi' -->
+  <!--<div class="search-multi">
+      <div class="pd-search-tab position-relative">
+        <div class="swiper-container-list-view swiper-container-btn overflow-hidden width-auto margin-auto">
+          <ul class="swiper-wrapper nav tab_menu clearfix height-auto width-fit-content margin-auto">
+            &lt;!&ndash;/**전체보기*/&ndash;&gt;
+            <th:block th:each="cfs, i : ${cf}" th:if="${cfs.CF_IDX == -1}">
+              <li class="swiper-slide sub-color-hover sub-color-active cfLi width-auto" th:attr="cf_idx=|${cfs.CF_IDX}|, onclick=|clickCategoryFirst(${cfs.CF_IDX})|">
+                <a class="icon-deco">
+                    <img src="/image/icon/brand_all_check.png">
+                  <div class="icon-deco-tr-bg"></div>
+                  </a>
+                  <p>전체보기</p>
+              </li>
+            </th:block>
+            &lt;!&ndash;/**나머지*/&ndash;&gt;
+            <th:block  th:each="cfs, i : ${cf}" th:unless="${cfs.CF_IDX == -1}">
+              <li class="swiper-slide sub-color-hover sub-color-active cfLi width-auto" th:attr="cf_idx=|${cfs.CF_IDX}|, onclick=|clickCategoryFirst(${cfs.CF_IDX})|">
+                <a class="icon-deco">
+                  <img th:src="${cfs.CF_ICON}">
+                  <div class="icon-deco-tr-bg"></div>
+                </a>
+                <p th:text="${cfs.CF_NAME}">대분류명</p>
+              </li>
+            </th:block>
+          </ul>
+        </div>
+      </div>
+    </div>-->
+
+<script th:inline="javascript">
+  //대분류 선택
+  var bIdxs_first;
+  function clickCategoryFirst(cfIdx, bIdxs){
+
+      $('#brandSearchDiv').hide();
+      $('#brandSearchDiv').fadeIn();
+
+      $('.cfLi').removeClass('active');
+      $('.cfLi[cf_idx='+cfIdx+']').addClass('active');
+      bIdxs_first=bIdxs;
+      $.ajax({
+          url:[[@{/product/brands.load}]]
+          ,type:'post'
+          ,data:'cfIdx='+cfIdx
+      }).done(function(res){
+          $('#brandUl').html('');
+
+
+          var li =
+              '<li class="swiper-slide thumb-slide active" onclick="brandSearchAll();" id="brandAll">'
+                  +'<div class="thumb-box">'
+                    +'<p class="thumb-img">'
+                      +'<img src="/image/icon/all_btn.png">'
+                    +'</p>'
+                    +'<p class="thumb-text">전체보기</p>'
+                  +'</div>'
+              +'</li>'
+          res.data.brandList.forEach(function(brand){
+              var classAdd='';
+              if(bIdxs_first!=undefined){
+                if(bIdxs_first.indexOf(brand.B_IDX) != -1 ){
+                  classAdd=' active';
+                }
+              }
+
+
+              li +=
+                  '<li class="swiper-slide thumb-slide brandSearchLi'+classAdd+'" b_idx="'+brand.B_IDX+'" onclick="brandSearch(this)">'
+                    +'<div class="thumb-box">'
+                      +'<p class="thumb-img">'
+                        +'<img src="'+brand.B_THUMBNAIL+'" alt="'+brand.B_NAME+'">'
+                      +'</p>'
+                      +'<p class="thumb-text">'+brand.B_NAME+'</p>'
+                    +'</div>'
+                  +'</li>';
+          });
+          $('#brandUl').append(li);
+
+          try{
+            //브랜드 처음으로 스와이프
+            SearchSwiper.update();
+            SearchSwiper.slideTo(0,0,null);
+          }catch(e){
+            console.log(e);
+          }
+
+          if(typeof loadProduct =='function'){
+
+              loadProduct(1);
+
+              $('.cf_menu').removeClass('active');
+              $('.cf_menu[cfIdx='+cfIdx+']').addClass('active');
+          }
+      });
+  }
+</script>
+</html>

@@ -1,0 +1,178 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>상품평 작성</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <th:block th:replace="/board/comp/menu.html"></th:block>
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form name="qnaForm" class="qna_form" enctype="multipart/form-data" method="POST">
+                            <input type="hidden" name="sp_qb_type" id="sp_qb_type">
+                            <fieldset>
+                                <div class="input_wrap input-rounded small-rounded input-line-gray">
+                                    <div class="input_col">
+                                        <div class="input_row">
+                                            <div class="input_tit">구분</div>
+                                            <div class="input_cont">
+                                                <ul class="radio_styled clearfix">
+
+                                                    <li>
+                                                        <input type="radio" id="qnaType1" onchange="Qna.typeChange(1)" name="qnaType" value="0" checked="">
+                                                        <label for="qnaType1">상품</label>
+                                                    </li>
+
+                                                    <li>
+                                                        <input type="radio" id="qnaType2" onchange="Qna.typeChange(2)" name="qnaType" value="1">
+                                                        <label for="qnaType2">주문/결제</label>
+                                                    </li>
+
+                                                    <li>
+                                                        <input type="radio" id="qnaType3" onchange="Qna.typeChange(3)" name="qnaType" value="2">
+                                                        <label for="qnaType3">교환/환불</label>
+                                                    </li>
+
+                                                    <li>
+                                                        <input type="radio" id="qnaType4" onchange="Qna.typeChange(4)" name="qnaType" value="3">
+                                                        <label for="qnaType4">배송</label>
+                                                    </li>
+
+                                                    <li>
+                                                        <input type="radio" id="qnaType5" onchange="Qna.typeChange(5)" name="qnaType" value="4">
+                                                        <label for="qnaType5">쿠폰/적립금</label>
+                                                    </li>
+
+                                                    <li>
+                                                        <input type="radio" id="qnaType6" onchange="Qna.typeChange(6)" name="qnaType" value="5">
+                                                        <label for="qnaType6">회원</label>
+                                                    </li>
+
+                                                    <li>
+                                                        <input type="radio" id="qnaType7" onchange="Qna.typeChange(7)" name="qnaType" value="6">
+                                                        <label for="qnaType7">기타</label>
+                                                    </li>
+
+                                                    <li>
+                                                        <input type="radio" id="qnaType8" onchange="Qna.typeChange(8)" name="qnaType" value="7">
+                                                        <label for="qnaType8">제휴</label>
+                                                    </li>
+
+                                                    <li>
+                                                        <input type="radio" id="qnaType9" onchange="Qna.typeChange(9)" name="qnaType" value="8">
+                                                        <label for="qnaType9">상품권 교환</label>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input_col" id="prodCol">
+                                        <div class="input_row">
+                                            <div class="input_tit">제품</div>
+
+                                            <div class="input_cont prod_search">
+                                                <div class="input_group display-flex">
+                                                    <input type="text" class="form-control width-300px xs-width-85 radius-right-0" id="prod_search" onkeydown="Qna.checkEnterKey()" placeholder="제품명 또는 모델명을 검색해주세요." value="">
+                                                    <button type="button" onclick="Qna.prodSearch()" class="btn btn-sm btn-dark width-70px xs-width-15 radius-left-0 height-34px float-initial">검색</button>
+                                                </div>
+                                                <div class="input_group margin-8-top display-none" id="prodSelectBox">
+                                                    <div class="toggle_wrap toggle_arrow width-400px xs-width-100">
+                                                        <p class="value" id="default">선택</p>
+                                                        <ul class="select max-height-250px scroll-y" id="select" style="display:none"></ul>
+                                                    </div>
+                                                    <p class="margin-5-top">※리스트를 펼쳐서 상품을 선택하여 주시기 바랍니다.</p>
+                                                </div>
+                                            </div>
+
+
+                                            <input type="hidden" id="sp_p_idx" name="sp_p_idx" value="">
+                                        </div>
+                                    </div>
+                                    <div class="input_col">
+                                        <div class="input_row">
+                                            <div class="input_tit">작성자</div>
+                                            <div class="input_cont clearfix">
+                                                <input type="text" class="form-control" id="qna_name" name="qna_name" readonly="readonly" value="김철수">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input_col">
+                                        <div class="input_row">
+                                            <div class="input_tit">핸드폰 번호</div>
+                                            <div class="input_cont clearfix">
+                                                <input type="tel" class="form-control" id="qna_hp" name="qna_hp" readonly="readonly" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input_col">
+                                        <div class="input_row">
+                                            <div class="input_tit">주소</div>
+                                            <div class="input_cont">
+                                                <input type="text" class="form-control" id="qna_addr" name="sp_qb_addr" readonly="readonly" value="(06527)서울 서초구 나루터로12길 18 (잠원동) test11112222">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input_col">
+                                        <div class="input_row">
+                                            <div class="input_tit">문의내용</div>
+                                            <div class="input_cont">
+                                                <textarea rows="13" id="qna_content" name="sp_qb_content" class="width-100 bg-light border-color-sub-light-gray" placeholder="문의내용을 입력해주세요."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input_col">
+                                        <div class="input_row">
+                                            <div class="input-row">
+                                                <div class="input_tit">첨부파일</div>
+                                                <div class="input_cont">
+                                                    <div class="fileinput fileinput-new input-group no-margin" data-provides="fileinput">
+                                                        <div class="form-control radius-right-0" data-trigger="fileinput">
+                                                            <i class="fa fa-file-image-o" aria-hidden="true"></i>
+                                                            <span class="fileinput-filename"></span>
+                                                        </div>
+                                                        <span class="input-group-addon btn btn-default btn-file radius-left-0 bg-light text-white height-38px">
+                                                                <span class="fileinput-new">파일선택</span>
+                                                                <span class="fileinput-exists">재선택</span>
+                                                                <input type="file" name="qb_image" id="qb_image">
+                                                            </span>
+                                                        <a href="javascript:" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">
+                                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div class="input_group margin-8-top">
+                                                        <p class="margin-5-top">※<b class="text-red">100MB 이상</b>인 파일은 업로드가 불가능합니다.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-left bg-light">
+                                    <ul class="margin-20-left padding-20-all xs-padding-15-all list-style-disc line-height-26 xs-line-height-22 bg-light">
+                                        <li>1:1문의 내역과 문의답변은 [마이페이지] → <a href="./myQna" class="text-extra-dark-gray">[1:1문의 내역]</a>에서 확인하실 수 있습니다.</li>
+                                        <li>핸드폰 번호 / 주소 정보 수정을 원하실 경우 [마이페이지] → <a href="./pwCheck" class="text-extra-dark-gray">[회원정보관리]</a>에서 수정해주시기 바랍니다.</li>
+                                        <li>한번 등록한 문의내용은 수정이 불가능합니다. 수정을 원하시면 삭제 후 재문의 해주세요.</li>
+                                        <li>고객센터 답변가능시간 <span th:text="${shop.shopInfo.siCsTime}"></span></li>
+                                    </ul>
+                                </div>
+                                <div class="text-center margin-30-top">
+                                    <button type="button" onclick="Qna.qnaInsert()" class="btn btn-point width-150px xs-width-100">작성하기</button>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+</body>
+</html>

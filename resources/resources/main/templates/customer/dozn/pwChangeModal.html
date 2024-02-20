@@ -1,0 +1,54 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<!--
+<th:block th:replace="/part/loading.html"></th:block>
+-->
+<div class="modal z-index-9999 scroll-y" id="pwModal" tabindex="-1" role="dialog" aria-labelledby="pwModal" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#pwModal').hide();">&times;</button>
+                <h4 class="modal-title" id="pwModalTitle">간편 비밀번호 수정</h4>
+            </div>
+            <div class="modal-body" id="pwModalBody">
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    //계좌 추가
+    function updateCaPw(caIdx){
+        var oriCaPw = $("#oriCaPw").val();
+        if(oriCaPw == ''){
+            alert('기존 비밀번호를 입력해주세요.');
+            return false;
+        }
+
+        var newCaPw = $("#newCaPw").val();
+        if(newCaPw == ''){
+            alert('새 비밀번호를 입력해주세요.');
+            return false;
+        }
+
+        var newCaPwCheck = $("#newCaPwCheck").val();
+        if(newCaPwCheck == ''){
+            alert('새 비밀번호 확인을 입력해주세요.');
+            return false;
+        }
+
+        var param = $("form[name=changePwForm]").serialize();
+        $.ajax({
+            url:[[@{/customer/change/pw.rest}]]
+            ,type:'post'
+            ,data: param
+        }).done(function(res){
+            if(res == 'OK'){
+                alert('비밀번호가 변경되었습니다.');
+                $("#pwModal").hide();
+                location.reload();
+            }else{
+                alert(res);
+            }
+        });
+    }
+</script>
+</html>

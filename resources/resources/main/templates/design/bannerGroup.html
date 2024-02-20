@@ -1,0 +1,134 @@
+<th:block th:if="${ms.getMainSectionOrders() != null}">
+<div class="group-wrap" >
+    <!-- 배너 그룹 레이아웃 타입 스타일 (이미지 버전): 클래스명 'banner-none-slide'-->
+    <div class="banner-img banner-none-slide" th:each="mso, j : ${ms.getMainSectionOrders()}" th:if="${j.index == 0} and ${mso.getBannerGroup() != null}
+    and ${mso.getBannerGroup().getBanners() != null} and ${mso.getBannerGroup().getBgDesign().equals('img')}">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="sm-padding-0" th:each="mso, i : ${ms.getMainSectionOrders()}" th:classappend="${ms.getMsColumn() == 1} ? 'col-xs-12' : 'col-sm-6'">
+                    <div class="img-group sm-display-none">
+                        <a th:each="image, i : ${mso.getBannerGroup().getBanners()}" th:href="@{|${image.getBnUrl()}|}">
+                            <img th:src="${image.bnImage}" class="" >
+                        </a>
+                    </div>
+                    <div class="img-group display-none sm-display-block">
+                        <a th:each="image, i : ${mso.getBannerGroup().getBanners()}" th:href="@{|${image.getBnUrl()}|}">
+                            <img th:src="${image.bnImageMobile}" class="width-100" >
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- // 배너 그룹 레이아웃 타입 스타일 (이미지 버전)  -->
+
+    <!-- 배너 그룹 레이아웃 타입 스타일 (슬라이드 버전 / 일반 container): 클래스명 'padding-none' -->
+    <!--(banner-prev 사용시 이미지 3장 이상 등록해야 슬라이드 정상작동)  -->
+    <th:block th:each="mso, j : ${ms.getMainSectionOrders()}" th:if="${mso.getBannerGroup() != null} and ${mso.getBannerGroup().getBanners() != null}
+                and ${!(mso.getBannerGroup().getBgDesign().equals('img') || mso.getBannerGroup().getBgDesign().equals('banner-slide-full'))}" th:classappend="${mso.getBannerGroup().getBannerDesign()}">
+        <div class="container mo-banner-blank">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- Swiper -->
+                    <!-- 웹 화면 이미지 표시 -->
+                    <!---->
+                    <div class="banner-prev">
+                        <div class="swiper-container-main-prev swiper-container position-relative overflow-hidden display-block sm-display-none"
+                             th:id="|bannerWeb${mso.msoIdx}|">
+                            <!-- th:style="|height:${mso.getBannerGroup().bgHeightWeb}px;|">-->
+                            <ul class="swiper-wrapper height-auto">
+                                <li class="swiper-slide height-100" th:each="image, i : ${mso.getBannerGroup().getBanners()}">
+                                    <picture>
+                                        <a th:href="@{|${image.bnUrl}|}">
+                                            <img th:src="${image.bnImage}">
+                                        </a>
+                                    </picture>
+                                </li>
+                            </ul>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
+                        </div>
+
+
+                        <!-- 모바일 화면 이미지 표시 -->
+                        <div class="swiper-container-main swiper-container position-relative overflow-hidden display-none sm-display-block"
+                             th:id="|bannerMo${mso.msoIdx}|">
+                            <!-- th:style="|height:${mso.getBannerGroup().bgHeightWeb}px;|">-->
+                            <ul class="swiper-wrapper height-auto">
+                                <li class="swiper-slide" th:each="image, i : ${mso.getBannerGroup().getBanners()}">
+                                    <picture class="height-auto">
+                                        <a th:href="@{|${image.bnUrl}|}">
+                                            <img th:src="${image.bnImageMobile}" class="height-auto">
+                                        </a>
+                                    </picture>
+                                </li>
+                            </ul>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+    <!-- // 배너 그룹 레이아웃 타입 스타일 (슬라이드 버전) -->
+
+    <!-- 배너 그룹 레이아웃 타입 스타일 (슬라이드 버전 & container-fluid): 클래스명 'banner-slide-full' -->
+    <th:block th:each="mso, j : ${ms.getMainSectionOrders()}" th:if="${mso.getBannerGroup() != null} and ${mso.getBannerGroup().getBanners() != null}
+                and ${mso.getBannerGroup().getBgDesign().equals('banner-slide-full')}" th:classappend="${mso.getBannerGroup().getBannerDesign()}">
+        <div class="banner-slide-full">
+            <div class="container-fluid mo-banner-blank ">
+                <div class="row">
+                    <!-- Swiper -->
+                    <!-- 웹 화면 이미지 표시 -->
+                    <div class="swiper-container-main swiper-container position-relative overflow-hidden display-block sm-display-none banner-slide-full-box-web"
+                         th:id="|bannerWeb${mso.msoIdx}|">
+                        <!-- th:style="|height:${mso.getBannerGroup().bgHeightWeb}px;|">-->
+                        <ul class="swiper-wrapper">
+                            <li class="swiper-slide height-100" th:each="image, i : ${mso.getBannerGroup().getBanners()}">
+                                <a th:href="@{|${image.bnUrl}|}">
+                                    <!--<img th:src="${image.bnImage}">-->
+                                    <picture class="cover-background" th:style="'background-image:url(' + ${image.bnImage} + ');'"></picture>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-bottom-multi">
+                            <div id="slideBtn" class="slide_btn">
+                                <a class="start pause-btn active" th:classappend="|start_bannerWeb${mso.msoIdx}|" ><span class="ti-control-play"></span></a>
+                                <a class="stop pause-btn" th:classappend="|stop_bannerWeb${mso.msoIdx}|" ><span class="ti-control-pause"></span></a>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                    <!-- 모바일 화면 이미지 표시 -->
+                    <div class="swiper-container-main swiper-container position-relative overflow-hidden display-none sm-display-block banner-slide-full-box-mo"
+                         th:id="|bannerMo${mso.msoIdx}|">
+                        <!-- th:style="|height:${mso.getBannerGroup().bgHeightWeb}px;|">-->
+                        <ul class="swiper-wrapper height-auto">
+                            <li class="swiper-slide" th:each="image, i : ${mso.getBannerGroup().getBanners()}">
+                                <picture class="height-auto">
+                                    <a th:href="@{|${image.bnUrl}|}">
+                                        <img th:src="${image.bnImageMobile}" class="height-auto">
+                                    </a>
+                                </picture>
+                            </li>
+                        </ul>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-bottom-multi">
+                            <div id="slideBtnMo" class="slide_btn">
+                                <a class="start pause-btn active" th:classappend="|start_bannerMo${mso.msoIdx}|" ><span class="ti-control-play"></span></a>
+                                <a class="stop pause-btn" th:classappend="|stop_bannerMo${mso.msoIdx}|" ><span class="ti-control-pause"></span></a>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </th:block>
+    <!-- // 배너 그룹 레이아웃 타입 스타일 (슬라이드 버전 & container-fluid) -->
+</div>
+</th:block>

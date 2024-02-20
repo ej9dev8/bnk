@@ -1,0 +1,51 @@
+<!-- 상품 그룹 관리(MOBILE) :: 타입 D - 타이틀 + 슬라이드 상품 리스트 (mo-prd-type-d) -->
+<div class="display-none sm-display-block web-type-layout web-prd-type-d" id="filterSec">
+    <div class="section-title" th:if="${mso.productGroup.pgName}">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1 class="product-group-title color-title" th:text="${mso.productGroup.pgName}">상품그룹명</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="margin-10-top">
+        <div class="thumb-style thumb-rounded small-rounded thumb-bg gray" >
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 padding-10-top">
+                        <form id="products">
+                            <div class="width-100">
+                                <div class="prod_sort_wrap clearfix">
+                                    <div class="select-rounded small-rounded select-bg-gray prod_sort text-0 width-180px">
+                                        <!-- 개별 클래스 요소 선택란 : select -->
+                                        <select class="bg-transparent" th:id="|prodTab_${mso.productGroup.pgIdx}|" th:onchange="|loadProductGroup(${mso.productGroup.pgIdx}, -1, 'mobile')|">
+                                            <option value="-1" selected>전체보기</option>
+                                            <option th:each="cfs, i : ${mso.productGroup.cfList}" th:value="${cfs.CF_IDX}" th:text="${cfs.CF_NAME}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="swiper-container-main-non-auto overflow-hidden circle-btn dp-btn center">
+                                    <ul class="swiper-wrapper height-auto" th:id="|${mso.productGroup.pgIdx}_mobile|" >
+                                        <li class="swiper-slide layout width-100 height-auto" th:each="pgiPage: ${#numbers.sequence(1, __${mso.productGroup.pgiTotalPageMap(2)}__)}">
+                                            <div class="pd_group value_group prod_list_wrap prod_style prod_style_grid 4-lay">
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event" th:each="sp : ${mso.productGroup.getListMap(1,4)}">
+                                                        <th:block th:replace="/product/p_block2.html"></th:block>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div class="swiper-button-prev"><span class="ti-angle-left arrow"></span></div>
+                                    <div class="swiper-button-next"><span class="ti-angle-right arrow"></span></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- // 상품 그룹 관리(MOBILE) :: 타입 E -->

@@ -1,0 +1,176 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>1:1 문의</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <th:block th:replace="/board/comp/menu.html"></th:block>
+                    <section class="padding-section half-padding-section">
+                        <div>
+                            <form name="qnaForm" id="qnaForm" class="qna_form" enctype="multipart/form-data" method="POST">
+                                <input type="hidden" name="sp_qb_type" id="sp_qb_type">
+                                <fieldset>
+                                    <div class="input_wrap input-rounded small-rounded input-line-gray">
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">구분</div>
+                                                <div class="input_cont">
+                                                    <ul class="radio_styled clearfix">
+                                                        <li th:each="qt, i : ${qnaType}">
+                                                            <label class="custom-rdo-wrap" th:for="|qnaType${i.count}|"><span th:text="${qt.getName()}">QNA명</span>
+                                                                <input type="radio" th:id="|qnaType${i.count}|" onclick="Qna.typeChange(this)" name="QNA_TYPE" th:value="${qt.getName()}" class="custom-rdo">
+                                                                <span class="custom-rdomark"></span>
+                                                            </label>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input_col hidden" id="prodCol">
+                                            <div class="input_row">
+                                                <div class="input_tit">제품</div>
+                                                <div class="input_cont prod_search">
+                                                    <div class="input_group display-flex">
+                                                        <input type="text" class="form-control width-300px xs-width-85 radius-right-0" id="prod_search" onkeydown="Qna.checkEnterKey()" placeholder="제품명 또는 모델명을 검색해주세요." value="">
+                                                        <button type="button" onclick="Qna.prodSearch()" class="btn btn-sm btn-dark width-70px xs-width-15 radius-left-0 height-34px float-initial">검색</button>
+                                                    </div>
+                                                    <div class="input_group margin-8-top display-none" id="prodSelectBox">
+                                                        <div class="toggle_wrap toggle_arrow width-400px xs-width-100">
+                                                            <p class="value" id="default">선택</p>
+                                                            <ul class="select max-height-250px scroll-y" id="select" style="display:none"></ul>
+                                                        </div>
+                                                        <p class="margin-5-top">※리스트를 펼쳐서 상품을 선택하여 주시기 바랍니다.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--                                    <div class="input_col">-->
+                                        <!--                                        <div class="input_row">-->
+                                        <!--                                            <div class="input_tit">공개여부</div>-->
+                                        <!--                                            <div class="input_cont">-->
+                                        <!--                                                <ul class="radio_styled clearfix">-->
+                                        <!--                                                    <li>-->
+                                        <!--                                                        <input type="radio" th:id="display_y" name="QNA_DISPLAY" th:value="Y" checked>-->
+                                        <!--                                                        <label th:for="display_y">공개</label>-->
+                                        <!--                                                    </li>-->
+                                        <!--                                                    <li>-->
+                                        <!--                                                        <input type="radio" th:id="display_n" name="QNA_DISPLAY" th:value="N">-->
+                                        <!--                                                        <label th:for="display_n">비공개</label>-->
+                                        <!--                                                    </li>-->
+                                        <!--                                                </ul>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <!--                                    </div>-->
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">작성자</div>
+                                                <div class="input_cont clearfix">
+                                                    <input type="text" class="form-control" id="qna" th:value="${@sessionInfo.getNameMasking()}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">제목</div>
+                                                <div class="input_cont">
+                                                    <input type="text" class="form-control" id="QNA_TITLE" name="QNA_TITLE">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">문의내용</div>
+                                                <div class="input_cont">
+                                                    <textarea rows="13" id="QNA_CONTENT" name="QNA_CONTENT" class="width-100 border-color-sub-light-gray form-control" placeholder="문의내용을 입력해주세요."></textarea>
+
+                                                    <div class="text-left margin-20-top">
+                                                        <ul class="padding-15-lr">
+                                                            <li>1:1문의 내역과 문의답변은 [마이페이지] → <a href="/myPage/qna" class="text-extra-dark-gray">[1:1문의 내역]</a>에서 확인하실 수 있습니다.</li>
+                                                            <!--/*
+                                                            <li>핸드폰 번호 / 주소 정보 수정을 원하실 경우 [마이페이지] → <a href="/myPage/modify" class="text-extra-dark-gray">[회원정보관리]</a>에서 수정해주시기 바랍니다.</li>
+                                                            <li>한번 등록한 문의내용은 수정이 불가능합니다. 수정을 원하시면 삭제 후 재문의 해주세요.</li>
+                                                            */-->
+                                                            <li>고객센터 답변가능시간 <span th:text="${shop.shopInfo.siCsTime}"></span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--/*<div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input-row">
+                                                    <div class="input_tit">첨부파일</div>
+                                                    <div class="input_cont">
+                                                        <div class="fileinput fileinput-new input-group no-margin" data-provides="fileinput">
+                                                            <div class="form-control radius-right-0 padding-12-all" data-trigger="fileinput">
+                                                                <i class="fa fa-file-image-o" aria-hidden="true"></i>
+                                                                <span class="fileinput-filename"></span>
+                                                            </div>
+                                                            <span class="input-group-addon btn btn-default btn-file radius-left-0 bg-light text-white height-38px">
+                                                                <span class="fileinput-new">파일선택</span>
+                                                                <span class="fileinput-exists">재선택</span>
+                                                                <input type="file" name="QNA_FILE" id="QNA_FILE">
+                                                            </span>
+                                                            <a href="javascript:" class="margin-5-left fileinput-exists" data-dismiss="fileinput">
+                                                                <i class="ti-close" aria-hidden="true"></i>
+                                                            </a>
+                                                        </div>
+                                                        <div class="input_group margin-8-top">
+                                                            <p class="margin-5-top">※<b class="text-red">100MB 이상</b>인 파일은 업로드가 불가능합니다.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>*/-->
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </section>
+                    <section class="padding-section">
+                        <div class="text-center">
+                            <button type="button" onclick="insertQna();" class="btn btn-point submit-btn">문의하기</button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+    <script type="text/javascript" src="/js/board.js"></script>
+    <script>
+        function insertQna(){
+            var qnaType = $("input[name=QNA_TYPE]:checked");
+            if(qnaType.val() == null){
+                alert('문의 분류를 선택해주세요.');
+                return false;
+            }
+            var qnaTitle = $("input[name=QNA_TITLE]");
+            if(qnaTitle.val() == ''){
+                alert('제목을 입력해주세요.');
+                qnaTitle.focus();
+                return false;
+            }
+            var qnaContent = $("textarea[name=QNA_CONTENT]");
+            if(qnaContent.val() == ''){
+                alert('내용을 입력해주세요.');
+                qnaContent.focus();
+                return false;
+            }
+            if(window.confirm('등록 하시겠습니까?')){
+                document.qnaForm.action = '/board/qna/insert.rest';
+                document.qnaForm.submit();
+            }
+        }
+    </script>
+</body>
+</html>

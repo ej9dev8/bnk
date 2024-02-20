@@ -1,0 +1,72 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+<body>
+    <form method="post" name="pgForm" style="display: none;" accept-charset="EUC-KR">
+        <input type="text" name="SERVICE_ID" th:value="${bg.service_id}">
+        <input type="text" name="ORDER_ID" th:value="${bg.order_id}">
+        <input type="text" name="ORDER_DATE" th:value="${bg.order_date}">
+        <input type="text" name="AMOUNT" th:value="${bg.amount}">
+        <input type="text" name="ITEM_NAME" th:value="${bg.item_name}">
+        <input type="text" name="ITEM_CODE" th:value="${bg.item_code}">
+        <input type="text" name="USER_ID" th:value="${bg.user_id}">
+        <input type="text" name="USER_IP" th:value="${bg.user_ip}">
+        <input type="text" name="USER_NAME" th:value="${bg.user_name}">
+        <input type="text" name="USER_EMAIL" th:value="${bg.user_email}">
+        <input type="text" name="INSTALLMENT_PERIOD" th:value="${bg.installment_period}">
+        <input type="text" name="CARD_TYPE" th:value="${bg.card_type}">
+        <input type="text" name="DIRECT_USE" th:value="${bg.direct_use}">
+        <input type="text" name="RETURN_URL" th:value="${bg.return_url}">
+        <input type="text" name="CHECK_SUM" th:value="${bg.check_sum}">
+        <input type="text" name="CANCEL_FLAG" value="Y">
+        <input type="text" name="RESERVED1" th:value="${bg.reserved1}">
+        <input type="text" name="RESERVED2" th:value="${bg.reserved2}">
+        <input type="text" name="RESERVED3" th:value="${bg.reserved3}">
+        <input type="text" name="APPNAME" value="app">
+        <input type="text" name="TAX_FREE_AMOUNT" value="">
+    </form>
+</body>
+
+<script th:inline="javascript">
+    pgSubmit();
+    function pgSubmit(){
+        var HForm = document.pgForm;
+        var url = [[${bg.action}]]
+
+        if(url == null){
+            HForm.action = [[${bg.return_url}]];
+            HForm.submit();
+        }else{
+            var filter = "win16|win32|win64|mac|macintel";
+            if(navigator.platform){
+                if(filter.indexOf(navigator.platform.toLowerCase())<0 ){//모바일
+                    HForm.target = "_self";
+
+                    if(url.indexOf('/credit')>-1){//신용카드
+                        url = url.replace('/credit', '/credit/smartphone');
+                    }else if(url.indexOf('/account')>-1){//계좌이체
+                        url = url.replace('/account', '/account/smartphone');
+                    }else{
+                        alert('잘못된 결제수단 방식입니다.\n다시 시도해주세요.');
+                        return false;
+                    }
+                    HForm.action = url;
+                    HForm.acceptCharset = "euc-kr";
+                    HForm.submit();
+                }else{//웹
+                    HForm.action = url;
+                    if (/edge/.test(navigator.userAgent.toLowerCase()) || /MSIE/.test(navigator.userAgent) || /Trident.*rv[ :]*11\./.test(navigator.userAgent)) {
+                        var befCharset = document.charset;
+                        document.charset = "euc-kr";
+                        HForm.submit();
+                        document.charset = befCharset;
+                    }else{
+                        HForm.acceptCharset = "euc-kr";
+                        HForm.submit();
+                    }
+                }
+            }
+        }
+    }
+
+</script>
+</html>

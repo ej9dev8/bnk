@@ -1,0 +1,44 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>배송조회</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+<div class="page-container">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <section class="padding-section">
+                    <div class="area_title">
+                        <h2>배송 정보</h2>
+                    </div>
+                    <div class="order_pay_method none input_wrap input_val">
+                        <div class="input_col">
+                            <div class="input_row">
+                                <div class="input_tit">배송주소</div>
+                                <div class="input_cont">배송주소</div>
+                            </div>
+                        </div>
+                        <div class="input_col">
+                            <div class="input_row">
+                                <div class="input_tit">배송상태</div>
+                                <div class="input_cont" >배송상태</div>
+                            </div>
+                        </div>
+                        <div class="input_col">
+                            <div class="input_row">
+                                <div class="input_tit">택배사</div>
+                                <div class="input_cont">택배사</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="/part/js.html"></th:block>
+</body>
+</html>

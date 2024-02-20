@@ -1,0 +1,41 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<!--/*
+  map
+*/-->
+<div class="prod_thumb_link">
+    <a th:href="@{|/product/detail/${sp.SP_IDX}|}" class="display-block">
+        <img th:src="${sp.P_THUMBNAIL}" th:alt="${sp.SP_NAME}">
+        <div class="label-container list" th:if="${#maps.containsKey(sp, 'SP_TAG')}">
+            <th:block th:each="tag : ${T(galaxia.shop.util.Common).stringToList(sp.SP_TAG)}">
+                <label class="label label-icon" th:classappend="${tag.STYLE}" th:text="${tag.TEXT}">태그</label>
+            </th:block>
+        </div>
+        <div class="bg-thumb"></div>
+
+        <div class="prod_sold_out" th:if="${sp.IS_SALE == 'N'}">
+            <div class="display-table width-100 height-100">
+                <div class="display-table-cell vertical-align-middle text-center">
+                    <span class="sold-out-text">품절</span>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+<div class="prod_detail_box padding-0-bottom">
+    <p class="disc" th:text="${sp.B_NAME}">브랜드</p>
+    <h1 class="tit">
+        <a th:href="@{|/product/detail/${sp.SP_IDX}|}" th:title="${sp.SP_NAME}" th:text="${sp.SP_NAME}">shop상품명</a>
+    </h1>
+    <!-- 쇼핑몰 일반 -->
+    <div class="price">
+        <th:block th:if="${sp.SP_PRICE != sp.P_PRICE}">
+            <strong class="price_sale_percent text-red" th:if="${sp.SP_PERCENT != null && sp.SP_PERCENT != 0}"><span  th:text="${#numbers.formatInteger(sp.SP_PERCENT,0)}">퍼센트</span>%</strong>
+            <strong class="original_price" th:text="${#numbers.formatInteger(sp.P_PRICE, 0, 'COMMA')}">판매가</strong>
+        </th:block>
+        <th:block th:unless="${sp.SP_PRICE != sp.P_PRICE}"></th:block>
+
+        <strong class="price_from" th:text="${#numbers.formatInteger(sp.SP_PRICE, 0, 'COMMA')}">분양몰상품가격</strong>
+    </div>
+</div>
+
+</html>

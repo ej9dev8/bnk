@@ -1,0 +1,101 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<footer id="footer" class="sm-margin-50-bottom" th:classappend="${shop.getShopCss().getScFooter()}">
+    <div class="container-fluid" th:if="${topNotice1}">
+        <div class="row">
+            <div class="footer-content-wrap xs-padding-15-tb">
+                <div class="container">
+                    <div class="footer-content">
+                        <p class="title-main float-left">
+                            <b><a th:href="@{|/board/detail/notice/${topNotice1.ntIdx}|}">공지사항</a></b>
+                            <a th:href="@{|/board/detail/notice/${topNotice1.ntIdx}|}" class="title-sub" th:text="${topNotice1.ntTitle}">[공지] 시스템 점검 공지</a>
+                        </p>
+                        <p class="more-link float-right">
+                            <a href="/board/notice">더보기<i class="ti-angle-right margin-5-left"></i></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer_nav_wrap">
+        <div class="container position-relative">
+            <div class="row">
+                <div class="col-xs-12">
+                    <ul class="footer_nav padding-20-top" th:if="${shop.footerMenus}">
+                        <li th:each="fms, i: ${shop.footerMenus}" th:if="${fms.getFmOrder()} > 0">
+                            <th:block th:if="${fms.agreement != null}">
+                                <!--/*개인정보처림방침만 bold처리*/-->
+                                <a th:if="${#strings.equals(fms.fmTitle, '개인정보처리방침')}" th:href="@{|/agreement/${fms.agreement.agmIdx}|}"><b th:text="${fms.agreement.agmType.getName()}"></b></a>
+                                <a th:unless="${#strings.equals(fms.fmTitle, '개인정보처리방침')}" th:href="@{|/agreement/${fms.agreement.agmIdx}|}" th:text="|${fms.agreement.agmType.getName()}|">푸터메뉴명</a>
+                            </th:block>
+                            <!--/*약관아닌 개별 푸터메뉴*/-->
+                            <a th:unless="${fms.agreement != null}" th:text="${fms.fmTitle}" th:href="@{|${fms.fmUrl}|}" target="_blank">푸터메뉴명</a>
+                        </li>
+                    </ul>
+                    <!--<div class="footer-select select-rounded small-rounded select-line-gray prod_sort text-0 width-150px" th:if="${shop.familySites}">
+                         <select class="bg-transparent" id="familySelect" onchange="familySite()">
+                            <option th:each="fs, i: ${shop.familySites}" th:if="${fs.getFsOrder()} > 0" th:value="${fs.getFsUrl()}" th:text="${fs.getFsTitle()}">사이트명</option>
+                        </select>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</footer>
+<!--플로팅바-->
+<div th:if="${shop.isShopUseFloating() && shop.getShopCss().getScFloatBorder().equals('floating-type-a')}">
+    <th:block th:replace="/part/floatingBar-type-a.html" />
+</div>
+<div th:if="${shop.isShopUseFloating() && shop.getShopCss().getScFloatBorder().equals('floating-type-b')}">
+    <th:block th:replace="/part/floatingBar-type-b.html" />
+</div>
+<!-- 모바일 퀵메뉴 -->
+<aside id="mobile-quick" class="mobile-quick display-none sm-display-block">
+    <ul>
+        <li>
+            <a href="/index" class="login-group-large color-point">
+                <span src="" alt="홈으로" class="icon ti-home"></span>
+                <b>홈으로</b>
+            </a>
+        </li>
+
+        <li>
+            <a onclick="history.back();" class="login-group-large color-point">
+                <span src="" alt="앞으로가기" class="icon ti-arrow-left"></span>
+                <b>앞으로가기</b>
+            </a>
+        </li>
+        <li>
+            <a onclick="history.forward();" class="login-group-large color-point">
+                <span src="" alt="뒤로가기" class="icon ti-arrow-right"></span>
+                <b>뒤로가기</b>
+            </a>
+        </li>
+        <li>
+            <a onclick="Common.posTop();" class="login-group-large color-point">
+                <span src="" alt="맨위로" class="icon ti-arrow-up"></span>
+                <b>맨위로</b>
+            </a>
+        </li>
+    </ul>
+</aside>
+<script th:inline="javascript">
+    function familySite() {
+        var url = $('#familySelect option:selected').val();
+        if(url != '') {
+            window.open(url);
+        }
+    }
+</script>
+<script th:inline="javascript">
+window.onload=function(){
+
+<!--노출중인 패밀리 사이트가 없을 시 select box 제거-->
+    var option = $('#familySelect option:eq(1)').val();
+    if(option == null){
+        $('#familySelect').remove();
+    }
+};
+</script>
+</html>

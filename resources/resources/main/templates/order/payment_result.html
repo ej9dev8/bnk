@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<div>
+  <input type="hidden" id="msg" th:value="${msg}" >
+  <input type="hidden" id="openerLocation" th:value="${openerLocation}" >
+</div>
+<script th:inline="javascript">
+    var msg  = document.getElementById("msg").value;
+    if(msg != null && msg != ''){
+        alert(msg);
+    }
+
+    var openerLocation = document.getElementById("openerLocation").value;
+    if(openerLocation != ''){
+        parent.location.href=openerLocation;
+    }
+    
+    parent.closePgModal();
+</script>
+</html>

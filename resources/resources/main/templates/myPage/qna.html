@@ -1,0 +1,155 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>마이페이지 1:1문의내역</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <th:block th:replace="/myPage/comp/menu.html"></th:block>
+                    <section class="padding-section">
+                        <form method="post" name="dateSearch" id="dateSearch" action="/myPage/qna" class="input-rounded small-rounded date_search bg-light sm-lr-fit">
+                            <fieldset>
+                                <legend class="hidden">기간조회</legend>
+                                <div class="search_box width-100 margin-auto">
+                                    <div class="month_btn clearfix sm-margin-10-bottom">
+                                        <button type="button" id="1m6" class="btn" onclick="setMonthDate('1m',this)">1개월</button>
+                                        <button type="button" id="3m6" class="btn" onclick="setMonthDate('3m',this)">3개월</button>
+                                        <button type="button" id="6m6" class="btn" onclick="setMonthDate('6m',this)">6개월</button>
+                                        <button type="submit" class="btn display-none xs-display-block">조회</button>
+                                    </div>
+                                    <div class="date_input_wrap">
+                                        <div class="date_input start">
+                                            <input type="text" class="form-control datepicker inquiry_datepicker border-color-sub-light-gray" name="date_from" id="date_from" th:value="${#strings.isEmpty(date_from)? '' : date_from}">
+                                            <i class="ti-calendar"></i>
+                                        </div>
+                                        <i class="date_wave">~</i>
+                                        <div class="date_input end">
+                                            <input type="text" class="form-control datepicker border-color-sub-light-gray" name="date_to" id="date_to" th:value="${#strings.isEmpty(date_to)? '' : date_to}">
+                                            <i class="ti-calendar"></i>
+                                        </div>
+                                        <input type="hidden" name="page" th:value="${page}">
+                                        <button type="button" class="btn btn-dark radius-left-0 xs-display-none" onclick="searchQna(1);">조회</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                        <table class="table sm_table_block">
+                            <thead class="sm-display-none">
+                            <tr>
+                                <th style="width:150px">작성일</th>
+                                <th style="width:150px">문의 구분</th>
+    <!--                                <th style="width:150px">공개 여부</th>-->
+                                <th style="width:auto">제목</th>
+                                <th style="width:100px">상태</th>
+                                <th style="width:100px"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="qna, i : ${qnaList}">
+                                <tr class="sm_prod_view">
+                                    <td class="title_none chk">
+                                        <p class="overflow-hidden">
+                                            <small class="display-block" th:text="${#strings.substring(qna.CREATED_DATE, 0,10)}"></small>
+    <!--                                            <span class="display-block xs-display-inline-block" th:text="${T(galaxia.shop.util.Common).getDate(qna.CREATED_DATE)}"></span>-->
+                                        </p>
+                                        <p class="overflow-hidden text-red display-none sm-display-block">
+                                            <b><span th:text="${qna.STATE}"></span></b>
+                                        </p>
+                                    </td>
+                                    <td class="title_none sm-display-none">
+                                        <p class="overflow-hidden">
+                                            <span th:text="${qna.QNA_TYPE}"></span>
+                                        </p>
+                                    </td>
+    <!--                                    <td class="sm_prod_view title_none">-->
+    <!--                                        <p class="overflow-hidden xs-padding-10-lr">-->
+    <!--                                            <span class="display-block xs-display-inline-block" th:if="${qna.qnaSecret == true}" th:text="공개"></span>-->
+    <!--                                            <span class="display-block xs-display-inline-block" th:unless="${qna.qnaSecret == true}" th:text="비공개"></span>-->
+    <!--                                        </p>-->
+    <!--                                    </td>-->
+                                    <td class="title_none prod_text_wrap">
+                                        <div class="prod_text padding-10-lr">
+                                            <span class="label label-default margin-5-bottom display-none sm-display-inline-block" th:text="${qna.QNA_TYPE}"></span>
+                                            <a class="display-block" th:href="@{|/myPage/detail/qna/${qna.QNA_IDX}|}" th:text="${qna.QNA_TITLE}"></a>
+                                        </div>
+                                    </td>
+                                    <td class="title_none sm-display-none">
+                                        <p class="overflow-hidden text-red">
+                                            <b><span class="display-block xs-display-none" th:text="${qna.STATE}"></span></b>
+                                        </p>
+                                    </td>
+                                    <td class="title_none">
+                                        <p class="overflow-hidden padding-10-lr">
+                                            <a th:onclick="deleteQna([[${qna.QNA_IDX}]])" class="btn btn-sm btn-transparent-light-gray">삭제</a>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                        <div th:if="${#lists.isEmpty(qnaList)}" class="data_none"><p>1:1 문의내역이 없습니다.</p></div>
+                        <div class="text-right margin-30-top">
+                            <a href="/board/qna" class="btn btn-point submit-btn">문의하기</a>
+                        </div>
+                        <div class="text-center">
+                            <div class="pagination" th:if="${not #lists.isEmpty(qnaList)}">
+                                <a onclick="searchQna(1)" class="arrow" id="prevAll"></a>
+
+                                <th:block th:if="${paging.prevPage} < 0">
+                                    <a onclick="searchQna(1)"  class="arrow" id="prev"></a>
+                                </th:block>
+                                <th:block th:unless="${paging.prevPage} < 0">
+                                    <a th:onclick="|searchQna(${paging.prevPage})|" class="arrow" id="prev"></a>
+                                </th:block>
+
+                                <a th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:onclick="|searchQna(${i})|" th:class="${paging.page eq i} ? on" th:text="${i}">1</a>
+
+                                <th:block th:if="${paging.nextPage} > ${paging.totalPage}">
+                                    <a th:onclick="|searchQna(${paging.totalPage})|" class="arrow" id="next"></a>
+                                </th:block>
+                                <th:block th:unless="${paging.nextPage} > ${paging.totalPage}">
+                                    <a th:onclick="|searchQna(${paging.nextPage})|" class="arrow" id="next"></a>
+                                </th:block>
+
+                                <a th:onclick="|searchQna(${paging.totalPage})|" class="arrow" id="nextAll"></a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+    <script type="text/javascript" src="/js/board.js"></script>
+    <script th:inline="javascript">
+        function deleteQna(idx){
+            if(confirm('선택한 문의내역을 삭제하시겠습니까?')){
+                $.ajax({
+                    url : '/board/qna/delete.rest',
+                    type : 'post',
+                    data : 'qnaIdx='+idx,
+                }).done(function(data){
+                    msg = data.message;
+                    if(msg == 'OK'){
+                        alert('완료되었습니다.');
+                        location.href = data.location;
+                    }else{
+                        alert(msg);
+                    }
+                });
+            }
+        }
+        function searchQna(page){
+            $("input[name=page]").val(page);
+            document.dateSearch.submit();
+        }
+    </script>
+</body>
+</html>

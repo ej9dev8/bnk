@@ -1,0 +1,13 @@
+<!-- 모달 페이지 시작 -->
+<div class="modal z-index-9999 scroll-y bg-black-op-5" id="agreementModal" tabindex="-1" role="dialog" aria-labelledby="agreementModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#agreementModal').hide();">&times;</button>
+        <h4 class="modal-title" id="agreementModalLabel" th:text="${agm.agmType.getName()}">약관명</h4>
+      </div>
+      <div class="modal-body" id="agreementModalBody" th:utext="${agm.agmContent}">약관내용</div>
+    </div>
+  </div>
+</div>
+<!-- 모달 페이지 끝 -->

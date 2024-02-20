@@ -1,0 +1,64 @@
+<!-- 상단 배너 -->
+<div id="topBanner" style="" class="" th:if="${shop.getHeader().isHdShowTopBanner()}">
+    <div class="width-100 text-center position-relative" th:style="|background-color:${shop.getHeader().getHdTopBannerBackground()};|">
+        <a th:href="@{|${shop.getHeader().getHdTopBannerUrl()}|}">
+            <!-- 데스크탑 탑배너 이미지 -->
+            <div class="topBanner-desktop cover-background sm-display-none">
+                <img th:src="${shop.getHeader().getHdTopBanner()}">
+            </div>
+
+            <!-- 모바일 탑배너 이미지 -->
+            <img class="topBanner-mobile display-none sm-display-block" th:src="${shop.getHeader().getHdTopBannerMobile()}">
+        </a>
+        <div class="custom-chk-wrapper">
+            <label class="custom-chk-wrap sm-display-none" for="top_today_close">오늘 다시 안 보기
+                <input type="checkbox" id="top_today_close" name="top_today_close" onclick="topCloseToday()">
+                <span class="custom-checkmark"></span>
+            </label>
+        </div>
+        <button type="button" class="btn bg-transparent" onclick="topBannerclose()"><i class="ti-close text-15"></i></button>
+    </div>
+</div>
+<!-- 상단 배너 -->
+<script>
+    loadGetCookie();
+    function loadGetCookie(){
+        var closeBanner = getCookie('close_banner');
+        ('cb == ' + closeBanner!='')
+        if(closeBanner!=''){
+            document.getElementById('topBanner').style.display = 'none';
+        }
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1);
+            if (c.indexOf(name) != -1) {
+                return c.substring(name.length,c.length);
+            }
+        }
+        return "";
+    }
+
+    // 탑 배너 하루종일 닫기
+    function topCloseToday(){
+        if($("input[name='top_today_close']").is(":checked") ==true){
+            setCookie("close_banner","Y",1);
+        }else{
+            setCookie("close_banner","Y",0);
+        }
+    }
+
+    //탑 배너 닫기
+    function topBannerclose(){
+        if(screen.availWidth <= 991){
+            setCookie("close_banner","Y",1);
+        }
+        $("#topBanner").css("display", "none");
+        $(".").css({top:"0px"});
+        $("body").css({'padding-top':"0px"});
+    }
+</script>

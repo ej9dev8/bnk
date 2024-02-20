@@ -1,0 +1,315 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>반품요청취소</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+<div class="page-container">
+    <th:block th:replace="/header/header.html"></th:block>
+    <th:block th:replace="/myPage/comp/menu.html"></th:block>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <form method="post" name="refundForm" id="refundForm" action="">
+                    <input type="hidden" name="O_IDX" th:value="${order.oIdx}">
+                    <section class="padding-section">
+                        <div class="area_title">
+                            <h2>STEP1. 제품</h2>
+                        </div>
+                        <div class="payArea bg-light no-margin-top margin-25-bottom padding-15-all small">
+                            <span>주문일자: <b class="margin-5-left text-dark-gray" th:text="${#temporals.format(order.oDate, 'yyyy-MM-dd HH:mm:ss')}">주문일자</b></span>
+                            <i class="margin-15-lr text-gray xs-display-none">|</i>
+                            <span class="xs-display-block xs-margin-10-top">주문번호: <b class="margin-5-left" th:text="${order.oCode}">주문번호</b></span>
+                        </div>
+                        <!-- 주문내역(모바일) -->
+                        <div class="sm_prod_view_wrap display-none sm-display-block">
+                            <!-- 반복되는 블록 -->
+                            <div class="sm_prod_view" th:each="op , i : ${order.getOrderProducts()}">
+                                <div class="order_box title_none">
+                                    <p class="order_box_text">
+                                        <span>분류</span>
+                                        <b th:text="${op.shopProduct.product.PType}">분류</b>
+                                    </p>
+                                </div>
+                                <div class="prod_box">
+                                    <div class="prod_img">
+                                        <img th:src="${op.shopProduct.product.PThumbnail}" th:alt="${op.shopProduct.spName}" data-no-retina="">
+                                    </div>
+                                    <div class="prod_detail">
+                                        <p class="text-gray small" th:text="${op.shopProduct.product.brand.bName}">브랜드</p>
+                                        <p><a th:href="@{|/product/detail/${op.shopProduct.spIdx}|}" class="tit" th:text="${op.shopProduct.spName}">상품명</a></p>
+                                        <p class="text-gray small">옵션명:<span>옵션</span></p>
+                                    </div>
+                                </div>
+                                <div class="order-price-box">
+                                    <b class="val-tit">상품금액</b>
+                                    <span>
+                                        <b th:text="|${#numbers.formatInteger(op.opPriceEvent, 0, 'COMMA')}|">상품금액</b>
+                                        <b class="order_after_seal">원</b>
+                                    </span>
+                                </div>
+                                <div class="order-price-box">
+                                    <b class="val-tit">주문금액</b>
+                                    <span class="text-red">
+                                        <b th:text="|${#numbers.formatInteger(op.opPrice, 0, 'COMMA')}|">상품금액</b>
+                                        <b class="order_after_seal">원</b>
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- // 반복되는 블록 -->
+                        </div>
+                        <!-- // 주문내역(모바일) -->
+                        <!-- 주문내역(웹) -->
+                        <table class="table sm-display-none sm_prod_view">
+                            <thead>
+                            <tr>
+                                <th style="width:100px">구분</th>
+                                <th style="width:auto">제품 정보</th>
+                                <th style="width:200px">상품금액</th>
+                                <th style="width:100px">주문금액</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="op , i : ${order.getOrderProducts()}">
+                                <td data-title="분류">
+                                    <span th:text="${op.shopProduct.product.PType}">상품타입</span>
+                                </td>
+                                <td class="text-left">
+                                    <div class="prod_box">
+                                        <div class="prod_img">
+                                            <img th:src="${op.shopProduct.product.PThumbnail}" th:alt="${op.shopProduct.spName}" data-no-retina="">
+                                        </div>
+                                        <div class="prod_detail">
+                                            <p class="text-gray small" th:text="${op.shopProduct.product.brand.bName}">CU</p>
+                                            <p><a th:href="@{|/product/detail/${op.shopProduct.spIdx}|}" class="tit" th:text="${op.shopProduct.spName}">상품명</a></p>
+                                            <p class="text-gray small">옵션: <span>옵션명</span></p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                   <span>
+                                        <b th:text="|${#numbers.formatInteger(op.opPriceEvent, 0, 'COMMA')}|"></b>
+                                        <b class="order_after_seal">원</b>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="text-red">
+                                        <b th:utext="|${#numbers.formatInteger(op.opPrice, 0, 'COMMA')}|"></b>
+                                        <b class="order_after_seal">원</b>
+                                    </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    <div class="padding-section">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <div class="input-rounded select-rounded small-rounded sm-margin-50-bottom">
+                                    <div class="area_title">
+                                        <h2>STEP2.반품취소 사유 입력</h2>
+                                    </div>
+                                    <ul class="claim_reason border-default">
+                                        <li>
+                                            <div>
+                                                <select class="form-control reason width-100" id="cancelTemplate" onchange="choiceCancelTemplate();">
+                                                    <option value="">직접입력</option>
+                                                    <option>구매의사 취소</option>
+                                                    <option>서비스 및 상품 불만족</option>
+                                                    <option>상품 정보 상이</option>
+                                                    <option>다른 상품 잘못 주문</option>
+                                                </select>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <textarea rows="3" name="O_RETURN_REASON" id="O_RETURN_REASON" class="form-control width-100" placeholder="취소 사유를 입력하세요." maxlength="1000" onkeyup="byteLimit(this, 1000);" autofocus></textarea>
+                                        </li>
+                                    </ul>
+                                    <span class="byte_text_wrap">
+                                        <span id="byteLimit">0</span>
+                                         /
+                                        <span>1000 Byte</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                                <div class="area_title">
+                                    <h2>STEP3. 반품취소 정보 확인</h2>
+                                </div>
+                                <ul class="refund_price border-default">
+                                    <li>
+                                        <p>결제수단</p>
+                                        <strong th:text="${order.getPayment().getPayServiceCode().getName()}">결제수단</strong>
+                                    </li>
+                                    <li>
+                                        <p>상품금액</p>
+                                        <strong>
+                                            <span id="productVal" th:text="|${#numbers.formatInteger(order.getPayment().getPayPrice(), 0, 'COMMA')}|"></span>
+                                            <span class="order_after_seal">원</span>
+                                        </strong>
+                                    </li>
+                                    <li th:if="${order.getOProdType().name().equals('배송')}">
+                                        <p>배송비</p>
+                                        <strong>
+                                            <span th:text="|${#numbers.formatInteger(order.payment.payPriceDel, 0, 'COMMA')}|"></span>
+                                            <span class="order_after_seal">원</span>
+                                        </strong>
+                                    </li>
+                                    <li>
+                                        <p>포인트</p>
+                                        <strong>
+                                            <span th:text="|${#numbers.formatInteger(order.payment.payPriceDiscount, 0, 'COMMA')}|"></span>
+                                            <span class="order_after_seal">원</span>
+                                        </strong>
+                                    </li>
+                                    <li>
+                                        <p>결제금액</p>
+                                        <strong class="text-red">
+                                            <span id="totalVal" th:text="|${#numbers.formatInteger(order.getPayment().getPayTotal(), 0, 'COMMA')}|"></span>
+                                            <span class="order_after_seal">원</span>
+                                        </strong>
+                                    </li>
+                                    <li th:if="${order.payment.payServiceCode.name() == 'DOZN'}">
+                                        <p>환불 수단</p>
+                                        <div>
+                                            <ul class="refund_bank">
+                                                <li data-title="예금주">
+                                                    <div>
+                                                        <input type="text" th:value="${@sessionInfo.getNameMasking()}" name="O_RETURN_NAME" id="O_RETURN_NAME" placeholder="환불받을 예금주명을 입력해주세요." readonly>
+                                                    </div>
+                                                </li>
+                                                <li data-title="은행명">
+                                                    <div>
+                                                        <input type="text" th:value="${cuAccount.caBankCode.name()}" name="O_RETURN_BANK" id="O_RETURN_BANK" placeholder="환불받을 은행명을 입력해주세요." readonly>
+                                                    </div>
+                                                </li>
+                                                <li data-title="계좌번호">
+                                                    <div>
+                                                        <input type="text" th:value="${cuAccount.getAccountMasking()}" name="O_RETURN_ACCOUNT" id="O_RETURN_ACCOUNT" placeholder="환불받을 계좌을 입력해주세요." readonly>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <section class="padding-section">
+                    <div class="margin-50-top text-center">
+                        <button type="button" onclick="openCancelModal();" class="btn btn-xlg btn-point">신청하기</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <th:block th:replace="/part/footer.html"></th:block>
+</div>
+
+<th:block th:replace="/part/js.html"></th:block>
+<th:block th:replace="/part/loading.html"></th:block>
+<th:block th:replace="/order/comp/refundModal.html"></th:block>
+
+<script th:inline="javascript">
+    var bool = true;
+    //결제취소
+    function refundApply(){
+        if(bool){
+            bool = false;
+            showLoadDiv();
+            $.ajax({
+                url : '/order/refund/cancel/'+[[${order.oCode}]]+'.rest',
+                type : 'post',
+                data : $("form[name=refundForm]").serialize(),
+                success : function(data) {
+                    hideLoadDiv();
+                    if(data.message != null){
+                        alert(data.message);
+                    }
+                    if(data.location != null){
+                        location.replace(data.location);
+                    }
+                },
+                error : function(data, status, er) {
+                    alert("잠시 후 시도해주세요");
+                }
+            }).always(function(){
+                hideLoadDiv();
+                bool=true;
+            });
+        }
+    }
+
+    //취소사유 입력 byte확인 및 제한 입력시
+    function byteLimit(obj, maxByte) {
+        var str = obj.value;
+        var str_len = str.length;
+        var rbyte = 0;
+        var rlen = 0;
+        var one_char = "";
+        var str2 = "";
+
+
+        for(var i=0; i<str_len; i++) {
+            one_char = str.charAt(i);
+            if(escape(one_char).length > 4) {
+                rbyte += 2;                                         //한글2Byte
+            }else{
+                rbyte++;                                            //영문 등 나머지 1Byte
+            }
+            if(rbyte <= maxByte){
+                rlen = i+1;                                          //return할 문자열 갯수
+            }
+        }
+        if(rbyte > maxByte){
+            str2 = str.substr(0,rlen);                                  //문자열 자르기
+            obj.value = str2;
+            byteLimit(obj, maxByte);
+        }else {
+            document.getElementById('byteLimit').innerText = rbyte;
+        }
+    }
+
+    //취소 템플릿 선택
+    function choiceCancelTemplate(){
+        var template = $('#cancelTemplate').val();
+        $('#O_RETURN_REASON').val(template);
+    }
+
+    // 취소 모달 창 오픈
+    function openCancelModal(){
+        var oReturnReason = $("#O_RETURN_REASON");
+        if(oReturnReason.val() == ''){
+            alert('취소/환불 사유를 입력해주세요.');
+            oReturnReason.focus();
+            return false;
+        }
+
+        var oReturnName = $("#O_RETURN_NAME");
+        if(oReturnName != null){
+            if(oReturnName.val() == ''){
+                alert('환불 정보를 입력해주세요.')
+                oReturnName.focus();
+                return false;
+            }
+            var oReturnBank = $("#O_RETURN_BANK");
+            if(oReturnBank.val() == ''){
+                alert('환불 정보를 입력해주세요.')
+                oReturnBank.focus();
+                return false;
+            }
+
+            var oReturnAccount = $("#O_RETURN_ACCOUNT");
+            if(oReturnAccount.val() == ''){
+                alert('환불 정보를 입력해주세요.')
+                oReturnAccount.focus();
+                return false;
+            }
+        }
+        $("#cancelModal").show();
+    }
+</script>
+</body>
+</html>

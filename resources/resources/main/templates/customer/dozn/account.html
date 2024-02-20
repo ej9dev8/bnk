@@ -1,0 +1,229 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title th:text="|계좌 추가 - ${shop.getShopName()}|">갤럭시아</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/pinpad.css">
+
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container ">
+        <section class="padding-section page-title-padding">
+            <div class="container">
+                <div class="page-title color-title">
+                    <h2 class="text-center font-w">계좌등록</h2>
+                </div>
+            </div>
+        </section>
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form name="accountForm" method="post">
+                            <fieldset class="margin-50-bottom">
+                                <div class="area_title">
+                                    <h2 class="font-weight-700">예금주 정보</h2>
+                                    <span class="help-block text-red">※ 예금주명이 회원이름과 동일한 계좌만 등록하시기 바랍니다. <b>결제시 오류 발생</b></span>
+                                </div>
+                                <div class="input_wrap input-rounded small-rounded input-line-gray">
+                                    <div class="input-rounded small-rounded input-line-gray">
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">예금주명</div>
+                                                <div class="input_cont">
+                                                    <input type="text" class="form-control padding-10-lr" id="depositor" name="depositor" placeholder="예금주명을 입력해주세요." th:value="${customer?.getNameMasking()}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-rounded small-rounded input-line-gray">
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">생년월일</div>
+                                                <div class="input_cont">
+                                                    <input type="text" class="form-control" id="identity" name="identity_no" placeholder="생년월일(yyyymmdd)을 입력해주세요." th:value="${customer?.getBirthNum()}" maxlength="8">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-rounded small-rounded input-line-gray">
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">핸드폰 번호</div>
+                                                <div class="input_cont">
+                                                    <input type="text" class="form-control" id="phone" name="phone" placeholder="핸드폰 번호를 입력해주세요." th:value="${customer?.getPhoneMasking()}" maxlength="13" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="margin-50-bottom">
+                                <div class="area_title">
+                                    <h2>계좌 정보</h2>
+                                    <span class="help-block text-red">※ 예금주명이 회원이름과 동일한 계좌만 등록하시기 바랍니다. <b>결제시 오류 발생</b></span>
+                                </div>
+                                <div class="input_wrap input-rounded small-rounded input-line-gray">
+                                    <div class="input_col">
+                                        <div class="input_row">
+                                            <div class="input_tit">은행</div>
+                                            <div class="input_cont">
+                                                <select class="form-control" name="caBankCode" placeholder="은행을 선택해주세요.">
+                                                    <option th:each="bank : ${shop.dozn.getDzBanks()}" th:value="${bank}" th:text="${bank}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input_wrap input-rounded small-rounded input-line-gray">
+                                    <div class="input_col">
+                                        <div class="input_row">
+                                            <div class="input_tit">계좌번호</div>
+                                            <div class="input_cont">
+                                                <input type="text" class="form-control" id="account" name="caAccount" placeholder="계좌번호 ('-' 제외하고 숫자만 입력)" onkeyup="onlyNum(this);" maxlength="14">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset class="margin-50-bottom">
+                                <h2 class="input_wrap_tit">간편 비밀번호</h2>
+                                <div class="input_wrap input-rounded small-rounded input-line-gray">
+                                    <div class="input_col">
+                                        <div class="input_row">
+                                            <div class="input_tit">비밀번호</div>
+                                            <div class="input_cont">
+                                                <input type="password" class="form-control" id="password" name="caPw" placeholder="******" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input_col">
+                                        <div class="input_row">
+                                            <div class="input_tit">비밀번호 확인</div>
+                                            <div class="input_cont">
+                                                <input type="password" class="form-control" id="passwordCheck" name="caPwCheck" placeholder="******" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="margin-80-top text-center float-right">
+                                    <button type="button" onclick="saveAccount()" class="btn btn-lg btn-point width-150px xs-width-100">저장하기</button>
+                                </div>
+                            </fieldset>
+                            <div id="auth" name="auth"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <th:block th:replace="/part/footer.html" />
+    </div>
+    <th:block th:replace="/part/js.html" />
+    <script>
+        function saveAccount(){
+            var bankCode = $("select[name=caBankCode]");
+            if(bankCode.val() == ''){
+                alert('은행을 선택해주세요.');
+                bankCode.focus();
+                return false;
+            }
+
+            var account = $("input[name=caAccount]");
+            if(account.val() == ''){
+                alert('계좌번호를 입력해주세요.');
+                account.focus();
+                return false;
+            }
+
+            var pw = $("input[name=caPw]");
+            if(pw.val() == ''){
+                alert('간편 비밀번호를 입력해주세요.');
+                pw.focus();
+                return false;
+            }
+
+            var pwCheck = $("input[name=caPwCheck]");
+            if(pwCheck.val() == ''){
+                alert('간편 비밀번호 확인을 입력해주세요.');
+                pwCheck.focus();
+                return false;
+            }
+
+            $("#auth").load('/customer/account/auth/ars.rest'
+                , $("form[name=accountForm]").serialize()
+                , function(){}
+            );
+        }
+
+        function authDone(){
+            $.ajax({
+                url : '/customer/account/auth/ars/result.rest',
+                type : 'post',
+                data : $("form[name=accountForm]").serialize(),
+                success : function(data) {
+                    if(data.message == 'OK'){
+                        alert('완료되었습니다.');
+                        opener.location.reload();
+                        self.close();
+                    }else{
+                        alert(data.message);
+                    }
+                },
+                error : function(data, status, er) {
+                    alert("에러발생, 관리자에게 문의하세요 [" + status + "_" + er + "]");
+                }
+            });
+        }
+    </script>
+    <script th:inline="javascript">
+        //숫자만입력
+        function onlyNum(obj){
+            var val = $(obj).val();
+            obj.value = val.replace(/[^0-9\.\,\-]/gi, '');
+        }
+    </script>
+
+    <!-- 가상 키패드 -->
+    <script type="text/javascript" src="/js/pinpad.js"></script>
+    <script>
+        //비밀번호
+        new pinpad({
+            ref : {
+                el : $('#password')
+            },
+            skin : 'basic',
+            passcode : true,
+            immediate : true,
+            maxLength : 6,
+            desc : '비밀번호 6자리 입력',
+            letterReplace : {
+                'del' : '<i class="fa fa-long-arrow-left" data-toggle="tooltip" title="fa fa-long-arrow-left"></i>',
+                'done' : '<i class="fa fa-check" data-toggle="tooltip" title="fa fa-check"></i>'
+            },
+            oncomplete : function(){
+            }
+        });
+        //비밀번호 확인
+        new pinpad({
+            ref : {
+                el : $('#passwordCheck')
+            },
+            skin : 'basic',
+            passcode : true,
+            immediate : true,
+            maxLength : 6,
+            desc : '비밀번호 6자리 입력',
+            letterReplace : {
+                'del' : '<i class="fa fa-long-arrow-left" data-toggle="tooltip" title="fa fa-long-arrow-left"></i>',
+                'done' : '<i class="fa fa-check" data-toggle="tooltip" title="fa fa-check"></i>'
+            },
+            oncomplete : function(){
+            }
+        });
+    </script>
+</body>
+</html>

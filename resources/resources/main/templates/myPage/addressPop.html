@@ -1,0 +1,94 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title th:text="|나의 배송주소록 : ${titleName}하기|">타이틀</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <div class="container">
+            <div class="row margin-20-top">
+                <div class="col-xs-12">
+                    <section class="padding-section">
+                        <div class="area_title">
+                            <h2 th:text="|배송주소 ${titleName}|">타이틀</h2>
+                        </div>
+                        <hr>
+                        <div class="payArea bg-light showMyDelivery">
+                            <form id="addressForm" name="addressForm" method="post">
+                                <input type="hidden" name="adIdx" th:value="${address?.adIdx}">
+                                <!--배송지명-->
+                                <div class="input_wrap input-rounded small-rounded">
+                                    <div class="input_col no-margin-bottom">
+                                        <div class="input_row">
+                                            <div class="input_tit">배송지명</div>
+                                            <div class="input_cont">
+                                                <input class="form-control cont_val" name="AD_TITLE" type="text" placeholder="배송지명" th:value="${address?.adTitle}">
+                                                <label class="custom-chk-wrap no-margin-bottom margin-15-top" for="AD_BASIC">
+                                                    <b>기본 배송지 설정</b>
+                                                    <input type="checkbox" class="custom-input" id="AD_BASIC" name="AD_BASIC" th:value="${address?.adBasic}" th:checked="${address}">
+                                                    <span class="chk_agr custom-checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <th:block th:replace="order/comp/delivery.html"></th:block>
+                            </form>
+                        </div>
+                        <div class="width-100 text-center margin-30-top">
+                            <button type="button" class="btn btn-lg btn-point width-150px xs-width-100" onclick="saveAddress();">저장</button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+    <script th:inline="javascript">
+        //배송주소 생성
+        var prefix = [[${prefix}]]
+        var prefix_person = [[${prefix_person}]]
+        function saveAddress(){
+            var name = $("input[name="+prefix+"_NAME]");
+            if(name.val() == ''){
+                alert('받는 분 이름을 입력해주세요.');
+                name.focus();
+                return false;
+            }
+            var phone = $("input[name="+prefix+"_PHONE]");
+            if(phone.val() == ''){
+                alert('받는 분 이름을 입력해주세요.');
+                phone.focus();
+                return false;
+            }
+            var post = $("input[name="+prefix+"_POST");
+            var detailAddr = $("input[name="+prefix+"_ADDR5");
+            if(post.val() == '' || detailAddr.val() == ''){
+                alert('주소를 입력해주세요.');
+                detailAddr.focus();
+                return false;
+            }
+
+            if($("#AD_BASIC").prop('checked') == true){
+                $("#AD_BASIC").val('Y');
+            }
+
+            $.ajax({
+                url:location.pathname+'.rest'
+                ,type: 'post'
+                ,data:$("#addressForm").serialize()
+            }).done(function(res){
+                alert(res.message);
+                location.href=res.location;
+            });
+        }
+
+    </script>
+    <script th:inline="javascript">
+        //출입방법 check
+        loadCheckEntType();
+    </script>
+</body>
+</html>

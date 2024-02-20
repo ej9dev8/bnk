@@ -1,0 +1,74 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<style>
+</style>
+<div class="">
+    <div class="row">
+        <div class="col-xs-12">
+            <form name="authForm" method="post" id="authForm">
+                <fieldset class="margin-50-bottom input-m-lg" id="authArsHide">
+                    <div class="area_title">
+                        <h2>결제 계좌 정보</h2>
+                    </div>
+                    <div class="input_wrap input-rounded small-rounded">
+                        <div class="input_col">
+                            <div class="input_row">
+                                <div class="input_tit">은행</div>
+                                <div class="input_cont">
+                                    <select class="form-control select-rounded small-rounded" name="caBankCode" placeholder="은행을 선택해주세요." th:readonly="${ca}">
+                                        <option th:each="bank : ${shop.dozn.dzBanks}" th:value="${bank}" th:text="${bank}" th:selected="${ca!=null && ca.caBankCode.name().equals(bank)}" ></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-rounded small-rounded input-line-gray">
+                        <div class="input_col">
+                            <div class="input_row">
+                                <div class="input_tit">계좌번호</div>
+                                <div class="input_cont">
+                                    <input type="number" pattern="\d*" class="form-control" id="account" name="caAccount" placeholder="계좌번호 ('-' 제외하고 숫자만 입력)" onkeyup="onlyNum(this);" maxlength="14" th:value="${ca?.caAccount}" th:readonly="${ca}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-rounded small-rounded input-line-gray">
+                        <div class="input_col">
+                            <div class="input_row">
+                                <div class="input_tit">예금주명</div>
+                                <div class="input_cont">
+                                    <input type="text" class="form-control" id="depositor" name="depositor" placeholder="예금주명을 입력해주세요." th:value="${customer?.getNameMasking()}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-rounded small-rounded input-line-gray">
+                        <div class="input_col">
+                            <div class="input_row">
+                                <div class="input_tit">생년월일(YYYYMMDD)</div>
+                                <div class="input_cont">
+                                    <input type="number" pattern="\d*" class="form-control" id="identity_no" name="identity_no" onkeyup="onlyNum(this);" maxlength="8" placeholder="생년월일(YYYYMMDD) 8자리를 입력해주세요." th:value="${customer.getBirthNum()}" th:readonly="${checkAccount != 0}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-rounded small-rounded input-line-gray">
+                        <div class="input_col">
+                            <div class="input_row">
+                                <div class="input_tit">핸드폰 번호</div>
+                                <div class="input_cont">
+                                    <input type="tel" class="form-control" id="phone" name="phone" onkeyup="autoHipenTel(this)" placeholder="핸드폰번호 ('-' 제외하고 숫자만 입력)" maxlength="13" th:value="${customer?.getPhoneMasking()}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" onclick="authArs();" id="authBtn" class="btn btn-default">인증하기</button>
+                </fieldset>
+
+                <div id="authDiv"></div>
+            </form>
+
+            <!--인증완료 후 바로결제 / 간편결제 비밀번호 등록 이동 버튼 -->
+        </div>
+    </div>
+</div>
+</html>

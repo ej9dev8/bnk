@@ -1,0 +1,272 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title th:text="|회원가입 - ${shop.getShopName()}|"></title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+<div class="page-container">
+<!--    <th:block th:replace="/header/header.html"></th:block>-->
+    <section class="padding-section page-title-padding">
+        <div class="container">
+            <div class="page-title color-title">
+                <h1>회원가입</h1>
+            </div>
+        </div>
+    </section>
+    <section class="padding-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 col-sm-12 col-xs-12 center-col">
+                    <div class="width-100">
+                        <form method="post" name="joinForm" id="joinForm" th:action="@{/customer/auth/req}">
+                            <input type="hidden" name="bsType" value="회원가입">
+                            <fieldset class="margin-50-bottom">
+                                <h2 class="input_wrap_tit">회원가입</h2>
+                                <div class="input_wrap input-rounded small-rounded">
+                                    <div class="input_col">
+                                        <div class="input_row">
+                                            <div class="input_tit">ID</div>
+                                            <div class="input_cont clearfix">
+                                                <input type="text" class="form-control" id="CU_ID" name="CU_ID" placeholder="ID는 이메일 형식으로 입력해주세요." autocomplete="new-password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="help-block">※ ID는 이메일 형식으로 입력해주세요.</span>
+
+                                    <div class="input_col">
+                                        <div class="input_row">
+                                            <div class="input_tit">비밀번호</div>
+                                            <div class="input_cont clearfix">
+                                                <input type="password" class="form-control" id="CU_PW" name="CU_PW" placeholder="비밀번호는 영문, 숫자, 특수문자를 포함한 8~20자 사용 가능합니다." autocomplete="new-password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input_col">
+                                        <div class="input_row">
+                                            <div class="input_tit">비밀번호 확인</div>
+                                            <div class="input_cont clearfix">
+                                                <input type="password" class="form-control" id="CU_PW_CHECK" name="CU_PW_CHECK" placeholder="비밀번호는 영문, 숫자, 특수문자를 포함한 8~20자 사용 가능합니다." autocomplete="new-password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="help-block">※ 비밀번호는 영문, 숫자, 특수문자를 포함한 8~20자 사용 가능합니다.</span>
+
+                                    <div class="input_col" th:if="${shop.shopMallType.name() == '폐쇄몰' || shop.shopMallType.name() == '코드몰'}">
+                                        <div class="input_row">
+                                            <div class="input_tit">회원가입 코드</div>
+                                            <div class="input_cont clearfix">
+                                                <input type="text" class="form-control" id="JC_CODE" name="JC_CODE" placeholder="회원가입 코드를 입력해주세요.">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </fieldset>
+                            <div class="margin-30-top">
+                                <div class="chk-styled">
+                                    <label for="agreeAll" class="custom-chk-wrap">모든 약관을 확인하고 전체 동의합니다.
+                                        <input type="checkbox" class="custom-input" id="agreeAll" name="agreeAll">
+                                        <span class="custom-checkmark chk_agr text-sm-medium font-weight-500"></span>
+                                    </label>
+                                </div>
+                                <div class="chk-styled margin-15-top clearfix">
+                                    <label for="agree1" class="custom-chk-wrap font-weight-500"><b class="color-point">[필수]</b> 1. 만 14세 이상입니다.
+                                        <input type="checkbox" class="custom-input" id="agree1" attr="agree" name="agree_over14">
+                                        <span class="custom-checkmark chk_agr text-sm-medium font-weight-500"></span>
+                                    </label>
+                                </div>
+                                <div class="chk-styled margin-10-top clearfix">
+                                    <label for="agree2" class="custom-chk-wrap font-weight-500 line-height-26"><b class="color-point">[필수]</b> 2.
+                                        <span th:text="${T(galaxia.shop.constant.agreement.AgmType).SERVICE.getName()}"></span>
+                                        </span>
+                                        <input type="checkbox" class="custom-input" id="agree2" attr="agree" name="agree_service">
+                                        <span class="custom-checkmark chk_agr text-sm-medium font-weight-500 top-4"></span>
+                                    </label>
+                                    <button type="button" onclick="agreement('SERVICE')" class="btn btn-xs btn-dark float-right padding-3-tb padding-8-lr">전체보기</button>
+                                </div>
+                                <div class="chk-styled margin-10-top clearfix">
+                                    <label for="agree3" class="custom-chk-wrap font-weight-500 line-height-26"><b class="color-point">[필수]</b> 3.
+                                        <span th:text="${T(galaxia.shop.constant.agreement.AgmType).ECOM.getName()}"></span>
+                                        <input type="checkbox" class="custom-input" id="agree3" attr="agree" name="agree_ecom">
+                                        <span class="custom-checkmark chk_agr text-sm-medium font-weight-500 top-4"></span>
+                                    </label>
+                                    <button type="button" onclick="agreement('ECOM')" class="btn btn-xs btn-dark float-right padding-3-tb padding-8-lr">전체보기</button>
+                                </div>
+                                <div class="chk-styled margin-10-top clearfix">
+                                    <label for="agree4" class="custom-chk-wrap font-weight-500 line-height-26"><b class="color-point">[필수]</b> 4.
+                                        <span th:text="${T(galaxia.shop.constant.agreement.AgmType).PRIVATE.getName()}"></span>
+                                        <input type="checkbox" class="custom-input" id="agree4" attr="agree" name="agree_private">
+                                        <span class="custom-checkmark chk_agr text-sm-medium font-weight-500 top-4"></span>
+                                    </label>
+                                    <button type="button" onclick="agreement('PRIVATE')" class="btn btn-xs btn-dark float-right padding-3-tb padding-8-lr">전체보기</button>
+                                </div>
+                                <div class="chk-styled margin-10-top clearfix">
+                                    <label for="agree5" class="custom-chk-wrap font-weight-500 line-height-26"><b class="color-point">[필수]</b> 5.
+                                        <span th:text="${T(galaxia.shop.constant.agreement.AgmType).PAY2.getName()}"></span>
+                                        <input type="checkbox" class="custom-input" id="agree5" attr="agree" name="agree_pay2">
+                                        <span class="custom-checkmark chk_agr text-sm-medium font-weight-500 top-4"></span>
+                                    </label>
+                                    <button type="button" onclick="agreement('PAY2')" class="btn btn-xs btn-dark float-right padding-3-tb padding-8-lr">전체보기</button>
+                                </div>
+                                <div class="chk-styled margin-10-top clearfix">
+                                    <label for="agree6" class="custom-chk-wrap font-weight-500 padding-0-lr">6. 마케팅 및 이벤트 목적의 개인정보 수집 및 이용동의
+                                        <input type="checkbox" class="custom-input hidden" id="agree6" attr="agree" name="agree_marketing">
+                                        <span class="custom-checkmark chk_agr text-sm-medium font-weight-500 hidden"></span>
+                                    </label>
+                                </div>
+                                <div class="chk-styled margin-15-top clearfix">
+                                    <label for="agree6_1" class="custom-chk-wrap font-weight-500">[선택] 6-1. 이메일 수신동의
+                                        <input type="checkbox" class="custom-input" id="agree6_1" attr="agree" name="agree_marketing_mail">
+                                        <span class="custom-checkmark chk_agr text-sm-medium font-weight-500"></span>
+                                    </label>
+                                </div>
+                                <div class="chk-styled margin-15-top clearfix">
+                                    <label for="agree6_2" class="custom-chk-wrap font-weight-500">[선택] 6-2. SMS 수신동의
+                                        <input type="checkbox" class="custom-input" id="agree6_2" attr="agree" name="agree_marketing_sms">
+                                        <span class="custom-checkmark chk_agr text-sm-medium font-weight-500"></span>
+                                    </label>
+                                </div>
+
+                            </div>
+                            <div class="text-center margin-40-top">
+                                <button type="button" onclick="joinSubmit();" class="btn btn-xlg btn-point width-150px xs-width-100">본인인증</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<!--    <th:block th:replace="/part/footer.html"></th:block>-->
+    <div id="Agreement"></div>
+</div>
+
+<th:block th:replace="/part/js.html"></th:block>
+<script type="text/javascript" src="/js/customer.js"></script>
+
+<script th:inline="javascript">
+    function joinSubmit(){
+        var check = true;
+        //아이디 유효성 체크
+        var idReg = '^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$';
+        var id = $("#CU_ID");
+        if( id.val() == null || id.val() == '' ){
+            alert('ID를 입력해주세요.');
+            id.focus();
+            check = false;
+            return false;
+        }else if( !id.val().match(idReg) ){
+            alert('ID는 이메일 형식으로 입력해주세요.');
+            id.focus();
+            check = false;
+            return false;
+        }
+
+        //비밀번호 유효성 체크
+        var pwReg = '^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\\\(\\\\)\\-_=+./<>]).{8,20}$';
+        var pw = $("#CU_PW");
+        if( pw.val() == null || pw.val() == ''){
+            alert('비밀번호를 입력해주세요.');
+            pw.focus();
+            check = false;
+            return false;
+        }else if( !pw.val().match(pwReg) ){
+            alert('비밀번호는 영문, 숫자, 특수문자를 포함한 8~20자 사용 가능합니다.');
+            pw.focus();
+            check = false;
+            return false;
+        }
+
+        //비밀번호확인 유효성 체크
+        var pwCheckVal = $("#CU_PW_CHECK");
+        if( pwCheckVal.val() == null || pwCheckVal.val() == ''){
+            alert('비밀번호 확인을 입력해주세요.');
+            pwCheckVal.focus();
+            check = false;
+            return false;
+        }
+
+        if(check && pw.val() != pwCheckVal.val()){
+            alert('비밀번호가 일치하지 않습니다.');
+            check = false;
+            return false;
+        }
+
+        //약관 체크
+        $('input[attr="agree"]').each(function(){
+            var agree = $(this);
+            if(agree.prop('checked')){
+                agree.val('Y');
+            }else{
+                agree.val('');
+                var agreeId = $(this).attr('id');
+                if(!agreeId.startsWith('agree6')){
+                    //마케팅 이용동의 제외
+                    alert('필수 이용약관을 선택해주세요.');
+                    check = false;
+                    return false;
+                }
+            }
+        });
+
+        var malltype = [[${shop.shopMallType}]]
+        if(check && malltype == '폐쇄몰'){
+
+            var PCC_window = window.open('', 'PCCV3Window', 'width=400, height=630, resizable=1, scrollbars=no, status=0, titlebar=0, toolbar=0, left=300, top=200' );
+
+            // iframe형식으로 개발하시지 말아주십시오. iframe으로 개발 시 나오는 문제는 개발지원해드리지 않습니다.
+            if(PCC_window == null){
+                alert(" ※ 윈도우 XP SP2 또는 인터넷 익스플로러 7 사용자일 경우에는 \n    화면 상단에 있는 팝업 차단 알림줄을 클릭하여 팝업을 허용해 주시기 바랍니다. \n\n※ MSN,야후,구글 팝업 차단 툴바가 설치된 경우 팝업허용을 해주시기 바랍니다.");
+            }
+
+            document.joinForm.target = 'PCCV3Window';
+            document.joinForm.submit();
+
+        }else if(check && malltype == '코드몰'){
+            $.ajax({
+                url :[[@{/customer/code/join.rest}]]
+                ,type : 'post'
+                ,data:$('#joinForm').serialize()
+            }).done(function(data){
+                if(data.message != null){
+                    alert(data.message);
+                }else if(data.location != null){
+                    location.href = data.location;
+                }
+            });
+        }
+    }
+</script>
+
+<script>
+    $('#agreeAll').change(function(){
+        if($(this).prop('checked') == true){
+            $('input[attr="agree"]').prop('checked',true);
+        }else{
+            $('input[attr="agree"]').prop('checked',false);
+        }
+    });
+
+    //이벤트 수신동의 약관 전체선택
+    $('input[id=agree6]').change(function(){
+        if($(this).prop('checked') == true){
+            $('input[id^=agree6]').prop('checked',true);
+        }else{
+            $('input[id^=agree6]').prop('checked',false);
+        }
+    });
+
+    //약관 전체선택/해제 여부
+    $('input[attr="agree"]').change(function(){
+        var input = $('input[attr="agree"]').length;
+        var chkInput = $('input[attr="agree"]:checked').length;
+        if(input == chkInput){
+            $('#agreeAll').prop('checked',true);
+        }else{
+            $('#agreeAll').prop('checked',false);
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>상품목록</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <section class="padding-section page-title-padding">
+                        <div class="page-title color-title">
+                            <h1><span class="color-point" th:text="|'${search}'|">상품보기</span> 검색결과</h1>
+                        </div>
+                    </section>
+                    <section class="padding-section">
+                        <div id="productListDiv" name="productListDiv"></div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <!--<section class="padding-section" id="filterSec">
+            <div class="thumb-style thumb-rounded small-rounded thumb-bg gray"> &lt;!&ndash; 개별 클래스 요소 선택란 : 상품 썸네일 &ndash;&gt;
+                <div class="container">
+                    <div class="row" id="">
+
+                    </div>
+                </div>
+            </div>
+        </section>-->
+
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+    <th:block th:replace="/part/js.html"></th:block>
+
+    <script th:inline="javascript">
+        loadProduct(1);
+        function loadProduct(page){
+            var order = $("#prodOrder option:selected").val();
+            if(order==null){
+                order = 4;
+            }
+            var dataParam="page="+page+"&order="+order+"&input="+[[${search}]];
+
+            // //브랜드 검색 조건
+            // var brandIdxs=$('.brandSearchLi.active');
+            // for(var b=0;b<brandIdxs.length;b++){
+            //     dataParam+='&b_idx='+$(brandIdxs[b]).attr('b_idx');
+            // }
+            //
+            // //가격 설정
+            // var priceLi=$('.priceLi.active')[0];
+            // dataParam+='&min='+$(priceLi).attr('min');
+            // dataParam+='&max='+$(priceLi).attr('max');
+            //
+            // //상품그룹에서 검색 시 cf Idx
+            // var cfIdx=$($('.cfLi.active')[0]).attr('cf_idx')
+            // dataParam+='&cfIdx='+cfIdx;
+
+            $.ajax({
+                url: '/product/search.load',
+                type: "POST",
+                data : dataParam,
+                success: function(data) {
+                    $("#productListDiv").html(data);
+                    document.location.href='#productListDiv';
+                },
+                error: function(jqXHR, exception,data) {
+
+                }
+            });
+        }
+    </script>
+</body>
+</html>

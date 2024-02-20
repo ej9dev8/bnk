@@ -1,0 +1,63 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+    <th:block th:if="${display == 'web'}">
+        <li th:if="${productGroup.pgDesign == '타입E'}"class="swiper-slide layout height-auto width-100 margin-20-right"
+            th:each="pgiPage: ${#numbers.sequence(1, __${productGroup.pgiTotalPageMap(4)}__)}">
+            <div class="pd_group value_group prod_list_wrap prod_style prod_style_grid 4-lay">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event" th:each="sp : ${productGroup.getListMap(pgiPage,4)}">
+                            <th:block th:replace="/product/p_block2.html"></th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+
+        <li th:if="${productGroup.pgDesign == '타입F'}" class="swiper-slide height-auto width-100 margin-20-right" th:each="pgiPage: ${#numbers.sequence(1, __${productGroup.pgiTotalPageMap(2)}__)}">
+            <div class="prod_style prod_style_grid 4-lay">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event" th:each="sp : ${productGroup.getListMap(1,4)}">
+                        <th:block th:replace="/product/p_block2.html"></th:block>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </th:block>
+    <th:block th:if="${display == 'mobile'}">
+        <!--/*모바일 C*/-->
+        <li th:if="${productGroup.pgDesignMobile == '타입C'}" class="col-xs-12 swiper-slide layout width-100 height-auto margin-20-right"
+            th:each="pgiPage: ${#numbers.sequence(1, __${productGroup.pgiTotalPageMap(4)}__)}">
+            <div class="pd_group value_group prod_list_wrap prod_style prod_style_grid">
+                <div class="row">
+                    <div class="col-xs-6 prod_event" th:each="sp : ${productGroup.getListMap(pgiPage,4)}">
+                        <th:block th:replace="/product/p_block2.html"></th:block>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <!--/*모바일 D*/-->
+        <li th:if="${productGroup.pgDesignMobile == '타입D'}" class="swiper-slide layout width-100 height-auto"
+            th:each="pgiPage: ${#numbers.sequence(1, __${productGroup.pgiTotalPageMap(2)}__)}">
+            <div class="pd_group value_group prod_list_wrap prod_style prod_style_grid 4-lay">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event" th:each="sp : ${productGroup.getListMap(1,4)}">
+                        <th:block th:replace="/product/p_block2.html"></th:block>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </th:block>
+
+    <script>
+        const swiper = new Swiper('.swiper', {
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'bullets',
+            },
+        });
+        swiper.pagination.update();
+    </script>
+</html>

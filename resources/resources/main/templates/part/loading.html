@@ -1,0 +1,14 @@
+<!--/*로더 : 아래 소스를 로딩이 필요한 페이지에 넣고, 제어 시 loading-box옆 display-none class 추가/삭제 */-->
+<div class="loading-box" id="loadDiv" style="display:none;">
+    <div class="loading-circle-box">
+        <div class="loading-circle"></div>
+    </div>
+</div>
+<script>
+    function showLoadDiv(){
+        $('#loadDiv').fadeIn(1500);
+    }
+    function hideLoadDiv(){
+        $('#loadDiv').hide();
+    }
+</script>

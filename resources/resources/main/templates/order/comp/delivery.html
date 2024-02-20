@@ -1,0 +1,190 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<div class="row">
+    <div class="col-sm-6 col-xs-12">
+        <fieldset class="sm-margin-30-bottom">
+            <div class="area_title">
+                <h2>배송 정보</h2>
+                <a type="button" class="btn btn-sm btn-transparent-light-gray" onclick="popAddress();" th:if="${#strings.startsWith(prefix, 'D')}">배송 주소록</a>
+            </div>
+            <div class="horiz-wrap input_wrap input-rounded select-rounded small-rounded">
+                <div class="input_col horiz">
+                    <div class="input_row">
+                        <div class="input_tit">받는 분</div>
+                        <div class="input_cont">
+                            <input type="text" class="form-control" id="AD_NAME" th:name="|${prefix_person}_NAME|" placeholder="받는 분" th:value="${address?.adName}">
+                        </div>
+                    </div>
+                </div>
+                <div class="input_col horiz">
+                    <div class="input_row">
+                        <div class="input_tit">핸드폰 번호</div>
+                        <div class="input_cont">
+                            <input type="text" class="form-control" id="AD_PHONE" th:name="|${prefix_person}_PHONE|" onkeyup="autoHipenTel(this);" placeholder="핸드폰번호 ('-' 제외하고 숫자만 입력)" maxlength="13" th:value="${address?.adPhone}">
+                        </div>
+                    </div>
+                </div>
+                <div class="input_col horiz no-margin-bottom">
+                    <div class="input_row">
+                        <div class="input_tit padding-0-top">주소</div>
+                        <div class="input_cont clearfix">
+                            <div>
+                                <p class="input-group">
+                                    <input type="tel" class="form-control radius-right-0" id="AD_POST" th:name="|${prefix}_POST|" placeholder="우편번호" th:value="${address?.adPost}" readonly>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" onclick="Common.postCode(this, 'AD')">찾기</button>
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="addr_basic">
+                                <input type="text" class="form-control" id="AD_FULLADDR" th:name="|${prefix}_FULLADDR|" placeholder="기본 주소" th:value="${address?.getAddr()}" readonly>
+                            </div>
+                            <div class="addr_detail">
+                                <input type="text" class="form-control" id="AD_ADDR5" th:name="|${prefix}_ADDR5|" placeholder="상세 주소" th:value="${address?.adAddr5}">
+                            </div>
+                            <input type="hidden"  id="AD_ADDR1" th:name="|${prefix}_ADDR1|" th:value="${address?.adAddr1}">
+                            <input type="hidden"  id="AD_ADDR2" th:name="|${prefix}_ADDR2|" th:value="${address?.adAddr2}">
+                            <input type="hidden"  id="AD_ADDR3" th:name="|${prefix}_ADDR3|" th:value="${address?.adAddr3}">
+                            <input type="hidden"  id="AD_ADDR4" th:name="|${prefix}_ADDR4|" th:value="${address?.adAddr4}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-sm-6 col-xs-12 padding-55-left md-padding-30-left sm-padding-10-left xs-padding-15-left">
+        <fieldset class="margin-15-bottom">
+            <div class="area_title">
+                <h2>배송 메세지</h2>
+                <span class="help-block no-margin">
+                    <small><b id="byteLimit">0</b>/1000byte</small>
+                </span>
+            </div>
+            <div class="no-margin-bottom">
+                <div class="horiz-wrap input_wrap input-rounded select-rounded small-rounded">
+                    <div class="input_col horiz">
+                        <div class="input_row">
+                            <div class="input_cont width-100">
+                                <select class="form-control reason width-100" onchange="choiceDelTemplate(this)">
+                                    <option value="">직접입력</option>
+                                    <option>문 앞에 놓아주세요</option>
+                                    <option>경비실에 맡겨주세요</option>
+                                    <option>택배함에 넣어주세요</option>
+                                    <option>직접 받겠습니다(부재시 문 앞)</option>
+                                    <option>배송전에 연락주세요</option>
+                                </select>
+                                <input type="text" class="form-control width-100 margin-5-top display-block" id="AD_MEMO" th:name="|${prefix}_MEMO|" placeholder="배송 메세지를 입력해주세요." onkeyup="byteLimitDel(this, 1000);" th:value="${address?.adMemo}">
+                                <!-- 해당 input은 select '직접입력' 선택시에만 표시될 수 있도록-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <div class="area_title">
+                <h2>공동현관 출입방법</h2>
+            </div>
+            <div class="no-margin-bottom">
+                <div class="">
+                    <div class="input-rounded small-rounded">
+                        <div class="radio_styled">
+                            <p class="margin-5-bottom">
+                                <label class="custom-rdo-wrap" for="ENT_FREE">자유 출입 가능
+                                    <input type="radio" class="custom-rdo ENTRANCE_TYPE" onchange="changeEntrance();" id="ENT_FREE" th:name="|${prefix}_ENTRANCE_TYPE|" value="free" checked>
+                                    <span class="custom-rdomark"></span>
+                                </label>
+                            </p>
+                            <p class="margin-5-bottom">
+                                <label class="custom-rdo-wrap" for="ENT_COMMON_PW">공동현관 비밀번호
+                                    <input type="radio" class="custom-rdo ENTRANCE_TYPE" onchange="changeEntrance();" id="ENT_COMMON_PW" th:name="|${prefix}_ENTRANCE_TYPE|" value="common">
+                                    <span class="custom-rdomark"></span>
+                                </label>
+                            </p>
+                            <p class="margin-5-bottom">
+                                <label class="custom-rdo-wrap" for="ENT_ETC">기타
+                                    <input type="radio" class="custom-rdo ENTRANCE_TYPE" onchange="changeEntrance();" id="ENT_ETC" th:name="|${prefix}_ENTRANCE_TYPE|" value="etc">
+                                    <span class="custom-rdomark"></span>
+                                </label>
+                            </p>
+                            <input type="text" class="form-control width-100 display-block" id="AD_ENTRANCE" th:name="|${prefix}_ENTRANCE|">
+                            <!--출입방법 65byte로 제한-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    //배송메모 선택
+    function choiceDelTemplate(obj){
+        $('#AD_MEMO').val(obj.value);
+        byteLimitDel(document.getElementById('AD_MEMO'), 250);
+    }
+
+    //취소사유 입력 byte확인 및 제한 입력시
+    function byteLimitDel(obj, maxByte) {
+        var str = obj.value;
+        var str_len = str.length;
+        var rbyte = 0;
+        var rlen = 0;
+        var one_char = "";
+        var str2 = "";
+
+
+        for(var i=0; i<str_len; i++) {
+            one_char = str.charAt(i);
+            if(escape(one_char).length > 4) {
+                rbyte += 2;                                         //한글2Byte
+            }else{
+                rbyte++;                                            //영문 등 나머지 1Byte
+            }
+            if(rbyte <= maxByte){
+                rlen = i+1;                                          //return할 문자열 갯수
+            }
+        }
+        if(rbyte > maxByte){
+            str2 = str.substr(0,rlen);                                  //문자열 자르기
+            obj.value = str2;
+            byteLimit(obj, maxByte);
+        }else {
+            document.getElementById('byteLimit').innerText = rbyte;
+        }
+    }
+
+    //배송지 선택
+    function popAddress(){
+        var url = [[@{|/myPage/address|}]];
+        window.open(url, 'address', 'width=1070, height=650, resizable=1, scrollbars=no, status=0, titlebar=0, toolbar=0, left=300, top=200' );
+    }
+
+    //배송 출입방법 선택
+    function loadCheckEntType(){
+        var addr = [[${addr}]]
+        if(addr == 'exist'){
+            var ent = [[${address?.adEntrance}]]
+            if(ent.memo != null){
+                $('#AD_ENTRANCE').val(ent.memo);
+            }
+            //출입방법
+            if(ent.type != null){
+                $.each($(".ENTRANCE_TYPE"), function(key, val){
+                    var entType = $(this).val();
+                    if(ent.type == entType){
+                        $(this).prop('checked', true);
+                    }else{
+                        $(this).prop('checked', false);
+                    }
+                });
+            }
+        }
+    }
+</script>
+
+<script th:inline="javascript">
+    window.onload = function(){
+        loadCheckEntType();
+    }
+</script>

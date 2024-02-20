@@ -1,0 +1,1378 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>디자인 미리보기</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container ">
+        <th:block th:replace="/header/header.html"></th:block>
+        <!-- 배너 슬라이드 레이아웃 -->
+        <section class="padding-section padding-none">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- Swiper -->
+                        <div class="swiper-container-main overflow-hidden">
+                            <ul class="swiper-wrapper">
+                                <li class="swiper-slide" th:each="i : ${#numbers.sequence(1, 5)}">
+                                    <picture class="">
+                                        <img src="/image/main-swiper.png" alt="" class="">
+                                    </picture>
+                                </li>
+                            </ul>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- // 배너 슬라이드 레이아웃 -->
+
+        <section class="padding-section section-title-padding">
+            <div class="container">
+                <div class="section-title">
+                    <h1>카테고리 검색</h1>
+                </div>
+            </div>
+        </section>
+
+        <!-- 상품 검색 레이아웃 -->
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 pd-search-tab">
+                        <ul class="nav tab_menu clearfix">
+                            <li class="sub-color-hover sub-color-active">
+                                <a href="#tabSec1" data-toggle="tab" aria-expanded="false" class="icon-deco">
+                                    <img src="http://localhost:8080/image/icon/tab/icon-life.png">
+                                </a>
+                                <p>전체보기</p>
+                            </li>
+                            <li th:each="cfs, i : ${cf}" class="sub-color-hover sub-color-active" >
+                                <a th:href="|#tabSec${i.count}|" data-toggle="tab" aria-expanded="false" class="icon-deco">
+                                    <img th:src="${cfs.CF_ICON}">
+                                </a>
+                                <p th:text="${cfs.CF_NAME}">대분류명</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div id="tabSec1" class="tab-pane fade">
+                    <div class="container-fluid margin-50-top xs-margin-30-top">
+                        <div class="row">
+                            <div id="search-content" class="col-xs-12 border-menu">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 prod-detail-wrap">
+                                            <div class="tab-list-content">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-xs-12">
+                                                            <h4 class="font-weight-700">브랜드</h4>
+                                                            <div class="swiper">
+                                                                <div class="swiper-container-list">
+                                                                    <ul class="swiper-wrapper">
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img1.png" alt="배스킨라빈스">
+                                                                                </p>
+                                                                                <p class="thumb-text">배스킨라빈스</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img2.png" alt="맘스터치">
+                                                                                </p>
+                                                                                <p class="thumb-text">맘스터치</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img8.png" alt="나뚜루">
+                                                                                </p>
+                                                                                <p class="thumb-text">나뚜루</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img3.png" alt="파파존스">
+                                                                                </p>
+                                                                                <p class="thumb-text">파파존스</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img4.png" alt="BHC">
+                                                                                </p>
+                                                                                <p class="thumb-text">BHC</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img5.png" alt="킹콩부대찌개">
+                                                                                </p>
+                                                                                <p class="thumb-text">킹콩부대찌개</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img6.png" alt="오설록">
+                                                                                </p>
+                                                                                <p class="thumb-text">오설록</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img7.png" alt="지호한방삼계탕">
+                                                                                </p>
+                                                                                <p class="thumb-text">지호한방삼계탕</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/file/brand/thumbnail/a93b0c84-7921-4413-b019-762a6b7d22ac.png" alt="test">
+                                                                                </p>
+                                                                                <p class="thumb-text">test</p>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+
+                                                                    <div class="swiper-button-prev"></div>
+                                                                    <div class="swiper-button-next"></div>
+                                                                    <div class="swiper-pagination"></div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 prod-detail-wrap">
+                                            <div class="tab-list-content padding-20-top">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-xs-12">
+                                                            <h4 class="font-weight-700">가격설정</h4>
+                                                            <div class="filter_wrap">
+                                                                <div class="filter_col">
+                                                                    <div class="filter_row">
+
+                                                                        <div class="filter_cont filter_category">
+                                                                            <ul class="filter_list filter_list1">
+
+                                                                                <li class="">
+                                                                                    <a href="">전체보기</a>
+                                                                                </li>
+
+                                                                                <li class="">
+                                                                                    <a href="">3천원 이하</a>
+                                                                                </li>
+
+                                                                                <li class="">
+                                                                                    <a href="">3천원 ~ 5천원</a>
+                                                                                </li>
+
+                                                                                <li class="">
+                                                                                    <a href="">5천원 ~ 1만원</a>
+                                                                                </li>
+
+                                                                                <li class="">
+                                                                                    <a href="">1만원 ~ 2만원</a>
+                                                                                </li>
+                                                                                <li class="">
+                                                                                    <a href="">2만원 ~ 3만원</a>
+                                                                                </li>
+                                                                                <li class="">
+                                                                                    <a href="">3만원 ~ 5만원</a>
+                                                                                </li>
+                                                                                <li class="">
+                                                                                    <a href="">5만원 이상</a>
+                                                                                </li>
+                                                                                <li class="price_enter">
+                                                                                    <a class="wrap">
+                                                                                        <form method="post" name="dateSearch" id="dateSearch" action="/myPage/order" class="price_search">
+                                                                                            <input type="text" class="form-control price_query" name="searchInput" id="searchInput" value="" placeholder="직접입력">
+                                                                                            <span class="wavecon">~</span>
+                                                                                            <input type="text" class="form-control price_query" name="searchInput" id="searchInput" value="" placeholder="직접입력">
+                                                                                            <button type="submit" class="btn btn-dark xs-display-none padding-3-tb padding-15-lr">조회</button>
+                                                                                        </form>
+                                                                                    </a>
+                                                                                </li>
+
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="padding-40-top">
+                                                <a class="btn btn-point width-150px padding-10-all display-block margin-auto">검색하기</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tabSec2" class="tab-pane fade">
+                    <div class="container-fluid margin-50-top xs-margin-30-top">
+                        <div class="row">
+                            <div id="search-content" class="col-xs-12 border-menu">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 prod-detail-wrap">
+                                            <div class="tab-list-content">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-xs-12">
+                                                            <h4 class="font-weight-700">브랜드</h4>
+                                                            <div class="swiper1">
+                                                                <div class="swiper-container-list">
+                                                                    <ul class="swiper-wrapper">
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img1.png" alt="배스킨라빈스">
+                                                                                </p>
+                                                                                <p class="thumb-text">배스킨라빈스</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img2.png" alt="맘스터치">
+                                                                                </p>
+                                                                                <p class="thumb-text">맘스터치</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img8.png" alt="나뚜루">
+                                                                                </p>
+                                                                                <p class="thumb-text">나뚜루</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img3.png" alt="파파존스">
+                                                                                </p>
+                                                                                <p class="thumb-text">파파존스</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img4.png" alt="BHC">
+                                                                                </p>
+                                                                                <p class="thumb-text">BHC</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img5.png" alt="킹콩부대찌개">
+                                                                                </p>
+                                                                                <p class="thumb-text">킹콩부대찌개</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img6.png" alt="오설록">
+                                                                                </p>
+                                                                                <p class="thumb-text">오설록</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img7.png" alt="지호한방삼계탕">
+                                                                                </p>
+                                                                                <p class="thumb-text">지호한방삼계탕</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/file/brand/thumbnail/a93b0c84-7921-4413-b019-762a6b7d22ac.png" alt="test">
+                                                                                </p>
+                                                                                <p class="thumb-text">test</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img1.png" alt="배스킨라빈스">
+                                                                                </p>
+                                                                                <p class="thumb-text">배스킨라빈스</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img2.png" alt="맘스터치">
+                                                                                </p>
+                                                                                <p class="thumb-text">맘스터치</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img8.png" alt="나뚜루">
+                                                                                </p>
+                                                                                <p class="thumb-text">나뚜루</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img3.png" alt="파파존스">
+                                                                                </p>
+                                                                                <p class="thumb-text">파파존스</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img4.png" alt="BHC">
+                                                                                </p>
+                                                                                <p class="thumb-text">BHC</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img5.png" alt="킹콩부대찌개">
+                                                                                </p>
+                                                                                <p class="thumb-text">킹콩부대찌개</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img6.png" alt="오설록">
+                                                                                </p>
+                                                                                <p class="thumb-text">오설록</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/image/icon/brand/brand-img7.png" alt="지호한방삼계탕">
+                                                                                </p>
+                                                                                <p class="thumb-text">지호한방삼계탕</p>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="swiper-slide thumb-slide">
+                                                                            <div class="thumb-box">
+                                                                                <p class="thumb-img">
+                                                                                    <img src="/file/brand/thumbnail/a93b0c84-7921-4413-b019-762a6b7d22ac.png" alt="test">
+                                                                                </p>
+                                                                                <p class="thumb-text">test</p>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+
+                                                                    <div class="swiper-button-prev"></div>
+                                                                    <div class="swiper-button-next"></div>
+                                                                    <div class="swiper-pagination"></div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12 prod-detail-wrap">
+                                            <div class="tab-list-content padding-20-top">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-xs-12">
+                                                            <h4 class="font-weight-700">가격설정</h4>
+                                                            <div class="filter_wrap">
+                                                                <div class="filter_col">
+                                                                    <div class="filter_row">
+
+                                                                        <div class="filter_cont filter_category">
+                                                                            <ul class="filter_list filter_list1">
+
+                                                                                <li class="">
+                                                                                    <a href="">전체보기</a>
+                                                                                </li>
+
+                                                                                <li class="">
+                                                                                    <a href="">3천원 이하</a>
+                                                                                </li>
+
+                                                                                <li class="">
+                                                                                    <a href="">3천원 ~ 5천원</a>
+                                                                                </li>
+
+                                                                                <li class="">
+                                                                                    <a href="">5천원 ~ 1만원</a>
+                                                                                </li>
+
+                                                                                <li class="">
+                                                                                    <a href="">1만원 ~ 2만원</a>
+                                                                                </li>
+                                                                                <li class="">
+                                                                                    <a href="">2만원 ~ 3만원</a>
+                                                                                </li>
+                                                                                <li class="">
+                                                                                    <a href="">3만원 ~ 5만원</a>
+                                                                                </li>
+                                                                                <li class="">
+                                                                                    <a href="">5만원 이상</a>
+                                                                                </li>
+                                                                                <li class="price_enter">
+                                                                                    <a class="wrap">
+                                                                                        <form method="post" name="dateSearch" id="dateSearch" action="/myPage/order" class="price_search">
+                                                                                            <input type="text" class="form-control price_query" name="searchInput" id="searchInput" value="" placeholder="직접입력">
+                                                                                            <span class="wavecon">~</span>
+                                                                                            <input type="text" class="form-control price_query" name="searchInput" id="searchInput" value="" placeholder="직접입력">
+                                                                                            <button type="submit" class="btn btn-dark xs-display-none padding-3-tb padding-15-lr">조회</button>
+                                                                                        </form>
+                                                                                    </a>
+                                                                                </li>
+
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="padding-40-top">
+                                                <a class="btn btn-point width-150px padding-10-all display-block margin-auto">검색하기</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </section>
+        <!-- // 상품 검색 레이아웃 -->
+
+        <section class="padding-section section-title-padding">
+            <div class="container">
+                <div class="section-title">
+                    <h1>이달의 초특가</h1>
+                </div>
+            </div>
+        </section>
+
+        <!-- '이달의 초특가' 레이아웃 -->
+        <section class="padding-section" id="filterSec">
+
+            <div class="thumb-style thumb-rounded small-rounded thumb-bg gray"> <!-- 개별 클래스 요소 선택란 : 상품 썸네일 -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <form id="products">
+                                <div class="width-100">
+                                    <div class="prod_sort_wrap clearfix">
+                                        <div class="select-rounded small-rounded select-bg-gray prod_sort text-0 width-180px"><!-- 개별 클래스 요소 선택란 : select -->
+                                            <select class="form-control bg-transparent" name="" id="prodTab" onchange="ProductList.getProducts2(this,0)" page="1" idx="1">
+                                                <option value="1" selected="">편의점 / 생활 / 영화</option>
+                                                <option value="2">상품권</option>
+                                                <option value="3">패스트푸드</option>
+                                                <option value="4">화장품</option>
+                                                <option value="4">커피 / 아이스크림</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-container-main-non-auto overflow-hidden circle-btn center">
+                                        <ul class="swiper-wrapper">
+                                            <li class="swiper-slide">
+                                                <div class="prod_style prod_style_grid">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                                <div class="prod_thumb_link">
+                                                                    <a href="/product/detail/200" class="display-block">
+                                                                        <img src="https://payimg.billgate.net/gxcon/1000102733_16853.jpg" alt="파리바게뜨 실키롤케익">
+                                                                        <div class="label-container">
+                                                                            <label class="label label-icon label-point-outline">특가</label>
+
+                                                                        </div>
+
+                                                                        <div class="prod_sold_out" >
+                                                                            <div class="display-table width-100 height-100">
+                                                                                <div class="display-table-cell vertical-align-middle text-center">
+                                                                                    <span class="sold-out-text">품절</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="prod_detail_box padding-0-bottom">
+                                                                    <p class="disc">파리바게뜨</p>
+                                                                    <h1 class="tit"><a href="/product/detail/200" title="실키롤케익">실키롤케익</a></h1>
+                                                                    <!-- 쇼핑몰 일반 -->
+                                                                    <div class="price">
+                                                                        <div class="display-table-cell vertical-align-middle">
+                                                                            <strong class="price_sale_percent text-red"><span>5</span>%</strong>
+                                                                            <strong class="price_from">10,450</strong>
+                                                                            <strong class="original_price">11,000</strong>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                                <div class="prod_thumb_link">
+                                                                    <a href="/product/detail/200" class="display-block">
+                                                                        <img src="https://payimg.billgate.net/gxcon/1000102723_154845.jpg" alt="마이넘버원3">
+                                                                        <div class="prod_bg-thumb"></div>
+                                                                    </a>
+                                                                    <div class="label-container">
+                                                                        <label class="label label-icon label-point">NEW</label>
+                                                                        <label class="label label-icon label-menu-outline">카드결제</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="prod_detail_box padding-0-bottom">
+                                                                    <p class="disc">배스킨라빈스</p>
+                                                                    <h1 class="tit"><a href="/product/detail/200" title="마이넘버원3">마이넘버원3</a></h1>
+                                                                    <!-- 쇼핑몰 일반 -->
+                                                                    <div class="price">
+                                                                        <div class="display-table-cell vertical-align-middle">
+                                                                            <strong class="price_sale_percent text-red"><span>10</span>%</strong>
+                                                                            <strong class="price_from">25,650</strong>
+                                                                            <strong class="original_price">27,000</strong>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                                <div class="prod_thumb_link">
+                                                                    <a href="/product/detail/200" class="display-block"><img src="https://payimg.billgate.net/gxcon/1000085837_1123.jpg" alt="[스타벅스] 아이스 아메리카노T"><div class="prod_bg-thumb"></div></a>
+                                                                    <div class="label-container">
+                                                                        <label class="label label-icon label-point-outline">특가</label>
+                                                                        <label class="label label-icon label-point">NEW</label>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="prod_detail_box padding-0-bottom">
+                                                                    <p class="disc">스타벅스</p>
+                                                                    <h1 class="tit"><a href="/product/detail/200" title="[스타벅스] 아이스 아메리카노T">[스타벅스] 아이스 아메리카노T</a></h1>
+                                                                    <!-- 쇼핑몰 일반 -->
+                                                                    <div class="price">
+                                                                        <div class="display-table-cell vertical-align-middle">
+                                                                            <strong class="price_sale_percent text-red"><span>15</span>%</strong>
+                                                                            <strong class="price_from">4,020</strong>
+                                                                            <strong class="original_price">4,100</strong>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                                <div class="prod_thumb_link">
+                                                                    <a href="/product/detail/200" class="display-block">
+                                                                        <img src="https://payimg.billgate.net/gxcon/1000085837_1123.jpg" alt="[스타벅스] 아이스 아메리카노T">
+                                                                        <div class="prod_bg-thumb"></div>
+                                                                    </a>
+                                                                    <div class="label-container">
+                                                                        <label class="label label-icon label-point-outline">특가</label>
+                                                                        <label class="label label-icon label-point">NEW</label>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="prod_detail_box padding-0-bottom">
+                                                                    <p class="disc">스타벅스</p>
+                                                                    <h1 class="tit"><a href="/product/detail/200" title="[스타벅스] 아이스 아메리카노T">[스타벅스] 아이스 아메리카노T</a></h1>
+                                                                    <!-- 쇼핑몰 일반 -->
+                                                                    <div class="price">
+                                                                        <div class="display-table-cell vertical-align-middle">
+                                                                            <strong class="price_sale_percent text-red"><span>5</span>%</strong>
+                                                                            <strong class="price_from">10,450</strong>
+                                                                            <strong class="original_price">11,000</strong>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="swiper-slide">
+                                                <div class="prod_style prod_style_grid">
+                                                    <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                                <div class="prod_thumb_link">
+                                                                    <a href="/product/detail/200" class="display-block">
+                                                                        <img src="https://payimg.billgate.net/gxcon/1000102733_16853.jpg" alt="파리바게뜨 실키롤케익">
+                                                                        <div class="label-container">
+                                                                            <label class="label label-icon label-point-outline">특가</label>
+
+                                                                        </div>
+
+                                                                        <div class="prod_sold_out" >
+                                                                            <div class="display-table width-100 height-100">
+                                                                                <div class="display-table-cell vertical-align-middle text-center">
+                                                                                    <span class="sold-out-text">품절</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="prod_detail_box padding-0-bottom">
+                                                                    <p class="disc">파리바게뜨</p>
+                                                                    <h1 class="tit"><a href="/product/detail/200" title="실키롤케익">실키롤케익</a></h1>
+                                                                    <!-- 쇼핑몰 일반 -->
+                                                                    <div class="price">
+                                                                        <div class="display-table-cell vertical-align-middle">
+                                                                            <strong class="price_sale_percent text-red"><span>5</span>%</strong>
+                                                                            <strong class="price_from">10,450</strong>
+                                                                            <strong class="original_price">11,000</strong>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                                <div class="prod_thumb_link">
+                                                                    <a href="/product/detail/200" class="display-block">
+                                                                        <img src="https://payimg.billgate.net/gxcon/1000102723_154845.jpg" alt="마이넘버원3">
+
+                                                                        <div class="prod_bg-thumb"></div>
+                                                                    </a>
+                                                                    <div class="label-container">
+                                                                        <label class="label label-icon label-point">NEW</label>
+                                                                        <label class="label label-icon label-menu-outline">카드결제</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="prod_detail_box padding-0-bottom">
+                                                                    <p class="disc">배스킨라빈스</p>
+                                                                    <h1 class="tit"><a href="/product/detail/200" title="마이넘버원3">마이넘버원3</a></h1>
+                                                                    <!-- 쇼핑몰 일반 -->
+                                                                    <div class="price">
+                                                                        <div class="display-table-cell vertical-align-middle">
+                                                                            <strong class="price_sale_percent text-red"><span>10</span>%</strong>
+                                                                            <strong class="price_from">25,650</strong>
+                                                                            <strong class="original_price">27,000</strong>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                                <div class="prod_thumb_link">
+                                                                    <a href="/product/detail/200" class="display-block"><img src="https://payimg.billgate.net/gxcon/1000085837_1123.jpg" alt="[스타벅스] 아이스 아메리카노T"><div class="prod_bg-thumb"></div></a>
+                                                                    <div class="label-container">
+                                                                        <label class="label label-icon label-point-outline">특가</label>
+                                                                        <label class="label label-icon label-point">NEW</label>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="prod_detail_box padding-0-bottom">
+                                                                    <p class="disc">스타벅스</p>
+                                                                    <h1 class="tit"><a href="/product/detail/200" title="[스타벅스] 아이스 아메리카노T">[스타벅스] 아이스 아메리카노T</a></h1>
+                                                                    <!-- 쇼핑몰 일반 -->
+                                                                    <div class="price">
+                                                                        <div class="display-table-cell vertical-align-middle">
+                                                                            <strong class="price_sale_percent text-red"><span>15</span>%</strong>
+                                                                            <strong class="price_from">4,020</strong>
+                                                                            <strong class="original_price">4,100</strong>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                                <div class="prod_thumb_link">
+                                                                    <a href="/product/detail/200" class="display-block"><img src="https://payimg.billgate.net/gxcon/1000085837_1123.jpg" alt="[스타벅스] 아이스 아메리카노T"><div class="prod_bg-thumb"></div></a>
+                                                                    <div class="label-container">
+                                                                        <label class="label label-icon label-point-outline">특가</label>
+                                                                        <label class="label label-icon label-point">NEW</label>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="prod_detail_box padding-0-bottom">
+                                                                    <p class="disc">스타벅스</p>
+                                                                    <h1 class="tit"><a href="/product/detail/200" title="[스타벅스] 아이스 아메리카노T">[스타벅스] 아이스 아메리카노T</a></h1>
+                                                                    <!-- 쇼핑몰 일반 -->
+                                                                    <div class="price">
+                                                                        <div class="display-table-cell vertical-align-middle">
+                                                                            <strong class="price_sale_percent text-red"><span>5</span>%</strong>
+                                                                            <strong class="price_from">10,450</strong>
+                                                                            <strong class="original_price">11,000</strong>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <div class="swiper-button-prev"></div>
+                                        <div class="swiper-button-next"></div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- // '이달의 초특가' 레이아웃 -->
+
+        <!-- '인기상품' 레이아웃 -->
+        <section class="padding-section section-title-padding">
+            <div class="container">
+                <div class="section-title">
+                    <h1>인기상품</h1>
+                </div>
+            </div>
+        </section>
+        <section class="padding-section" id="filterSec">
+            <div class="thumb-style thumb-rounded small-rounded thumb-bg gray"> <!-- 개별 클래스 요소 선택란 : 상품 썸네일 -->
+                <!--<div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">-->
+                            <div class="main-header header-padding-xlarge">
+                                <div class="row">
+                                    <div class="container">
+                                        <div class="col-md-6 col-xs-12 padding-0-all">
+                                            <div class="menu-center-grow">
+                                                <!-- 메인메뉴 -->
+                                                <div class="main-swiper width-100">
+                                                    <div class="swiper-container-sub-tab circle-btn swiper-container-list-menu">
+                                                        <ul class="swiper-wrapper nav tab_menu">
+
+                                                            <li class="active swiper-slide" href="#tabLife" data-toggle="tab" aria-expanded="false">
+                                                                <a>
+                                                                    <span>편의점 / 생활 / 영화</span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="swiper-slide" href="#tabGiftCard" data-toggle="tab" aria-expanded="false">
+                                                                <a>
+                                                                    <span>상품권</span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="swiper-slide" href="#tabFastFood" data-toggle="tab" aria-expanded="false">
+                                                                <a>
+                                                                    <span>패스트푸드</span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="swiper-slide" href="#tabCosmetic" data-toggle="tab" aria-expanded="false">
+                                                                <a>
+                                                                    <span>화장품</span>
+                                                                </a>
+                                                            </li>
+                                                            <li class="swiper-slide" href="#tabCoffee" data-toggle="tab" aria-expanded="false">
+                                                                <a>
+                                                                    <span>커피 / 아이스크림</span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+
+                                                        <div class="swiper-button-prev"></div>
+                                                        <div class="swiper-button-next"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="border-color-extra-dark-gray margin-20-top margin-30-bottom">
+                            <div class="tab-content">
+                                <div id="tabLife" class="tab-pane fade in active">
+                                    <form id="products">
+                                    <div class="width-100">
+                                        <div class="prod_style prod_style_grid">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                        <div class="prod_thumb_link">
+                                                            <a href="/product/detail/200" class="display-block">
+                                                                <img src="https://payimg.billgate.net/gxcon/1000102733_16853.jpg" alt="파리바게뜨 실키롤케익">
+
+                                                                <div class="prod_sold_out" >
+                                                                    <div class="display-table width-100 height-100">
+                                                                        <div class="display-table-cell vertical-align-middle text-center">
+                                                                            <span class="sold-out-text">품절</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                        <div class="prod_detail_box">
+                                                            <p class="disc">파리바게뜨</p>
+                                                            <h1 class="tit"><a href="/product/detail/200" title="실키롤케익">실키롤케익</a></h1>
+                                                            <!-- 쇼핑몰 일반 -->
+                                                            <div class="price">
+                                                                <div class="display-table-cell vertical-align-middle">
+                                                                    <strong class="price_sale_percent text-red"><span>5</span>%</strong>
+                                                                    <strong class="price_from">10,450</strong>
+                                                                    <strong class="original_price">11,000</strong>
+                                                                    <div class="label-container">
+                                                                        <label class="label label-icon label-point-outline">특가</label>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                        <div class="prod_thumb_link">
+                                                            <a href="/product/detail/200" class="display-block">
+                                                                <img src="https://payimg.billgate.net/gxcon/1000102723_154845.jpg" alt="마이넘버원3">
+                                                                <div class="prod_bg-thumb"></div>
+                                                            </a>
+                                                        </div>
+                                                        <div class="prod_detail_box">
+                                                            <p class="disc">배스킨라빈스</p>
+                                                            <h1 class="tit"><a href="/product/detail/200" title="마이넘버원3">마이넘버원3</a></h1>
+                                                            <!-- 쇼핑몰 일반 -->
+                                                            <div class="price">
+                                                                <div class="display-table-cell vertical-align-middle">
+                                                                    <strong class="price_sale_percent text-red"><span>10</span>%</strong>
+                                                                    <strong class="price_from">25,650</strong>
+                                                                    <strong class="original_price">27,000</strong>
+                                                                    <div class="label-container">
+                                                                        <label class="label label-icon label-point">NEW</label>
+                                                                        <label class="label label-icon label-menu-outline">카드결제</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                        <div class="prod_thumb_link">
+                                                            <a href="/product/detail/200" class="display-block"><img src="https://payimg.billgate.net/gxcon/1000085837_1123.jpg" alt="[스타벅스] 아이스 아메리카노T"><div class="prod_bg-thumb"></div></a>
+                                                        </div>
+                                                        <div class="prod_detail_box">
+                                                            <p class="disc">스타벅스</p>
+                                                            <h1 class="tit"><a href="/product/detail/200" title="[스타벅스] 아이스 아메리카노T">[스타벅스] 아이스 아메리카노T</a></h1>
+                                                            <!-- 쇼핑몰 일반 -->
+                                                            <div class="price">
+                                                                <div class="display-table-cell vertical-align-middle">
+                                                                    <strong class="price_sale_percent text-red"><span>15</span>%</strong>
+                                                                    <strong class="price_from">4,020</strong>
+                                                                    <strong class="original_price">4,100</strong>
+                                                                    <div class="label-container">
+                                                                        <label class="label label-icon label-point-outline">특가</label>
+                                                                        <label class="label label-icon label-point">NEW</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                        <div class="prod_thumb_link">
+                                                            <a href="/product/detail/200" class="display-block"><img src="/image/blank-square.png" alt=""><div class="prod_more">
+                                                                <div class="display-table width-100 height-100">
+                                                                    <div class="display-table-cell vertical-align-middle text-center">
+                                                                        <span class="sold-out-text">인기상품<br>더보기</span><br>
+                                                                        <span class="ti-plus plus"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                </div>
+                                <div id="tabGiftCard" class="tab-pane fade">
+                                    <form id="products">
+                                        <div class="width-100">
+                                            <div class="prod_style prod_style_grid">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block">
+                                                                    <img src="https://payimg.billgate.net/gxcon/1000102733_16853.jpg" alt="파리바게뜨 실키롤케익">
+
+                                                                    <div class="prod_sold_out" >
+                                                                        <div class="display-table width-100 height-100">
+                                                                            <div class="display-table-cell vertical-align-middle text-center">
+                                                                                <span class="sold-out-text">품절</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                            <div class="prod_detail_box">
+                                                                <p class="disc">파리바게뜨</p>
+                                                                <h1 class="tit"><a href="/product/detail/200" title="실키롤케익">실키롤케익</a></h1>
+                                                                <!-- 쇼핑몰 일반 -->
+                                                                <div class="price">
+                                                                    <div class="display-table-cell vertical-align-middle">
+                                                                        <strong class="price_sale_percent text-red"><span>5</span>%</strong>
+                                                                        <strong class="price_from">10,450</strong>
+                                                                        <strong class="original_price">11,000</strong>
+                                                                        <div class="label-container">
+                                                                            <label class="label label-icon label-point-outline">특가</label>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block">
+                                                                    <img src="https://payimg.billgate.net/gxcon/1000102723_154845.jpg" alt="마이넘버원3">
+                                                                    <div class="prod_bg-thumb"></div>
+                                                                </a>
+                                                            </div>
+                                                            <div class="prod_detail_box">
+                                                                <p class="disc">배스킨라빈스</p>
+                                                                <h1 class="tit"><a href="/product/detail/200" title="마이넘버원3">마이넘버원3</a></h1>
+                                                                <!-- 쇼핑몰 일반 -->
+                                                                <div class="price">
+                                                                    <div class="display-table-cell vertical-align-middle">
+                                                                        <strong class="price_sale_percent text-red"><span>10</span>%</strong>
+                                                                        <strong class="price_from">25,650</strong>
+                                                                        <strong class="original_price">27,000</strong>
+                                                                        <div class="label-container">
+                                                                            <label class="label label-icon label-point">NEW</label>
+                                                                            <label class="label label-icon label-menu-outline">카드결제</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block"><img src="https://payimg.billgate.net/gxcon/1000085837_1123.jpg" alt="[스타벅스] 아이스 아메리카노T"><div class="prod_bg-thumb"></div></a>
+                                                            </div>
+                                                            <div class="prod_detail_box">
+                                                                <p class="disc">스타벅스</p>
+                                                                <h1 class="tit"><a href="/product/detail/200" title="[스타벅스] 아이스 아메리카노T">[스타벅스] 아이스 아메리카노T</a></h1>
+                                                                <!-- 쇼핑몰 일반 -->
+                                                                <div class="price">
+                                                                    <div class="display-table-cell vertical-align-middle">
+                                                                        <strong class="price_sale_percent text-red"><span>15</span>%</strong>
+                                                                        <strong class="price_from">4,020</strong>
+                                                                        <strong class="original_price">4,100</strong>
+                                                                        <div class="label-container">
+                                                                            <label class="label label-icon label-point-outline">특가</label>
+                                                                            <label class="label label-icon label-point">NEW</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block"><img src="/image/blank-square.png" alt=""><div class="prod_more">
+                                                                    <div class="display-table width-100 height-100">
+                                                                        <div class="display-table-cell vertical-align-middle text-center">
+                                                                            <span class="sold-out-text">인기상품<br>더보기</span><br>
+                                                                            <span class="ti-plus plus"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="tabFastFood" class="tab-pane fade">
+                                    <form id="products">
+                                        <div class="width-100">
+                                            <div class="prod_style prod_style_grid">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block">
+                                                                    <img src="https://payimg.billgate.net/gxcon/1000102733_16853.jpg" alt="파리바게뜨 실키롤케익">
+
+                                                                    <div class="prod_sold_out" >
+                                                                        <div class="display-table width-100 height-100">
+                                                                            <div class="display-table-cell vertical-align-middle text-center">
+                                                                                <span class="sold-out-text">품절</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                            <div class="prod_detail_box">
+                                                                <p class="disc">파리바게뜨</p>
+                                                                <h1 class="tit"><a href="/product/detail/200" title="실키롤케익">실키롤케익</a></h1>
+                                                                <!-- 쇼핑몰 일반 -->
+                                                                <div class="price">
+                                                                    <div class="display-table-cell vertical-align-middle">
+                                                                        <strong class="price_sale_percent text-red"><span>5</span>%</strong>
+                                                                        <strong class="price_from">10,450</strong>
+                                                                        <strong class="original_price">11,000</strong>
+                                                                        <div class="label-container">
+                                                                            <label class="label label-icon label-point-outline">특가</label>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block">
+                                                                    <img src="https://payimg.billgate.net/gxcon/1000102723_154845.jpg" alt="마이넘버원3">
+                                                                    <div class="prod_bg-thumb"></div>
+                                                                </a>
+                                                            </div>
+                                                            <div class="prod_detail_box">
+                                                                <p class="disc">배스킨라빈스</p>
+                                                                <h1 class="tit"><a href="/product/detail/200" title="마이넘버원3">마이넘버원3</a></h1>
+                                                                <!-- 쇼핑몰 일반 -->
+                                                                <div class="price">
+                                                                    <div class="display-table-cell vertical-align-middle">
+                                                                        <strong class="price_sale_percent text-red"><span>10</span>%</strong>
+                                                                        <strong class="price_from">25,650</strong>
+                                                                        <strong class="original_price">27,000</strong>
+                                                                        <div class="label-container">
+                                                                            <label class="label label-icon label-point">NEW</label>
+                                                                            <label class="label label-icon label-menu-outline">카드결제</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block"><img src="https://payimg.billgate.net/gxcon/1000085837_1123.jpg" alt="[스타벅스] 아이스 아메리카노T"><div class="prod_bg-thumb"></div></a>
+                                                            </div>
+                                                            <div class="prod_detail_box">
+                                                                <p class="disc">스타벅스</p>
+                                                                <h1 class="tit"><a href="/product/detail/200" title="[스타벅스] 아이스 아메리카노T">[스타벅스] 아이스 아메리카노T</a></h1>
+                                                                <!-- 쇼핑몰 일반 -->
+                                                                <div class="price">
+                                                                    <div class="display-table-cell vertical-align-middle">
+                                                                        <strong class="price_sale_percent text-red"><span>15</span>%</strong>
+                                                                        <strong class="price_from">4,020</strong>
+                                                                        <strong class="original_price">4,100</strong>
+                                                                        <div class="label-container">
+                                                                            <label class="label label-icon label-point-outline">특가</label>
+                                                                            <label class="label label-icon label-point">NEW</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block"><img src="/image/blank-square.png" alt=""><div class="prod_more">
+                                                                    <div class="display-table width-100 height-100">
+                                                                        <div class="display-table-cell vertical-align-middle text-center">
+                                                                            <span class="sold-out-text">인기상품<br>더보기</span><br>
+                                                                            <span class="ti-plus plus"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="tabCosmetic" class="tab-pane fade">
+                                    <form id="products">
+                                        <div class="width-100">
+                                            <div class="prod_style prod_style_grid">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block">
+                                                                    <img src="https://payimg.billgate.net/gxcon/1000102733_16853.jpg" alt="파리바게뜨 실키롤케익">
+
+                                                                    <div class="prod_sold_out" >
+                                                                        <div class="display-table width-100 height-100">
+                                                                            <div class="display-table-cell vertical-align-middle text-center">
+                                                                                <span class="sold-out-text">품절</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                            <div class="prod_detail_box">
+                                                                <p class="disc">파리바게뜨</p>
+                                                                <h1 class="tit"><a href="/product/detail/200" title="실키롤케익">실키롤케익</a></h1>
+                                                                <!-- 쇼핑몰 일반 -->
+                                                                <div class="price">
+                                                                    <div class="display-table-cell vertical-align-middle">
+                                                                        <strong class="price_sale_percent text-red"><span>5</span>%</strong>
+                                                                        <strong class="price_from">10,450</strong>
+                                                                        <strong class="original_price">11,000</strong>
+                                                                        <div class="label-container">
+                                                                            <label class="label label-icon label-point-outline">특가</label>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block">
+                                                                    <img src="https://payimg.billgate.net/gxcon/1000102723_154845.jpg" alt="마이넘버원3">
+                                                                    <div class="prod_bg-thumb"></div>
+                                                                </a>
+                                                            </div>
+                                                            <div class="prod_detail_box">
+                                                                <p class="disc">배스킨라빈스</p>
+                                                                <h1 class="tit"><a href="/product/detail/200" title="마이넘버원3">마이넘버원3</a></h1>
+                                                                <!-- 쇼핑몰 일반 -->
+                                                                <div class="price">
+                                                                    <div class="display-table-cell vertical-align-middle">
+                                                                        <strong class="price_sale_percent text-red"><span>10</span>%</strong>
+                                                                        <strong class="price_from">25,650</strong>
+                                                                        <strong class="original_price">27,000</strong>
+                                                                        <div class="label-container">
+                                                                            <label class="label label-icon label-point">NEW</label>
+                                                                            <label class="label label-icon label-menu-outline">카드결제</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block"><img src="https://payimg.billgate.net/gxcon/1000085837_1123.jpg" alt="[스타벅스] 아이스 아메리카노T"><div class="prod_bg-thumb"></div></a>
+                                                            </div>
+                                                            <div class="prod_detail_box">
+                                                                <p class="disc">스타벅스</p>
+                                                                <h1 class="tit"><a href="/product/detail/200" title="[스타벅스] 아이스 아메리카노T">[스타벅스] 아이스 아메리카노T</a></h1>
+                                                                <!-- 쇼핑몰 일반 -->
+                                                                <div class="price">
+                                                                    <div class="display-table-cell vertical-align-middle">
+                                                                        <strong class="price_sale_percent text-red"><span>15</span>%</strong>
+                                                                        <strong class="price_from">4,020</strong>
+                                                                        <strong class="original_price">4,100</strong>
+                                                                        <div class="label-container">
+                                                                            <label class="label label-icon label-point-outline">특가</label>
+                                                                            <label class="label label-icon label-point">NEW</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block"><img src="/image/blank-square.png" alt=""><div class="prod_more">
+                                                                    <div class="display-table width-100 height-100">
+                                                                        <div class="display-table-cell vertical-align-middle text-center">
+                                                                            <span class="sold-out-text">인기상품<br>더보기</span><br>
+                                                                            <span class="ti-plus plus"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="tabCoffee" class="tab-pane fade">
+                                    <form id="products">
+                                        <div class="width-100">
+                                            <div class="prod_style prod_style_grid">
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block">
+                                                                    <img src="https://payimg.billgate.net/gxcon/1000102733_16853.jpg" alt="파리바게뜨 실키롤케익">
+
+                                                                    <div class="prod_sold_out" >
+                                                                        <div class="display-table width-100 height-100">
+                                                                            <div class="display-table-cell vertical-align-middle text-center">
+                                                                                <span class="sold-out-text">품절</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </a>
+                                                            </div>
+                                                            <div class="prod_detail_box">
+                                                                <p class="disc">파리바게뜨</p>
+                                                                <h1 class="tit"><a href="/product/detail/200" title="실키롤케익">실키롤케익</a></h1>
+                                                                <!-- 쇼핑몰 일반 -->
+                                                                <div class="price">
+                                                                    <div class="display-table-cell vertical-align-middle">
+                                                                        <strong class="price_sale_percent text-red"><span>5</span>%</strong>
+                                                                        <strong class="price_from">10,450</strong>
+                                                                        <strong class="original_price">11,000</strong>
+                                                                        <div class="label-container">
+                                                                            <label class="label label-icon label-point-outline">특가</label>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block">
+                                                                    <img src="https://payimg.billgate.net/gxcon/1000102723_154845.jpg" alt="마이넘버원3">
+                                                                    <div class="prod_bg-thumb"></div>
+                                                                </a>
+                                                            </div>
+                                                            <div class="prod_detail_box">
+                                                                <p class="disc">배스킨라빈스</p>
+                                                                <h1 class="tit"><a href="/product/detail/200" title="마이넘버원3">마이넘버원3</a></h1>
+                                                                <!-- 쇼핑몰 일반 -->
+                                                                <div class="price">
+                                                                    <div class="display-table-cell vertical-align-middle">
+                                                                        <strong class="price_sale_percent text-red"><span>10</span>%</strong>
+                                                                        <strong class="price_from">25,650</strong>
+                                                                        <strong class="original_price">27,000</strong>
+                                                                        <div class="label-container">
+                                                                            <label class="label label-icon label-point">NEW</label>
+                                                                            <label class="label label-icon label-menu-outline">카드결제</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block"><img src="https://payimg.billgate.net/gxcon/1000085837_1123.jpg" alt="[스타벅스] 아이스 아메리카노T"><div class="prod_bg-thumb"></div></a>
+                                                            </div>
+                                                            <div class="prod_detail_box">
+                                                                <p class="disc">스타벅스</p>
+                                                                <h1 class="tit"><a href="/product/detail/200" title="[스타벅스] 아이스 아메리카노T">[스타벅스] 아이스 아메리카노T</a></h1>
+                                                                <!-- 쇼핑몰 일반 -->
+                                                                <div class="price">
+                                                                    <div class="display-table-cell vertical-align-middle">
+                                                                        <strong class="price_sale_percent text-red"><span>15</span>%</strong>
+                                                                        <strong class="price_from">4,020</strong>
+                                                                        <strong class="original_price">4,100</strong>
+                                                                        <div class="label-container">
+                                                                            <label class="label label-icon label-point-outline">특가</label>
+                                                                            <label class="label label-icon label-point">NEW</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event">
+                                                            <div class="prod_thumb_link">
+                                                                <a href="/product/detail/200" class="display-block"><img src="/image/blank-square.png" alt=""><div class="prod_more">
+                                                                    <div class="display-table width-100 height-100">
+                                                                        <div class="display-table-cell vertical-align-middle text-center">
+                                                                            <span class="sold-out-text">인기상품<br>더보기</span><br>
+                                                                            <span class="ti-plus plus"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                    <!--</div>
+                </div>
+            </div>-->
+            </div>
+        </section>
+        <!-- // '인기상품' 레이아웃 -->
+        <!--<section class="padding-50-tb">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">-->
+                        <!-- Swiper -->
+                        <!--<div class="swiper-container-main-3 overflow-hidden">
+                            <ul class="swiper-wrapper">
+                                <li class="swiper-slide" th:each="i : ${#numbers.sequence(1, 5)}">
+                                    <picture class="">
+                                        <img src="/image/main-swiper0.png" alt="" class="">
+                                    </picture>
+                                </li>
+                            </ul>-->
+                            <!--<div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>-->
+                            <!--<div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>-->
+
+
+
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+<th:block th:replace="/part/js.html"></th:block>
+</body>
+</html>

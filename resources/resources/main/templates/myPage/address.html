@@ -1,0 +1,140 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>나의 배송주소록</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 margin-40-top xs-margin-25-top">
+                        <div class="area_title">
+                            <h2>나의 배송주소록</h2>
+                            <a class="btn btn-point btn-sm" th:href="@{|/myPage/address/new|}"><i class="ti-plus"></i>주소 추가</a>
+                        </div>
+                        <table class="table xs_table_block" id="addressTable">
+                            <thead class="xs-display-none">
+                                <tr>
+                                    <th style="width:150px">배송지 이름</th>
+                                    <th>받는 분</th>
+                                    <th>주소</th>
+                                    <th>배송 요청사항</th>
+                                    <th>출입방법</th>
+                                    <th style="width:100px">관리</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="ad, i : ${addressList}" th:id="|ad_tr_${ad.adIdx}|" class="address_tr">
+                                    <td>
+                                        <b th:if="${ad.adBasic}"><i class="ti-check color-point font-weight-900"></i></b>
+                                        <span th:text="${ad.adTitle}">주소명</span>
+                                    </td>
+                                    <td>
+                                        <strong th:text="${ad.adName}">배송자 이름</strong>
+                                        <p th:text="${ad.getPhoneMasking()}">010-2333-4421</p>
+                                    </td>
+                                    <td th:onclick="|pageAction(${ad.adIdx})|">
+                                        <!--/**주소 마스킹 처리 필요*/-->
+                                        <small th:text="|[${ad.adPost}]|">[우편번호]</small>
+                                        <br>
+                                        <a th:text="${ad.getAddr()}">기본주소</a>
+                                        <a th:text="${ad.adAddr5}">나머지주소</a>
+                                    </td>
+                                    <td>
+                                        <p th:text="${ad.adMemo}">문 앞에 놓아주세요.</p>
+                                    </td>
+                                    <td>
+                                        <small th:if="${ad.adEntrance.get('type').equals('free')}"><b>[자유 출입 가능]</b></small>
+                                        <small th:if="${ad.adEntrance.get('type').equals('common')}"><b>[공동현관 비밀번호]</b></small>
+                                        <small th:if="${ad.adEntrance.get('type').equals('etc')}"><b>[기타]</b></small>
+                                        <br>
+                                        <p th:text="${ad.adEntrance.get('memo')}">출입 방법</p>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-dark btn-sm margin-10-bottom sm-no-margin" th:href="@{|/myPage/address/detail/${ad.adIdx}|}">수정</a>
+                                        <a class="btn btn-default btn-sm" th:onclick="|adDelete(${ad.adIdx})|">삭제</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!--/**최초 주소가 없는 경우*/-->
+                        <div class="data_none" th:if="${#lists.isEmpty(addressList)}">저장된 주소가 없습니다.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+
+    <script th:inline="javascript">
+
+        function adDelete(adIdx){
+            $.ajax({
+                url : '/myPage/address/delete.rest',
+                type : 'post',
+                data : 'adIdx='+adIdx,
+            }).done(function(data){
+                if(data.location == null){
+                    alert('삭제되었습니다.');
+                    $("#ad_tr_"+adIdx).remove();
+
+                    if($(".address_tr").length==0){
+                        $("#addressTable").after('<div class="data_none">저장된 주소가 없습니다.</div>')
+                    }
+                }else{
+                    alert(data.message);
+                    location.href = data.location;
+                }
+
+            });
+        }
+
+
+        function pageAction(adIdx){
+            var openerLoc = opener.location.href;
+            if(openerLoc.indexOf('/myPage/modify') > -1){
+                //상세 이동
+                var loc = '/myPage/address/detail/'+adIdx;
+                location.href=loc;
+            }else if(openerLoc.indexOf('/order/order') > -1 || openerLoc.indexOf('/present') > -1){
+                //배송지 선택
+                $.ajax({
+                    url : location.pathname+'/'+adIdx+'.rest',
+                    type : 'post',
+                    data : 'adIdx='+adIdx,
+                }).done(function(data){
+                    if(data instanceof String){
+                        alert(data);
+                    }else{
+                        $(opener.document).find('#AD_NAME').val(data.adName);
+                        $(opener.document).find('#AD_PHONE').val(data.adPhone);
+                        $(opener.document).find('#AD_POST').val(data.adPost);
+                        $(opener.document).find('#AD_FULLADDR').val(data.adFulladdr);
+                        $(opener.document).find('#AD_ADDR1').val(data.adAddr1);
+                        $(opener.document).find('#AD_ADDR2').val(data.adAddr2);
+                        $(opener.document).find('#AD_ADDR3').val(data.adAddr3);
+                        $(opener.document).find('#AD_ADDR4').val(data.adAddr4);
+                        $(opener.document).find('#AD_ADDR5').val(data.adAddr5);
+                        $(opener.document).find('#AD_MEMO').val(data.adMemo);
+                        $(opener.document).find('#AD_ENTRANCE').val(data.adEntrance.memo);
+                        var entType = data.adEntrance.type;
+                        $(opener.document).find('.ENTRANCE_TYPE').prop('checked', false);
+                        if(entType== 'common_pw'){
+                            $(opener.document).find('#ENT_COMMON_PW').prop('checked', true);
+                        }else if(entType == 'etc'){
+                            $(opener.document).find('#ENT_ETC').prop('checked', true);
+                        }else{
+                            $(opener.document).find('#ENT_FREE').prop('checked', true);
+                        }
+                    }
+
+                    self.close();
+                });
+            }
+        }
+    </script>
+</body>
+</html>

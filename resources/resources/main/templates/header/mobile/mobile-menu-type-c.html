@@ -1,0 +1,52 @@
+<!-- 모바일 메뉴 소스부분 : 데스크탑과 분리 코드 ( ~ 991px) -->
+<div id="middle" class="display-none sm-display-block fixed" th:classappend="${shop.getHeader().getHdMenuStyle()}">
+    <div class="category-wrapper">
+        <div class="width-100 overflow-hidden">
+            <nav id="nav" class="bg-point">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 padding-0">
+                            <div class="nav_wrap position-relative">
+                                <div class="gnb_wrap width-100">
+                                 <ul class="gnb gnb_type2" id="mobileHeaderMenu">
+                                     <li class="" th:classappend="${home_active} ? 'active':''"><a href="/index">홈</a></li>
+                                     <li th:each="cfs, i : ${cf}" th:attr="cfIdx=|${cfs.CF_IDX}|" th:class="${cfIdx == cfs.CF_IDX ? 'active':''}">
+                                         <a th:href="@{|/product/list?cfIdx=${cfs.CF_IDX}|}" th:text="${cfs.CF_NAME}">대분류명</a>
+                                     </li>
+
+                                     <!--<li th:each="eg, i : ${egTopList}" th:classappend="${egIdx} == ${eg.EG_IDX} ? 'active':''">
+                                         <a th:href="@{|/board/detail/event/${eg.EG_IDX}|}" th:text="${eg.EG_NAME}">이벤트명</a>
+                                     </li>-->
+
+                                     <li class="" th:classappend="${active} == 'community' ? 'active':''">
+                                         <a href="/board/event">이벤트</a>
+                                     </li>
+                                     <li class="" th:classappend="${active} == 'customerCenter' ? 'active':''">
+                                         <a href="/board/notice" title="고객센터">고객센터</a>
+                                     </li>
+                                     <li class="" th:classappend="${active != null && #strings.startsWith(active, 'my') ? 'active':''}">
+                                         <a href="/myPage/order" title="마이페이지">마이페이지</a>
+                                     </li>
+                                </ul>
+                            </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="col-xs-2 search-btn-wrapper">
+            <button type="button" onclick="Subs.moSearchOpen()" class="content mo_btn_search margin-auto width-100 bg-transparent"><span class="ti-search text-18 font-weight-700 text-sub text-extra-dark-gray"></span></button>
+        </div>
+        <div class="search_data" id="search_data">
+            <form method="get" name="searchForm2" id="searchForm2" class="search_form"  onsubmit="submitSearch(); return false;">
+                <fieldset class="input display-none sm-display-block">
+                    <input type="text" id="searchInput2" name="input" class="main-font" placeholder="검색어를 입력해주세요." onfocus="this.placeholder=''" onblur="this.placeholder='검색어를 입력해주세요.'">
+                </fieldset>
+                <fieldset class="button display-none sm-display-block">
+                    <button type="submit" class="search_btn"><span class="ti-search"></span></button>
+                    <button type="button" class="search_btn_close" onclick="Subs.moSearchClose()"><span class="ti-close"></span></button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- // 모바일 메뉴 소스부분 -->

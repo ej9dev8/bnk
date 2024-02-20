@@ -1,0 +1,678 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>상세페이지</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container pd-detail-page">
+        <th:block th:replace="/header/header.html"></th:block>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <section class="padding-section page-title-padding">
+                        <div class="row">
+                            <!-- 제품 썸네일 -->
+                            <div class="col-lg-6 col-sm-12 text-center prod_thumbnail">
+                                <div class="prod_thumb_link position-relative">
+                                    <img th:src="${shopProduct.product.pThumbnail}" th:alt="${shopProduct.product.pName}" data-no-retina="">
+
+                                    <div class="label-container" th:if="${not shopProduct.spTag.isEmpty and shopProduct.isSale()}">
+                                        <label class="label label-icon" th:each="tag : ${shopProduct.spTag}" th:classappend="${tag.get('STYLE')}" th:text="${tag.get('TEXT')}"></label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!--// 제품 썸네일 -->
+
+                            <!-- 브랜드 썸네일-->
+                            <div th:classappend="${shopProduct.shop.shopCss.scSearchBrand}">
+                                <h2>test!!@</h2>
+                            </div>
+                            <!--// 브랜드 썸네일-->
+
+                            <!-- 제품정보 -->
+                            <div class="col-lg-6 col-sm-12 xs-margin-20-top prod_info_wrap">
+                                <button type="button" class="btn mobile_info_close" onclick="Detail.mobileInfoClose()" style="display:none">모바일제품옵션 닫기</button>
+                                <div class="info_top">
+                                    <h5 class="pd-top-brand" th:text="${shopProduct.product.brand?.bName}">브랜드</h5>
+                                    <h2 class="pd-top-title" th:text="${shopProduct.spName}">상품명</h2>
+
+                                    <!--/*
+                                    <div class="col-xs-12 pd-content" th:if="${shopProduct.product.pType.name} == '배송'">
+                                        <div>
+                                            <h4 class="tit pd-tit">배송상품</h4>
+                                            <h5 class="pd-info-tit">배송비<span>2,500원</span></h5>
+                                        </div>
+                                    </div>
+                                    */-->
+                                </div>
+                                <div class="pd-top-won">
+                                    <th:block th:if="${shopProduct.product.pPrice != shopProduct.spPrice}">
+                                        <strong class="sale-percent text-red" th:text="|${#numbers.formatInteger(shopProduct.spPercent, 0, 'COMMA')}%|">0%</strong>
+                                        <strong class="original" th:text="|${#numbers.formatInteger(shopProduct.product.pPrice, 0, 'COMMA')}원|">정상가</strong>
+                                    </th:block>
+                                    <div class="price_from display-table justify-content-space-between width-100">
+                                        <p class="font-weight-700 display-table-cell" th:text="|${#numbers.formatInteger(shopProduct.spPrice, 0, 'COMMA')} 원|">판매가</p>
+                                        <p class="d-effective text-medium display-table-cell text-right vertical-align-bottom" th:if="${duration != null}">
+                                            <span class="time ti-time"></span> 유효기간
+                                            <span th:text="${duration.get('count')}" class="text-red"></span>
+                                            <span th:text="${duration.get('unit')}"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="quant-wrap" th:if="${ shopProduct.spQuotaOnce != null || shopProduct.spQuotaDay != null || checkEvent != null }">
+
+                                                <h5 class="pd-info-tit" th:if="${shopProduct.spQuotaOnce != null || shopProduct.spQuotaDay != null}">
+                                                    <div class="title">구매 제한</div>
+                                                    <div class="desc">
+                                                        <div class="txt" th:if="${shopProduct.spQuotaDay != null}">
+                                                            <span class="desc-tit">1인</span>
+                                                            <span class="desc-txt" th:text="${#numbers.formatInteger(shopProduct.spQuotaDay, 0, 'COMMA')}" id="spQuotaDay"></span>개
+                                                        </div>
+                                                        <span class="margin-5-lr"> / </span>
+                                                        <div class="txt" th:if="${shopProduct.spQuotaOnce != null}">
+                                                            <span class="desc-tit">1회</span>
+                                                            <span class="desc-txt" th:text="${#numbers.formatInteger(shopProduct.spQuotaOnce, 0, 'COMMA')}" id="spQuotaOnce"></span>개
+                                                        </div>
+                                                    </div>
+                                                </h5>
+
+                                                <h5 class="pd-info-tit" th:if="${checkEvent != null && checkEvent > 0}">
+                                                    <div class="title">이벤트 수량</div>
+                                                    <div class="desc">
+                                                        <div class="txt">
+                                                            <span class="desc-tit">총</span>
+                                                            <span class="desc-txt" th:text="${#numbers.formatInteger(shopProduct.spStock, 0, 'COMMA')}" id="spStock"></span>개
+                                                        </div>
+                                                    </div>
+                                                </h5>
+
+                                                <!--<h5 class="pd-info-tit" th:if="${shopProduct.spQuotaOnce != null || shopProduct.spQuotaDay != null}">
+                                                    <div class="title-wrap">
+                                                        <p class="title">구매 제한</p>
+                                                    </div>
+                                                    <div class="txt-wrap">
+                                                        <dd class="txt" th:if="${shopProduct.spQuotaDay != null}">1인<span th:text="${#numbers.formatInteger(shopProduct.spQuotaDay, 0, 'COMMA')}" id="spQuotaDay"></span>개</dd>
+                                                        <dd class="txt" th:if="${shopProduct.spQuotaOnce != null}">1회<span th:text="${#numbers.formatInteger(shopProduct.spQuotaOnce, 0, 'COMMA')}" id="spQuotaOnce"></span>개</dd>
+                                                    </div>
+                                                </h5>-->
+
+                                                <!--<h5 class="pd-info-tit" th:if="${checkEvent != null && checkEvent > 0}">
+                                                    <div class="title-wrap">
+                                                        <p class="title">이벤트 수량</p>
+                                                    </div>
+                                                    <div class="txt-wrap">
+                                                        <dd class="txt">총 <span th:text="${#numbers.formatInteger(shopProduct.spStock, 0, 'COMMA')}" id="spStock"></span>개</dd>
+                                                    </div>
+                                                </h5>-->
+                                            </div>
+                                <div class="prod-select-dp-wrap">
+                                    <!-- 옵션 박스 -->
+                                    <div class="double-option-wrap option-box-wrap">
+                                        <div class="select-rounded small-rounded">
+                                            <select class="form-control reason" th:each="opt, i: ${shopProduct.product.pOption}" th:id="|option${i.count}|" onchange="selectOption(this)" name="optGroup">
+                                                <option th:text="|${opt.key} 옵션 선택|" value=""></option>
+                                                <option th:each="subopt: ${opt.value}" th:text="${subopt}"></option>
+                                            </select>
+                                        </div>
+
+                                        <div id="selectOrder" class="info_select_order">
+                                            <form id="detailForm" method="post" action="/order/order">
+                                                <div class="order_list order1 bg-light" data-list="order1" id="optionDiv" th:style="${shopProduct.product.pOption == null || shopProduct.product.pOption.isEmpty ?'':'display:none;'}">
+                                                    <div class="option-dp-box" th:if="${shopProduct.product.pOption != null && not shopProduct.product.pOption.isEmpty}">
+                                                        <p class="option-dp-box-text">
+                                                            <span class="optionDivName">옵션명</span>
+                                                            <a onclick="removeOptionBox(this)"><span class="ti-close float-right"></span></a>
+                                                        </p>
+                                                    </div>
+                                                    <div class="count_control float-left">
+                                                        <button type="button" onclick="countControl('-', this);" class="minus"><i class="ti-minus"></i></button>
+                                                        <input class="padding-0-lr" type="text" id="opCnt" name="opCnt" value="1" readonly>
+                                                        <button type="button" onclick="countControl('+', this);" class="plus"><i class="ti-plus"></i></button>
+                                                        <input type="hidden" id="spPrice" name="spPrice" th:value="${shopProduct.spPrice}">
+                                                        <input type="hidden" name="opSpIdx" th:value="${shopProduct.spIdx}">
+                                                    </div>
+                                                    <div class="float-right">
+                                                        <strong class="price selectPrice" th:text="|${#numbers.formatInteger(shopProduct.spPrice, 0, 'COMMA')}|">상품금액</strong>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                    </div>
+                                    <!-- // 옵션 박스 -->
+                                </div>
+                                <div class="info_purchase">
+                                    <p>합계금액</p>
+                                    <strong id="priceSum" class="sum text-red" th:text="${#numbers.formatInteger(shopProduct.spPrice, 0, 'COMMA')}">합계금액</strong>
+                                </div>
+                                <div class="info_btn">
+                                    <th:block th:if="${shopProduct.isSale()}">
+                                        <th:block th:if="${shopProduct.product.pType.name().equals('쿠폰')}">
+                                            <a onclick="addCart();" class="btn btn-xlg btn-point-outline">장바구니</a>
+                                            <a th:onclick="|toOrderPage(${spIdx})|" class="btn btn-xlg btn-point no-margin-lr">주문하기</a>
+                                        </th:block>
+                                        <th:block th:unless="${shopProduct.product.pType.name().equals('쿠폰')}">
+                                            <a th:onclick="|toOrderPage(${spIdx})|" class="btn btn-xlg btn-point width-100 no-margin-lr">주문하기</a>
+                                        </th:block>
+                                    </th:block>
+                                    <th:block th:unless="${shopProduct.isSale()}">
+                                        <a class="btn btn-xlg bg-extra-medium-gray text-white width-100 no-margin-lr cursor-default">품절</a>
+                                    </th:block>
+                                </div>
+                            </div>
+                            <!--// 제품정보 -->
+                        </div>
+                    </section>
+                    <!--// 제품상세 상단영역 -->
+                    <!-- 제품상세 하단영역 -->
+                    <section class="padding-section">
+                        <div class="position-relative">
+                            <div class="detail-tab-content-wrap">
+                                <div class="swiper-detail-list-tab circle-btn sm-lr-fit">
+                                    <ul class="swiper-wrapper" id="">
+                                        <li id="productTab1" class="swiper-slide active">
+                                            <a href="#tabSec1" data-toggle="tab" aria-expanded="true">상세정보</a>
+                                        </li>
+                                        <li class="swiper-slide">
+                                            <a href="#tabSec2" data-toggle="tab" aria-expanded="true">고시정보</a>
+                                        </li>
+                                        <li class="swiper-slide">
+                                            <a href="#tabSec3" data-toggle="tab" aria-expanded="true">이용안내</a>
+                                        </li>
+                                        <!--<li class="swiper-slide">
+                                            <a href="#tabSec4" data-toggle="tab" onclick="ProdDetail.detailTabMove()" aria-expanded="true">제품문의</a>
+                                        </li>
+                                        <li class="swiper-slide">
+                                            <a href="#tabSec5" data-toggle="tab" onclick="ProdDetail.detailTabMove()" aria-expanded="true">상품평</a>
+                                        </li>
+                                        <li class="swiper-slide">
+                                            <a href="#tabSec6" data-toggle="tab" onclick="ProdDetail.detailTabMove()" aria-expanded="true">교환/반품</a>
+                                        </li>-->
+                                    </ul>
+                                    <div class="swiper-button-prev"><span class="ti-angle-left arrow"></span></div>
+                                    <div class="swiper-button-next"><span class="ti-angle-right arrow"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="padding-section">
+                        <div class="tab-content">
+                            <!-- 상세정보 -->
+                            <div id="tabSec1" class="tab-pane fade active in">
+                                <div class="detail-img-wrap" th:utext="${shopProduct.product.pContentDetail}">
+                                    상세정보
+                                </div>
+                            </div>
+                            <!--// 상세정보 -->
+
+                            <!-- 고시정보 -->
+                            <div id="tabSec2" class="tab-pane fade">
+                                <div class="width-100 info-accordion-wrap">
+                                    <div class="panel_group accordion_style">
+                                        <div class="panel" >
+                                            <div class="panel-heading border-none">
+                                                <a href="#productInfos" data-parent="#tab" data-toggle="collapse" class="" aria-expanded="true">
+                                                    <h2 class="table_tit border-bottom border-bottom-2px padding-20-bottom no-margin-bottom">
+                                                        <span class="tit">고시정보
+                                                            <span class="arrow">
+                                                                <i class="up ti-angle-up"></i>
+                                                                <i class="down ti-angle-down"></i>
+                                                            </span>
+                                                        </span>
+                                                    </h2>
+                                                </a>
+                                            </div>
+                                            <div id="productInfos" class="panel-collapse collapse in" aria-expanded="true" style="">
+                                                <div class="table_layout table_horiz border-none">
+                                                    <ul>
+                                                        <li th:each="pi, i : ${productInfo}">
+                                                            <strong class="tit" th:text="${pi.piName}">고시정보 제목</strong>
+                                                            <div class="content" style="white-space: pre-line;" th:utext="${pi.piContent}">고시정보 내용</div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- //고시정보 -->
+
+                            <!-- 이용안내 -->
+                            <div id="tabSec3" class="tab-pane fade">
+                                <div class="detail-img-wrap" th:utext="${shopProduct.product.pContentInfo}">
+                                    이용안내
+                                </div>
+                                <!--<div class="width-100 info-accordion-wrap">
+                                    <div class="panel_group accordion_style">
+                                        <div class="panel">
+                                            <div class="panel-heading border-none">
+                                                <a href="#productInfos2" data-parent="#tab" data-toggle="collapse" class="" aria-expanded="true">
+                                                    <h2 class="table_tit border-bottom border-bottom-2px padding-20-bottom no-margin-bottom">
+                                                        <span class="tit">이용안내
+                                                            <span class="arrow">
+                                                                <i class="up ti-angle-up"></i>
+                                                                <i class="down ti-angle-down"></i>
+                                                            </span>
+                                                        </span>
+                                                    </h2>
+                                                </a>
+                                            </div>
+                                            <div id="productInfos2" class="panel-collapse collapse in" aria-expanded="true" style="">
+                                                <div class="table_layout table_horiz border-none">
+                                                    <div class="event-alram-box bg-light">
+                                                        <h4 class="font-weight-700 text-center xs-text-15 margin-0-bottom"><p class="icon xs-text-12 xs-padding-5-all"><span class="ti-info"></span></p>이용안내</h4>
+                                                        <div class="">
+                                                            <ul class="padding-10-all list-style-hp">
+                                                                <li>이용안내 내용 입력 표시입니다</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>-->
+                            </div>
+                            <!-- //이용안내 -->
+
+                            <!-- 제품문의 -->
+                            <!--<div id="tabSec4" class="tab-pane fade">
+                                <div>
+                                    <div class="area_title">
+                                        <h2>제품문의</h2>
+                                    </div>
+                                    <table class="table qna_table xs_table_block margin-15-top">
+                                        <thead class="xs-display-none">
+                                        <tr>
+                                            <th style="width:70px">번호</th>
+                                            <th style="width:100px">답변상태</th>
+                                            <th style="width:auto">내용</th>
+                                            <th style="width:100px">작성자</th>
+                                            <th style="width:120px">작성일</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="i : ${#numbers.sequence(1, 5)}">
+                                            <td class="xs-display-none" th:text="${i}"></td>
+                                            <td class="xs-display-none">
+                                                <p class="btn btn-sm text-white cursor-default bg-green">답변완료</p>
+                                            </td>
+                                            <td class="text-left title_none xs-padding-10-top">
+                                                <a href="javascript:alert('해당 게시글은 작성자만 확인할 수 있습니다.');" class="qna_content text_cut lock">인덕션이 되는제품인지 궁금합니다</a>
+                                            </td>
+                                            <td class="xs-display-none">jan***</td>
+                                            <td class="title_none xs-text-right">
+                                                <p class="display-none xs-display-block xs-float-left xs-margin-5-top text-gray">jan***</p>
+                                                <p class="xs-display-block xs-float-left xs-margin-5-top padding-10-left text-gray">2021-07-07</p>
+                                                <p class="display-none xs-display-inline-block btn btn-sm text-white xs-width-70px cursor-default bg-green">답변완료</p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="pagination">
+                                        <a id="prevAll" class="arrow" onclick="Detail.qnaPageMove(this, 1836)" page="1"></a>
+                                        <a id="prev" class="arrow" onclick="Detail.qnaPageMove(this, 1836)" page="1"></a>
+                                        <a id="page1" class="on" onclick="Detail.qnaPageMove(this, 1836)" page="1">1</a>
+                                        <a id="next" class="arrow" onclick="Detail.qnaPageMove(this, 1836)" page="1"></a>
+                                        <a id="nextAll" class="arrow" onclick="Detail.qnaPageMove(this, 1836)" page="1"></a>
+                                    </div>
+                                </div>
+                            </div>-->
+                            <!--// 제품문의 -->
+
+                            <!-- 상품평 -->
+                            <!--<div id="tabSec5" class="tab-pane fade">
+                                <div>
+                                    &lt;!&ndash;<div class="page-title text-center padding-40-bottom">
+                                                <div class="star-rating">
+                                                    <span class="ti-star text-medium"></span>
+                                                    <span class="ti-star text-medium"></span>
+                                                    <span class="ti-star text-medium"></span>
+                                                    <span class="ti-star text-medium"></span>
+                                                    <span class="ti-star text-medium"></span>
+                                                    <span>&nbsp;&nbsp;()&nbsp;&nbsp;<b class="text-orange text-18"> 0</b>건</span>
+                                                </div>
+                                            </div>&ndash;&gt;
+                                    <h2 class="table_tit"><div class="area_title">
+                                                <h2>상품평</h2>
+                                            </div>
+                                                <div class="width-100">
+                                                    <div class="prod_sort_wrap clearfix margin-15-top">
+                                                        <div class="chk_styled prod_sort text-0">
+                                                            <label for="photo-check" class="custom-chk-wrap font-weight-500">포토상품평만 보기
+                                                                <input type="checkbox" class="custom-input" id="photo-check" name="allChk">
+                                                                <span class="custom-checkmark"></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <table class="table xs_table_block">
+                                                    <thead class="xs-display-none">
+                                                    <tr>
+                                                        <th style="width: 100px">번호</th>
+                                                        <th style="width: 150px">이미지</th>
+                                                        <th style="width: auto">제목</th>
+                                                        <th style="width: 150px">작성자/조회수</th>
+                                                        <th style="width: 120px">작성일</th>
+                                                        <th style="width: 120px">별점</th>
+                                                    </tr>
+                                                    </thead>
+                                                </table>
+                                                <div class="data_none">
+                                                    <p>등록된 게시물이 없습니다.</p>
+                                                </div>
+                                        </div>
+                                    <div class="pagination">
+                                        <a onclick="Detail.review(1, 1836);" class="arrow" id="prevAll"></a>
+                                        <a onclick="Detail.review(1, 1836);" class="arrow" id="prev"></a>
+                                        <a onclick="Detail.review(1, 1836);" class="on">1</a>
+                                        <a onclick="Detail.review(1, 1836);" class="arrow" id="next"></a>
+                                        <a onclick="Detail.review(1, 1836);" class="arrow" id="nextAll"></a>
+                                    </div>
+                                </div>-->
+                            <!--//상품평 -->
+
+                            <!-- 교환/반품 -->
+                            <!--<div id="tabSec6" class="tab-pane fade">
+                                <div class="width-100 info-accordion-wrap">
+                                    <div class="panel_group accordion_style" id="tab">
+                                        <div class="panel" id="panel58">
+                                            <div class="panel-heading border-none">
+                                                <a href="#productInfos3" data-parent="#tab" data-toggle="collapse" class="" aria-expanded="true">
+                                                    <h2 class="table_tit border-bottom border-bottom-2px padding-20-bottom no-margin-bottom">
+                                                        <span class="tit">교환/반품<span class="arrow">
+                                                            <i class="up ti-angle-up"></i>
+                                                            <i class="down ti-angle-down"></i>
+                                                        </span></span>
+                                                    </h2>
+                                                </a>
+                                            </div>
+                                            <div id="productInfos3" class="panel-collapse collapse in" aria-expanded="true" style="">
+                                                <div class="table_layout table_horiz border-none">
+                                                    <ul>
+                                                        <li>
+                                                            <strong class="tit">교환반품 test1</strong>
+                                                            <div class="content" style="white-space: pre-line;">교환반품 test1</div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                &lt;!&ndash;<div class="margin-50-bottom" th:utext="${shopProduct.product.pContentInfo}"></div>&ndash;&gt;
+                            </div>-->
+                            <!--// 교환/반품 -->
+                        </div>
+                    </section>
+                    <!--// 제품상세 하단영역 -->
+                    <!-- 관련상품 영역 -->
+                    <section class="padding-section" id="filterSec" th:if="${prList.size() > 0}">
+                        <div class="page-title">
+                            <h4 class="text-left no-margin-bottom">관련상품</h4>
+                        </div>
+                        <div class="thumb-style thumb-rounded small-rounded thumb-bg gray"> <!-- 개별 클래스 요소 선택란 : 상품 썸네일 -->
+                            <form id="products">
+                                <div class="prod_list_wrap prod_style prod_style_grid list_prod">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event" th:each="sp : ${prList}">
+                                        <th:block th:replace="/product/p_block2.html"></th:block>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+    <script type="text/javascript" src="/js/product.js"></script>
+    <script th:inline="javascript">
+    function toOrderPage(spIdx){
+        var opCnt=$('input[name="opCnt"]');
+        var length = $('input[name="opCnt"]').length-1;
+        var sp='';
+        if($('.optionDivName').length > 0){
+            for(var i=0; i< length; i++){
+                var optName = $('.optionDivName').eq(i).text();
+                var idx = spIdx+'_'+optName
+
+                if($('input[name="'+idx+'"]').length > 0){
+                    $('input[name="'+idx+'"]').val(opCnt.eq(i).val());
+                }else{
+                    $('#detailForm').append('<input type="hidden" name="'+idx+'" value="'+opCnt.eq(i).val()+'">');
+                }
+
+                sp +=idx;
+                if(length > i+1){
+                    sp +=',';
+                }
+            }
+
+        }else{
+            sp = spIdx;
+            if($('input[name="'+spIdx+'"]').length > 0){
+                $('input[name="'+spIdx+'"]').val(opCnt.val())
+            }else{
+                $('#detailForm').append('<input type="hidden" name="'+spIdx+'" value="'+opCnt.val()+'">')
+            }
+        }
+
+        if($('input[name="sp"]').length > 0){
+            $('input[name="sp"]').val(sp);
+        }else{
+            $('#detailForm').append('<input type="hidden" name="sp" value="'+sp+'">');
+        }
+
+        document.getElementsByName('sp').value = encodeURIComponent(document.getElementsByName('sp').value);
+        $('#detailForm').submit();
+    }
+
+    // 수량 조절 구매제한
+    function countControl(type, obj){
+        var uniq = $($(obj).parent());
+        var opCnt = uniq.find($('input[name="opCnt"]')).val();
+        var spQuotaOnce=Number( $('#spQuotaOnce').html().replace(/[^0-9]/gi,'') );
+
+        var allCnt = 0;
+        for(var i=0; i< $('input[name="opCnt"]').length-1;i++){
+            allCnt += Number($('input[name="opCnt"]').eq(i).val());
+        }
+
+        if(type == '-'){
+            opCnt--;
+        }else{
+            if(allCnt >= spQuotaOnce){
+                alert('구매 제한 개수를 초과하였습니다.');
+                return false;
+            }
+            if($('#spQuotaOnce').length != 0){
+                try{
+                    if(opCnt<spQuotaOnce){
+                        opCnt++;
+                    }
+                }catch(e){}
+            }else{
+                opCnt++;
+            }
+        }
+        if(opCnt < 1){
+            return false;
+        }
+        $($(obj).parent()).find($('input[name="opCnt"]')).val(opCnt);
+
+        calculatePrice();
+    }
+    function removeOptionBox(obj){
+        $($(obj).parent().parent().parent()).remove();
+        calculatePrice();
+    }
+    // 합계금액
+    function calculatePrice(){
+        var spPrice = $('#spPrice').val();
+        var opCnt = 0;
+        var partPrice = 0;
+        if($('input[name="opCnt"]').length > 1){
+            for(var i=0; i< $('input[name="opCnt"]').length-1;i++){
+                opCnt += Number($('input[name="opCnt"]').eq(i).val());
+
+                partPrice = $('input[name="opCnt"]').eq(i).val() * spPrice
+
+                $('.selectPrice').eq(i).text(comma(partPrice));
+            }
+        }else{
+            opCnt = $('#opCnt').val();
+
+            partPrice = $('#opCnt').val() * spPrice
+
+            $('.selectPrice').text(comma(partPrice));
+        }
+        var priceSum = spPrice * opCnt;
+        $('#priceSum').text(setComma(priceSum));
+    }
+
+    //옵션 선택
+    function selectOption(obj){
+        var id=$(obj).attr('id');
+        var count=Number(id.replace('option',''));
+
+        if($('#option'+(count+1)).length != 0){
+            //다음 sub옵션 존재하는 경우
+            $('#option'+(count+1)).val('');
+        }else{
+            var spQuotaOnce=Number( $('#spQuotaOnce').html().replace(/[^0-9]/gi,'') );
+            var opCnt = 0;
+            for(var i=0;i<$('input[name="opCnt"]').length;i++){
+                opCnt += Number($('input[name="opCnt"]').eq(i).val());
+            }
+
+            if(opCnt > spQuotaOnce){
+                alert('구매 제한 개수를 초과하였습니다.');
+                $('#option1').val('');
+            }else{
+                //마지막 sub옵션인 경우
+                var opt_dom=$('#optionDiv').clone();
+
+
+                var optionDetail='';
+                for(var i=1; i< count+1; i++){
+                    if(i != 1){
+                        optionDetail+=' / ';
+                    }
+                    if($('#option'+i).val() == ""){
+                        return false;
+                    }
+                    optionDetail+=$('#option'+i).val();
+                }
+
+                // 중복 옵션 선택시 alert
+                for(var i=0; i< $('.optionDivName').length; i++){
+                    if(optionDetail == $('.optionDivName').eq(i).text()){
+                        alert('이미 선택한 옵션입니다.');
+                        $('#option1').val('');
+                        return false;
+                    }
+                }
+
+                opt_dom.find('.optionDivName').html(optionDetail);
+                opt_dom.removeAttr('id');
+                opt_dom.show();
+                $('#optionDiv').before(opt_dom);
+
+                calculatePrice();
+
+                $('#option1').val('');
+            }
+        }
+
+        var optSize = $('select[name="optGroup"]').length;
+        if(optSize > 1){
+            for(var i=0;i<optSize;i++){
+                if($('select[name="optGroup"]').eq(i).val() == ''){
+                    $('select[name="optGroup"]').eq(i+1).val('');
+                    $('select[name="optGroup"]').eq(i+1).attr('disabled', true);
+                }else{
+                    $('select[name="optGroup"]').eq(i+1).attr('disabled', false);
+                }
+            }
+        }
+    }
+
+    var bool = true;
+    function addCart(){
+        //장바구니 담기
+        if(bool){
+            bool = false;
+
+            $.ajax({
+                url: "/order/cart/add.rest",
+                data: {'opSpIdx':$("input[name=opSpIdx]").val(), 'opCnt':$("input[name=opCnt]").val()},
+                type: "POST",
+                success: function (data) {
+                    if(data.message != null && data.location == null){
+                        alert(data.message);
+                    }else if(confirm(data.message) && data.location != null){
+                        location.href=data.location;
+                    }
+                },
+                error: function (data, status, er) {
+                    alert("에러발생, 관리자에게 문의하세요 [" + status + "_" + er + "]");
+                }
+            }).always(function(){
+                bool = true;
+            });
+        }
+
+    }
+    </script>
+    <script th:inline="javascript">
+        $(function(){
+            var optSize = $('select[name="optGroup"]').length;
+            if(optSize > 1){
+                for(var i=0;i<optSize;i++){
+                    if($('select[name="optGroup"]').eq(i).val() == ''){
+                        $('select[name="optGroup"]').eq(i+1).val('');
+                        $('select[name="optGroup"]').eq(i+1).attr('disabled', true);
+                    }
+                }
+            }
+        });
+
+
+
+        $(document).ready(function(){
+            // 최근 본 상품 localStorage로
+            let useFloating = [[${shop.shopUseFloating}]]
+            if(useFloating == true){
+                let rv = new Object();
+                rv.pThumnbail = [[${shopProduct.product.pThumbnail}]]
+                rv.spName = [[${shopProduct.spName}]]
+                rv.spIdx = [[${shopProduct.spIdx}]]
+
+                let rvList = new Array();
+                if(localStorage.getItem('rvList') == null){
+                }else{
+                    rvList = JSON.parse(localStorage.getItem('rvList'));
+                    for(var i=0; i<rvList.length; i++){
+                        if(rvList[i].spIdx == rv.spIdx){
+                            //동일한 상품 삭제
+                            rvList.splice(i, 1);
+                        }
+                    }
+                    if(rvList.length >= 5){
+                        //5개 이상이면 첫번째 상품 삭제
+                        rvList.splice(0,1);
+                    }
+                }
+                rvList.push(rv);
+                localStorage.setItem('rvList', JSON.stringify(rvList));
+            }
+        });
+    </script>
+</body>
+</html>

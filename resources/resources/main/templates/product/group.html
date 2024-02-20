@@ -1,0 +1,66 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <title th:text="|${shop.getShopName()} - ${pg_name}|"></title>
+  <th:block th:replace="/part/meta.html"></th:block>
+  <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+<div class="page-container">
+  <th:block th:replace="/header/header.html"></th:block>
+  <section class="padding-section page-title-padding">
+    <div class="container">
+      <div class="page-title color-title">
+        <h1 th:text="${pg_name}" id="cf_title"></h1>
+      </div>
+    </div>
+  </section>
+
+  <section class="padding-section">
+  <th:block th:replace="/product/brandSearch.html"></th:block>
+  </section>
+
+  <div id="productListDiv">
+  </div>
+  <th:block th:replace="/part/footer.html"></th:block>
+</div>
+<th:block th:replace="/part/js.html"></th:block>
+
+<script th:inline="javascript">
+function loadProduct(page){
+    var order = $("#prodOrder option:selected").val();
+    if(order==null){
+        order = 4;
+    }
+    var param="page="+page+"&order="+order;
+
+    //브랜드 검색 조건
+    var brandIdxs=$('.brandSearchLi.active');
+    for(var b=0;b<brandIdxs.length;b++){
+        param+='&b_idx='+$(brandIdxs[b]).attr('b_idx');
+    }
+
+    //가격 설정
+    var priceLi=$('.priceLi.active')[0];
+    param+='&min='+$(priceLi).attr('min');
+    param+='&max='+$(priceLi).attr('max');
+
+    $.ajax({
+        url: location.pathname+'/load.load',
+        type: "POST",
+        data : param,
+        success: function(data) {
+            $("#productListDiv").html(data);
+        },
+        error: function(jqXHR, exception,data) {
+
+        }
+    });
+  }
+</script>
+<script>
+    $(document).ready(function(){
+        loadProduct(1);
+    });
+    </script>
+</body>
+</html>

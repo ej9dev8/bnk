@@ -1,0 +1,334 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>마이페이지 - 쿠폰/포인트</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                <th:block th:replace="/myPage/comp/menu.html"></th:block>
+                    <section class="padding-section">
+                        <!--<div class="tab_menu_wrap">
+                            <ul class="tab_menu clearfix">
+                                <li class="active border-none "><a href="#tabSec1" data-toggle="tab" onclick="ProdDetail.detailTabMove()" aria-expanded="true">포인트</a></li>
+                                <li class="two-tabs border-none "><a href="#tabSec2" data-toggle="tab" onclick="ProdDetail.detailTabMove()" aria-expanded="false">쿠폰</a></li>
+                            </ul>
+                        </div>-->
+                        <div class="tab-content">
+                            <!-- 포인트 -->
+                            <div id="tabSec1" class="tab-pane fade active in">
+                                <div class="">
+                                    <table class="table sm_table_block">
+                                        <thead class="sm-display-none">
+                                            <tr>
+                                                <th style="width:100px">번호</th>
+                                                <th style="width:auto">기록</th>
+                                                <th style="width:100px">포인트</th>
+                                                <th style="width:250px">일시</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="sm_prod_view" th:each="pt, i : ${pointList}">
+                                                <td class="sm-display-none" th:text="${paging.totalCount}-(${paging.listCount}*(${paging.page}-1))-${i.index}">IDX</td>
+                                                <td class="title_none chk display-none sm-display-flex">
+                                                    <p th:text="${pt.CREATED_DATE}"></p>
+                                                    <b class="text-red" th:text="|${#numbers.formatInteger(pt.POINT_AMOUNT, 0, 'COMMA')}P|">0P</b>
+                                                </td>
+
+                                                <td class="text-left prod_text_wrap">
+                                                    <div class="prod_text padding-10-lr">
+                                                        <p class="text-cut">
+
+                                                            <p th:classappend="${pt.POINT_TYPE == '추가'}? 'label-primary' : 'label-danger' " class="display-none sm-display-inline-block label margin-5-bottom" th:text="${pt.POINT_TYPE}">구분</p>
+                                                            <span th:classappend="${pt.POINT_TYPE == '추가'}? 'label-primary' : 'label-danger' " class="sm-display-none label margin-5-right" th:text="${pt.POINT_TYPE}">구분</span>
+
+                                                            <th:block th:if="${pt.get('O_CODE') == null}">
+                                                                <span class="sm-display-block" th:if="${pt.POINT_MEMO}" th:text="| ${pt.POINT_MEMO}|">관리자 메모</span>
+                                                            </th:block>
+                                                            <th:block th:unless="${pt.get('O_CODE') == null}">
+                                                                <span class="sm-display-block" th:if="${pt.POINT_MEMO}">
+                                                                    <a th:href="@{/myPage/detail/__${pt.O_CODE}__}" th:text="| ${pt.POINT_MEMO}|"></a>
+                                                                </span>
+                                                            </th:block>
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                                <!--th:classappend="${pt.POINT_TYPE == '추가'}? 'text-primary' : text-red"-->
+                                                <td th:style="${pt.POINT_TYPE == '추가'}? 'color: #337ab7' : 'color: #d9534f'" class="sm-display-none text-right">
+                                                    <strong th:text="|${#numbers.formatInteger(pt.POINT_AMOUNT, 0, 'COMMA')}P|">0 P</strong>
+                                                </td>
+                                                <td class="sm-display-none" th:text="${pt.CREATED_DATE}"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div th:if="${#lists.isEmpty(pointList)}" class="data_none"><p>포인트가 없습니다.</p></div>
+                                <div class="text-center" th:if="${not #lists.isEmpty(pointList)}">
+                                    <div class="pagination">
+                                        <a href="/myPage/point?page=1" class="arrow" id="prevAll"></a>
+
+                                        <th:block th:if="${paging.prevPage} < 0">
+                                            <a href="/myPage/notice?page=1"  class="arrow" id="prev"></a>
+                                        </th:block>
+                                        <th:block th:unless="${paging.prevPage} < 0">
+                                            <a th:href="@{|/myPage/point?page=${paging.prevPage}|}"  class="arrow" id="prev"></a>
+                                        </th:block>
+
+                                        <a th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:href="@{|/myPage/point?page=${i}|}" th:class="${paging.page eq i} ? on" th:text="${i}">1</a>
+
+                                        <th:block th:if="${paging.nextPage} > ${paging.totalPage}">
+                                            <a th:href="@{|/myPage/point?page=${paging.totalPage}|}" class="arrow" id="next"></a>
+                                        </th:block>
+                                        <th:block th:unless="${paging.nextPage} > ${paging.totalPage}">
+                                            <a th:href="@{|/myPage/point?page=${paging.nextPage}|}" class="arrow" id="next"></a>
+                                        </th:block>
+
+                                        <a th:href="@{|/myPage/point?page=${paging.totalPage}|}" class="arrow" id="nextAll"></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--// 포인트 -->
+                            <!--&lt;!&ndash; 쿠폰 &ndash;&gt;
+                            <div id="tabSec2" class="tab-pane fade">
+                                <div class="margin-30-top">
+                                    <form method="post" name="coupon_enter" id="coupon_enter" class="coupon_enter bg-light border-default padding-20-all" onsubmit="coupon_enter(); return false;">
+                                        <input type="hidden" name="flag" value="1">
+                                        <fieldset class="search_box width-100 margin-auto">
+                                            <legend class="hidden">쿠폰등록</legend>
+                                            <div class="form-group no-margin position-relative">
+                                                <div class="input-group width-100">
+                                                    <div class="display-table-row width-100">
+                                                        <div class="input-group-input">
+                                                            <input type="text" class="form-control radius-right-0 height-50px" id="search_word" name="search_word" placeholder="쿠폰코드를 입력하세요" value="">
+                                                        </div>
+                                                        <div class="input-group-btn width-80px xs-width-60px">
+                                                            <button type="submit" class="btn btn-dark width-100 radius-left-0">등록</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                    <div class="select-rounded small-rounded select-bg-gray prod_sort text-0 width-130px xs-width-120px margin-30-bottom margin-30-top">&lt;!&ndash; 개별 클래스 요소 선택란 : select &ndash;&gt;
+                                        <select id="TYPE" class="bg-transparent" onchange="Mileage.pageMove(this)">
+                                            <option value="IN">적립</option>
+                                            <option value="OUT">사용</option>
+                                        </select>
+                                    </div>
+                                    <table class="table xs_table_block">
+                                        <thead class="xs-display-none">
+                                        <tr>
+                                            <th style="width:100px">번호</th>
+                                            <th style="width:auto">기록</th>
+                                            <th style="width:100px">할인금액</th>
+                                            <th style="width:250px">사용기한</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        <tr>
+                                            <td class="xs-display-none">
+                                                33
+                                            </td>
+                                            <td class="text-left">
+                                                <p class="text-cut">
+                                                    <strong>반품/환불/취소 회수 </strong>
+                                                    ( <a href="/order/detail">20210514-0000008</a> )
+                                                </p>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-10-left text-left">
+                                                    <span class="text-primary padding-10-right text-16 font-weight-600">596</span>
+                                                </div>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-5-top pull-right">
+                                                </div>
+                                            </td>
+                                            <td class="xs-display-none text-right text-primary"><strong>596 P</strong></td>
+                                            <td class="xs-display-none"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="xs-display-none">
+                                                32
+                                            </td>
+                                            <td class="text-left">
+                                                <p class="text-cut">
+                                                    <strong>반품/환불/취소 회수 </strong>
+                                                    ( <a href="/order/detail">20210514-0000008</a> )
+                                                </p>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-10-left text-left">
+                                                    <span class="text-primary padding-10-right text-16 font-weight-600">432</span>
+                                                </div>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-5-top pull-right">
+                                                </div>
+                                            </td>
+                                            <td class="xs-display-none text-right text-primary"><strong>432 P</strong></td>
+                                            <td class="xs-display-none"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="xs-display-none">
+                                                31
+                                            </td>
+                                            <td class="text-left">
+                                                <p class="text-cut">
+                                                    <strong>반품/환불/취소 회수 </strong>
+                                                    ( <a href="/order/detail">20210514-0000008</a> )
+                                                </p>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-10-left text-left">
+                                                    <span class="text-primary padding-10-right text-16 font-weight-600">1,028</span>
+                                                </div>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-5-top pull-right">
+                                                </div>
+                                            </td>
+                                            <td class="xs-display-none text-right text-primary"><strong>1,028 P</strong></td>
+                                            <td class="xs-display-none"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="xs-display-none">
+                                                30
+                                            </td>
+                                            <td class="text-left">
+                                                <p class="text-cut">
+                                                    <strong>반품/환불/취소 회수 </strong>
+                                                    ( <a href="/order/detail">20210514-0000008</a> )
+                                                </p>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-10-left text-left">
+                                                    <span class="text-primary padding-10-right text-16 font-weight-600">540</span>
+                                                </div>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-5-top pull-right">
+                                                </div>
+                                            </td>
+                                            <td class="xs-display-none text-right text-primary"><strong>540 P</strong></td>
+                                            <td class="xs-display-none"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="xs-display-none">
+                                                29
+                                            </td>
+                                            <td class="text-left">
+                                                <p class="text-cut">
+                                                    <strong>반품/환불/취소 회수 </strong>
+                                                    ( <a href="/order/detail">20210514-0000008</a> )
+                                                </p>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-10-left text-left">
+                                                    <span class="text-primary padding-10-right text-16 font-weight-600">317</span>
+                                                </div>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-5-top pull-right">
+                                                </div>
+                                            </td>
+                                            <td class="xs-display-none text-right text-primary"><strong>317 P</strong></td>
+                                            <td class="xs-display-none"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="xs-display-none">
+                                                28
+                                            </td>
+                                            <td class="text-left">
+                                                <p class="text-cut">
+                                                    <strong>반품/환불/취소 회수 </strong>
+                                                    ( <a href="/order/detail">20210514-0000008</a> )
+                                                </p>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-10-left text-left">
+                                                    <span class="text-primary padding-10-right text-16 font-weight-600">685</span>
+                                                </div>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-5-top pull-right">
+                                                </div>
+                                            </td>
+                                            <td class="xs-display-none text-right text-primary"><strong>685 P</strong></td>
+                                            <td class="xs-display-none"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="xs-display-none">
+                                                27
+                                            </td>
+                                            <td class="text-left">
+                                                <p class="text-cut">
+                                                    <strong>반품/환불/취소 회수 </strong>
+                                                    ( <a href="/order/detail">20210513-0000022</a> )
+                                                </p>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-10-left text-left">
+                                                    <span class="text-primary padding-10-right text-16 font-weight-600">1,000</span>
+                                                </div>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-5-top pull-right">
+                                                </div>
+                                            </td>
+                                            <td class="xs-display-none text-right text-primary"><strong>1,000 P</strong></td>
+                                            <td class="xs-display-none"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="xs-display-none">
+                                                26
+                                            </td>
+                                            <td class="text-left">
+                                                <p class="text-cut">
+                                                    <strong>반품/환불/취소 회수 </strong>
+                                                    ( <a href="/order/detail">20210513-0000022</a> )
+                                                </p>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-10-left text-left">
+                                                    <span class="text-primary padding-10-right text-16 font-weight-600">1,250</span>
+                                                </div>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-5-top pull-right">
+                                                </div>
+                                            </td>
+                                            <td class="xs-display-none text-right text-primary"><strong>1,250 P</strong></td>
+                                            <td class="xs-display-none"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="xs-display-none">
+                                                25
+                                            </td>
+                                            <td class="text-left">
+                                                <p class="text-cut">
+                                                    <strong>반품/환불/취소 회수 </strong>
+                                                    ( <a href="/order/detail">20210513-0000022</a> )
+                                                </p>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-10-left text-left">
+                                                    <span class="text-primary padding-10-right text-16 font-weight-600">1,500</span>
+                                                </div>
+                                                <div class="display-none xs-display-inline-block text-11 margin-5-top padding-5-top pull-right">
+                                                </div>
+                                            </td>
+                                            <td class="xs-display-none text-right text-primary"><strong>1,500 P</strong></td>
+                                            <td class="xs-display-none"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div th:if="${#lists.isEmpty(pointList)}" class="data_none"><p>포인트가 없습니다.</p></div>
+                                <div class="text-center" th:if="${not #lists.isEmpty(pointList)}">
+                                    <div class="pagination">
+                                        <a href="/myPage/point?page=1" class="arrow" id="prevAll"></a>
+
+                                        <th:block th:if="${paging.prevPage} < 0">
+                                            <a href="/myPage/notice?page=1"  class="arrow" id="prev"></a>
+                                        </th:block>
+                                        <th:block th:unless="${paging.prevPage} < 0">
+                                            <a th:href="@{|/myPage/point?page=${paging.prevPage}|}"  class="arrow" id="prev"></a>
+                                        </th:block>
+
+                                        <a th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:href="@{|/myPage/point?page=${i}|}" th:class="${paging.page eq i} ? on" th:text="${i}">1</a>
+
+                                        <th:block th:if="${paging.nextPage} > ${paging.totalPage}">
+                                            <a th:href="@{|/myPage/point?page=${paging.totalPage}|}" class="arrow" id="next"></a>
+                                        </th:block>
+                                        <th:block th:unless="${paging.nextPage} > ${paging.totalPage}">
+                                            <a th:href="@{|/myPage/point?page=${paging.nextPage}|}" class="arrow" id="next"></a>
+                                        </th:block>
+
+                                        <a th:href="@{|/myPage/point?page=${paging.totalPage}|}" class="arrow" id="nextAll"></a>
+                                    </div>
+                                </div>
+                            </div>-->
+                            <!--//쿠폰 -->
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+</body>
+</html>

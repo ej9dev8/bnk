@@ -1,0 +1,181 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<!-- 헤더 전체 묶음 -->
+<header id="header" class="main-header sm-no-margin">
+    <!-- 데스크탑 메뉴 소스부분 : 모바일과 분리 코드 ( 992px ~ )   -->
+    <th:block th:replace="/header/top-banner.html"></th:block>
+    <div class="sm-display-none">
+
+
+
+        <!-- 메인 메뉴 전체디자인 클래스 적용위치-->
+        <!-- 1단 topbar -->
+        <div class="main-header-top sm-display-none">
+            <div class="container">
+                <div class="width-flex-between">
+
+                    <th:block th:each="ho, i : ${shop.getHeaderOrders()}">
+                        <!--/* 1단 좌측 */-->
+                        <div class="menu-left-grow" th:if="${ho.hoRow == 1} and ${ho.hoCol == 1}">
+                            <th:block th:replace="|/header/${ho.hoType.getClass(ho.hoRow, ho.hoCol)}.html|"></th:block>
+                        </div>
+
+                        <!--/* 1단 중앙 */-->
+                        <div class="menu-center-grow" th:if="${ho.hoRow == 1} and ${ho.hoCol == 2}">
+                            <div class="margin-auto">
+                                <th:block th:replace="|/header/${ho.hoType.getClass(ho.hoRow, ho.hoCol)}.html|"></th:block>
+                            </div>
+                        </div>
+
+                        <!--/* 1단 우측 */-->
+                        <div class="menu-right-grow" th:if="${ho.hoRow == 1} and ${ho.hoCol == 3}">
+                            <th:block th:replace="|/header/${ho.hoType.getClass(ho.hoRow, ho.hoCol)}.html|"></th:block>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2단 -->
+        <div class="main-header-middle">
+            <div class="container">
+                <div class="width-flex-between">
+                    <th:block th:each="ho, i : ${shop.getHeaderOrders()}">
+                        <!--/* 2단 좌측 */-->
+                        <div class="menu-left-grow" th:if="${ho.hoRow == 2} and ${ho.hoCol == 1}">
+                            <div class="margin-auto display-flex flex-flow-row">
+                                <th:block th:replace="|/header/${ho.hoType.getClass(ho.hoRow, ho.hoCol)}.html|"></th:block>
+                            </div>
+                        </div>
+
+                        <!--/* 2단 중앙 */-->
+                        <div class="menu-center-grow" th:if="${ho.hoRow == 2} and ${ho.hoCol == 2}">
+                            <div class="margin-auto display-flex flex-flow-row">
+                                <th:block th:replace="|/header/${ho.hoType.getClass(ho.hoRow, ho.hoCol)}.html|"></th:block>
+                            </div>
+                        </div>
+
+                        <!--/* 2단 우측 */-->
+                        <div class="menu-right-grow" th:if="${ho.hoRow == 2} and ${ho.hoCol == 3}">
+                            <div class="margin-auto display-flex flex-flow-row">
+                                <th:block th:replace="|/header/${ho.hoType.getClass(ho.hoRow, ho.hoCol)}.html|"></th:block>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+
+        <!--         3단  display-none-->
+        <div class="main-header-bottom">
+            <div class="container">
+                <div class="width-flex-between">
+                    <th:block th:each="ho, i : ${shop.getHeaderOrders()}" >
+                        <!--/*3단 좌측*/-->
+                        <div class="menu-left-grow" th:if="${ho.hoRow == 3} and ${ho.hoCol == 1}">
+                            <div class="margin-auto display-flex flex-flow-row">
+                                <th:block th:replace="|/header/${ho.hoType.getClass(ho.hoRow, ho.hoCol)}.html|"></th:block>
+                            </div>
+                        </div>
+
+                        <!--/* 3단 중앙 */-->
+                        <div class="menu-center-grow" th:if="${ho.hoRow == 3} and ${ho.hoCol == 2}">
+                            <div class="margin-auto display-flex flex-flow-row">
+                                <th:block th:replace="|/header/${ho.hoType.getClass(ho.hoRow, ho.hoCol)}.html|"></th:block>
+                            </div>
+                        </div>
+
+                        <!--/* 3단 우측 */-->
+                        <div class="menu-right-grow" th:if="${ho.hoRow == 3} and ${ho.hoCol == 3}">
+                            <div class="margin-auto display-flex flex-flow-row">
+                                <th:block th:replace="|/header/${ho.hoType.getClass(ho.hoRow, ho.hoCol)}.html|"></th:block>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+        <!-- // 데스크탑 메뉴 소스부분  -->
+    </div>
+
+    <!--모바일 메뉴-->
+
+        <div th:if="${shop.getHeader().getHdMobileStyle().equals('mobile-menu-type-a')}">
+            <th:block th:replace="/header/mobile/mobile-menu-type-a.html"></th:block>
+        </div>
+        <div th:if="${shop.getHeader().getHdMobileStyle().equals('mobile-menu-type-b')}">
+            <th:block th:replace="/header/mobile/mobile-menu-type-b.html"></th:block>
+        </div>
+        <div th:if="${shop.getHeader().getHdMobileStyle().equals('mobile-menu-type-c')}">
+            <th:block th:replace="/header/mobile/mobile-menu-type-c.html"></th:block>
+        </div>
+    <!--//모바일 메뉴-->
+</header>
+<!-- // 헤더 전체 묶음 -->
+
+<script type="text/javascript">
+    //search
+    function submitSearch(){
+        var search = $("#searchInput").val();
+        var search2 = $("#searchInput2").val();
+        if(window.innerWidth > 768){
+            if(search!=''){
+                document.searchForm.action = '/product/search';
+                document.searchForm.submit();
+            }else{
+                alert("검색어를 입력해주세요");
+            }
+        }else if(window.innerWidth <= 768){
+            if(search2!=''){
+                document.searchForm2.action = '/product/search';
+                document.searchForm2.submit();
+            }else{
+                alert("검색어를 입력해주세요");
+            }
+        }
+    }
+
+
+    function myToggle() {//프로필 버튼 리스트 펼침
+        var x = document.getElementById("toggleList");
+        if (x.style.visibility === "hidden") {
+            x.style.visibility = "visible";
+        } else {
+            x.style.visibility = "hidden";
+        }
+    }
+
+    var Subs = {
+        init : function(){
+            var $categoryMenu = null;
+            var $floatingMenu = null;
+            var $headerBanner = null;
+        },
+        //모바일 검색창
+        moSearchOpen :function(){
+            $("#search_data").css({'display':'block'});
+            $("#header_input").focus();
+        },
+        //모바일 검색창
+        moSearchClose :function(){
+            $("#search_data").css({'display':'none'});
+        },
+        //상단이동
+        posTop : function(){
+            $('html, body').stop().animate({'scrollTop':'0'},600);
+            //event.preventDefault();
+        }
+    }
+</script>
+<script type="text/javascript">
+    window.onload = function(){
+        // mobile 클릭된 상단메뉴로 스크롤 이동
+        document.addEventListener('DOMContentLoaded', function(){
+            try{
+                $('#mobileHeaderMenu>li.active')[0].scrollIntoView({ behavior: 'smooth', inline:'center' });
+            }catch(e){
+                console.log(e);
+            }
+        });
+    }
+</script>

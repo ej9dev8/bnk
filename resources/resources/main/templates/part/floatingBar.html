@@ -1,0 +1,72 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<aside id="quick-menu" class="sm-display-none">
+    <ul class="bg-white radius-30 padding-5-top">
+        <!-- 모바일 퀵메뉴 -->
+        <li class="display-none">
+            <a onclick="Common.posTop()">TOP</a>
+        </li>
+
+        <!-- PC 퀵메뉴 -->
+        <div class="quick-radius-wrap">
+            <li class="sm-display-none quick-border" th:each="fb, i : ${shop.getFloatingBars()}" th:if="${fb.fbDisplay > 0}">
+                <a th:if="${fb.fbType.name() == '상담전화'}" th:href="@{|tel:${fb.fbUrl}|}" class="login-group-large">
+                    <img th:src="${fb.fbThumbnail}" class="" th:alt="${fb.fbType}">
+                    <span th:text="${fb.fbName}"></span>
+                </a>
+                <a th:unless="${fb.fbType.name() == '상담전화'}" th:href="@{|${fb.fbUrl}|}" class="login-group-large">
+                    <img th:src="${fb.fbThumbnail}" class="" th:alt="${fb.fbType}">
+                    <span th:text="${fb.fbName}"></span>
+                </a>
+            </li>
+            <li class="sm-display-none recent-pd bg-light" th:if="${recentViewed != null}">
+                <div class="recent-pd-content">
+                    <p><a class="font-weight-600 text-center display-block">최근 본 상품</a></p>
+                    <div class="swiper-container-vertical vertical-content">
+                        <ul class="swiper-wrapper">
+                            <li class="swiper-slide" th:each="rv, i : ${recentViewed}">
+                                <a th:href="@{|/product/detail/${rv.spIdx}|}" class="login-group-large font-weight-600 recent">
+                                    <img th:src="${rv.pThumbnail}" th:alt="${rv.pName}">
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="bottom-control-nav-btn">
+                            <div class="swiper-btn swiper-button-prev">
+                                <span class="ti-angle-up"></span>
+                            </div>
+                            <div class="swiper-btn swiper-button-next">
+                                <span class="ti-angle-down"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="sm-display-none height-20px line-height-none">
+                <a onclick="topFunction()" id="myBtn">TOP</a>
+            </li>
+        </div>
+    </ul>
+</aside>
+
+<script>
+    //Get the button
+    var mybutton = document.getElementById("myBtn");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {try{
+            scrollFunction();
+        }catch(e){}};
+
+    function scrollFunction() {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        mybutton.style.display = "block";
+      } else {
+        mybutton.style.display = "none";
+      }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+</script>

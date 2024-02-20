@@ -1,0 +1,63 @@
+<!-- 상품 그룹 관리(MOBILE) :: 타입 C - 타이틀 + 상품 리스트 일반형 (mo-prd-type-c) -->
+<div class="display-none sm-display-block web-type-layout mo-prd-type-c" id="filterSec">
+    <div class="section-title" th:if="${mso.productGroup.pgName}">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1 class="product-group-title color-title" th:text="${ms.msName}">상품그룹명</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="thumb-style thumb-rounded small-rounded thumb-bg gray"> <!-- 개별 클래스 요소 선택란 : 상품 썸네일 -->
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="tab-content">
+                        <div>
+                            <form id="products">
+                                <div class="width-100">
+                                    <div class="swiper-container-main-non-auto overflow-hidden circle-btn dp-btn center">
+                                        <ul class="swiper-wrapper" th:id="|${mso.productGroup.pgIdx}_mobile|">
+                                            <li class="col-xs-12 swiper-slide layout width-100 height-auto" th:each="pgiPage: ${#numbers.sequence(1, __${mso.productGroup.pgiTotalPageMap(4)}__)}">
+                                                <div class="pd_group value_group prod_list_wrap prod_style prod_style_grid">
+                                                    <div class="row">
+                                                        <div class="col-xs-6 prod_event" th:each="sp : ${mso.productGroup.getListMap(pgiPage,4)}">
+                                                            <th:block th:replace="/product/p_block2.html"></th:block>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <div class="swiper-button-prev"><span class="ti-angle-left arrow"></span></div>
+                                        <div class="swiper-button-next"><span class="ti-angle-right arrow"></span></div>
+                                    </div>
+
+                                    <!--<div class="swiper-container-main-non-auto overflow-hidden circle-btn dp-btn center">
+                                        <ul class="swiper-wrapper">
+                                            <div th:id="|${mso.productGroup.pgIdx}_mobile|">
+                                                <li class="col-xs-12 swiper-slide layout width-100 height-auto" th:each="pgiPage: ${#numbers.sequence(1, __${mso.productGroup.pgiTotalPageMap(4)}__)}">
+                                                    <div class="pd_group prod_list_wrap prod_style prod_style_grid">
+                                                        <div class="row">
+                                                            <div class="col-xs-6 prod_event" th:each="sp : ${mso.productGroup.getListMap(pgiPage,4)}">
+                                                                <th:block th:replace="/product/p_block2.html"></th:block>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </div>
+                                        </ul>
+                                        <div class="swiper-button-prev"><span class="ti-angle-left arrow"></span></div>
+                                        <div class="swiper-button-next"><span class="ti-angle-right arrow"></span></div>
+                                    </div>-->
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- // 상품 그룹 관리(MOBILE) :: 타입 C -->

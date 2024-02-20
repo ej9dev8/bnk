@@ -1,0 +1,61 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>공지사항</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <th:block th:replace="/board/comp/menu.html"></th:block>
+                    <section class="padding-section">
+                        <table class="table table_view">
+                                        <caption class="hidden">공지사항 view</caption>
+                                        <thead>
+                                            <tr>
+                                                <th class="view_tit event-title-wrap">
+                                                    <h1 class="event-title">
+                                                        <p class="title" th:text="${notice.ntTitle}">제목</p>
+                                                        <span class="date" th:text="${#strings.substring(notice.createdDate, 0, 10)}">yyyy-MM-dd</span>
+                                                    </h1>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="view_content text-left">
+                                                    <div class="content" th:utext="${notice.ntContent}"></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                    </section>
+                    <section class="padding-section">
+                        <ul class="prev_next" th:if="${noticeNext != null || noticeBefore != null}">
+                                        <li class="list_prev" th:if="${noticeBefore != null}">
+                                            <span class="prev">이전글</span>
+                                            <a th:href="@{|/board/detail/notice/${noticeBefore.ntIdx}|}" class="text-cut" th:text="${noticeBefore.ntTitle}">이전글</a>
+                                        </li>
+                                        <li class="list_more" th:if="${noticeNext != null}">
+                                            <span class="next">다음글</span>
+                                            <a th:href="@{|/board/detail/notice/${noticeNext.ntIdx}|}" class="text-cut" th:text="${noticeNext.ntTitle}">다음글</a>
+                                        </li>
+                            </ul>
+                    </section>
+                    <section class="padding-section">
+                        <div class="text-center">
+                            <a href="/board/notice" class="btn btn-point submit-btn">목록</a>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+</body>
+</html>

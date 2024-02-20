@@ -1,0 +1,105 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>교환신청</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <th:block th:replace="/myPage/comp/menu.html"></th:block>
+                    <div class="col-xs-12">
+                        <form method="post" name="cancelForm" id="cancelForm" action="" class="">
+                            <div class="margin-40-bottom padding-15-all bg-sub radius-10">
+                                <span class="color-menu-bg-text text-15 xs-text-sm-medium padding-10-right">주문일자 : 2021-01-26</span>
+                                <span class="text-15 xs-text-sm-medium">주문번호 : 20210126-0000016</span>
+                                <input type="hidden" name="sp_o_idx" id="sp_o_idx" value="34432">
+                                <input type="hidden" name="sp_o_code" id="sp_o_code" value="20210126-0000016">
+                            </div>
+                            <fieldset class="margin-50-bottom">
+                                <div class="area_title">
+                                    <h2>STEP1. 교환 제품 선택</h2>
+                                </div>
+                                <table class="table xs_table_block">
+                                    <thead class="xs-display-none">
+                                        <tr>
+                                            <th style="width:auto">제품 정보</th>
+                                            <th style="width:150px">수량</th>
+                                            <th style="width:150px">주문금액</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-left sm_prod_view title_none">
+                                                <div class="claim_prod_chk chk_styled">
+                                                    <input type="checkbox" name="product_chk" value="1548" idx="41004" checked="checked">
+                                                </div>
+                                                <div class="prod_box">
+                                                    <div class="prod_img">
+                                                        <img src="/file/product/thumbnail/1548745057453_위더스깔끔원목건지개_001.jpg" alt="위더스 깔끔 원목건지개" data-no-retina="">
+                                                    </div>
+                                                    <div class="prod_detail">
+                                                        <p class="tit">위더스 깔끔 원목건지개</p>
+                                                        <p class="text-12 text-gray"></p>
+
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="xs-display-none">1개</td>
+                                            <td class="title_none">
+                                                <b class="price text-15">8,900<small>원</small></b>
+                                                <p class="display-none xs-display-inline-block">&nbsp;/&nbsp;1개</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </fieldset>
+                            <fieldset class="clearfix">
+                                <div class="col-xs-12 text-left padding-0-left sm-padding-0-right input-rounded small-rounded">
+                                    <div class="area_title">
+                                        <h2>STEP2.교환 사유 선택</h2>
+                                    </div>
+                                    <ul class="claim_reason">
+                                        <li>
+                                            <div class="select-rounded small-rounded select-line-gray">
+                                                <select class="form-control reason width-300px xs-width-100" name="sp_op_reason" id="sp_op_reason">
+                                                    <option value="0">교환 사유를 선택하세요.</option>
+
+                                                    <option value="1">상품불량</option>
+
+                                                    <option value="2">배송미도착</option>
+
+                                                    <option value="3">상품오배송</option>
+
+                                                    <option value="4">단순변심
+                                                    </option>
+                                                    <option value="5">기타</option>
+                                                </select>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <textarea class="border-color-sub-light-gray" rows="3" name="sp_op_cancel_reason" id="sp_op_cancel_reason" placeholder="교환 사유를 입력하세요."></textarea>
+                                        </li>
+                                    </ul>
+                                    <div class="text-center padding-20-all xs-padding-10-all">
+                                        <p class="text-15 xs-text-sm-medium"><span class="ti-info info-icon"></span><strong>구매자 단순변심 및 기타사유</strong>에 의한 반품은 배송비 <strong>6,000원</strong>이 발생됩니다.</p>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                        <div class="margin-50-top text-center">
+                            <a href="javascript:history.go(-1)" class="btn btn-lg btn-transparent-dark-gray width-150px xs-width-49">취소</a>
+                            <button type="button" onclick="Claim.changeApply()" class="btn btn-lg btn-point width-150px xs-width-49">신청하기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+    <th:block th:replace="/part/js.html"></th:block>
+</body>
+</html>

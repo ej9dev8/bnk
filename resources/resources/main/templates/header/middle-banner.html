@@ -1,0 +1,6 @@
+<!-- 2단 광고배너 선택시 클래스명: middle-banner -->
+<div class="banner-group" th:if="${headerBn != null}">
+    <a class="img-gr" th:each="bn, i : ${headerBn}" th:if="${i.count == 1}" th:href="${bn.get('BN_URL')?:'#'}" th:title="${bn.BG_TITLE}">
+        <img th:src="${bn.BN_IMAGE}" th:alt="${bn.BG_TITLE}">
+    </a>
+</div>

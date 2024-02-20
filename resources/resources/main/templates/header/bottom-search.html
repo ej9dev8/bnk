@@ -1,0 +1,9 @@
+<!-- 3단 검색창 선택시 클래스명: bottom-search -->
+<div class="search_main"  th:classappend="${shop.getHeader().getHdSearchStyle()}">
+    <form method="post" name="searchForm" id="searchForm" class="search_form" onsubmit="submitSearch(); return false;">
+        <fieldset class="input position-relative">
+            <input type="text" id="searchInput" name="input" class="main-search"  placeholder="검색어를 입력해주세요." th:value="${search}">
+            <a type="submit" class="main-search-btn text-16" title="검색하기"><i class="ti-search"></i></a>
+        </fieldset>
+    </form>
+</div>

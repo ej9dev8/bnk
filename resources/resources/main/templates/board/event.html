@@ -1,0 +1,70 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>이벤트</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <section class="padding-section page-title-padding">
+            <div class="container">
+                <div class="page-title color-title">
+                    <h1>이벤트</h1>
+                </div>
+            </div>
+        </section>
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="tab_menu_wrap">
+                            <div>
+                                <ul class="tab_menu clearfix">
+                                    <li id="event_ing" class="active"><a onclick="eventType(true)">진행중인 이벤트</a></li>
+                                    <li id="event_end" class=""><a onclick="eventType(false)">종료된 이벤트</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    <div class="row">
+                        <div class="col-xs-12 tab-content">
+                            <div id="eventLoadDiv" class="tab-pane fade in active"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <th:block th:replace="/part/footer.html"></th:block>
+</div>
+<th:block th:replace="/part/js.html"></th:block>
+</body>
+<script th:inline="javascript">
+    function eventType(isOpen){
+        if(isOpen){
+            $('#event_ing').addClass('active');
+            $('#event_end').removeClass('active');
+        }else{
+            $('#event_ing').removeClass('active');
+            $('#event_end').addClass('active');
+        }
+        loadEventGroup(1);
+    }
+    //이벤트 진행중, 종료 검색
+    function loadEventGroup(page){
+        var isOpen=$('#event_ing').hasClass('active');
+
+        $.ajax({
+            url:[[@{/board/event/load?isOpen=}]]+isOpen+'&page='+page
+            ,type:'get'
+        }).done(function(res){
+            $('#eventLoadDiv').html(res);
+        });
+    }
+</script>
+<script th:inline="javascript">
+    window.onload=function(){
+        loadEventGroup(1);
+    }
+</script>
+</html>

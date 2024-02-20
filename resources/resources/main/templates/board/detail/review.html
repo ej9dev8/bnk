@@ -1,0 +1,41 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>상품평</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <th:block th:replace="/myPage/comp/menu.html"></th:block>
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 margin-40-top">
+                        <table class="table table_view">
+                            <thead>
+                            <tr><th class="text-left view_tit" th:text="${review.rvTitle}">제목</th></tr>
+                            </thead>
+                            <tbody>
+                            <tr><td class="view_content text-left"><div class="content"><p th:text="${review.rvContent}">본문내용</p></div></td></tr>
+                            </tbody>
+                        </table>
+                        <div class="width-100 text-center margin-50-top">
+                            <a href="/myPage/review" class="btn btn-lg btn-dark width-130px">목록</a>
+                            <a th:href="@{|/myPage/review/update/${review.rvIdx}|}" class="btn btn-lg btn-dark width-130px">수정</a>
+                            <a onclick="Review.deleteReview()" class="btn btn-lg btn-dark width-130px">삭제</a>
+                        </div>
+                        <form name="reviewForm" method="POST">
+                            <input type="hidden" name="RV_IDX" th:value="${review.rvIdx}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+    <script type="text/javascript" src="/js/board.js"></script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>주문/결제 완료</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <section class="padding-section page-title-padding">
+            <div class="container">
+                <div class="page-title color-title">
+                    <h1>주문완료</h1>
+                </div>
+            </div>
+        </section>
+        <section class="padding-section sm-display-none">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12 padding-0-lr">
+                        <div class="bg-light">
+                            <div class="action_process custom">
+                                <ul class="step3">
+                                    <li><i><span class="icon ti-shopping-cart"></span></i><span class="process-text"><a class="">장바구니</a></span></li>
+                                    <li><i><span class="icon ti-pencil-alt"></span></i><span class="process-text"><a class="">주문/결제</a></span></li>
+                                    <li class="active"><i><span class="icon ti-check-box"></span></i><span class="process-text"><a class="">주문완료</a></span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <section class="padding-section">
+                        <div class="bubble-box">
+                            <h1 class="title">주문이 완료 되었습니다.</h1>
+                            <hr>
+                            <p class="text"><b class="margin-5-right">주문일자</b><span th:text="${#temporals.format(order.getODate(), 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+                            <!--                                        <p class="text"><b class="margin-5-right">주문일자</b><span th:text="|${order.oDate} ${order.oTime}|"></span></p>-->
+                            <p class="text"><b class="margin-5-right">주문번호</b><span th:text="${order.oCode}"></span></p>
+                        </div>
+                    </section>
+                    <section class="padding-section">
+                        <fieldset>
+                            <div class="area_title">
+                                <h2>제품정보</h2>
+                            </div>
+                            <!-- 주문내역(모바일) -->
+                            <div class="sm_prod_view_wrap display-none sm-display-block">
+                                <!-- 반복되는 블록 -->
+                                <div class="sm_prod_view" th:each="op, i : ${order.getOrderProducts()}">
+                                    <div class="order_box title_none">
+                                        <p class="order_box_text">
+                                            <span>구분</span>
+                                            <span><b th:text="${op.shopProduct.product.PType}">쿠폰</b></span>
+                                        </p>
+                                    </div>
+                                    <div class="prod_box">
+                                        <div class="prod_img">
+                                            <img th:src="${op.shopProduct.product.PThumbnail}" th:alt="${op.shopProduct.spName}" data-no-retina="">
+                                        </div>
+                                        <div class="prod_detail">
+                                            <p class="text-gray small" th:text="${op.shopProduct.product.brand.bName}">브랜드명</p>
+                                            <p><a th:href="@{|/product/detail/${op.shopProduct.spIdx}|}" class="tit" th:text="${op.shopProduct.product.brand.bName}">제품명</a></p>
+                                            <p class="text-gray small" th:if="${op.opOption}">옵션: <span th:text="${op.opOption}">옵션명</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="order-price-box">
+                                        <b class="val-tit">주문상태</b>
+                                        <span>
+                                            <b class="text-red" th:text="${op.opDelState}">주문상태</b>
+                                        </span>
+                                    </div>
+                                    <div class="order-price-box">
+                                        <b class="val-tit">수신번호</b>
+                                        <span><b th:text="${T(galaxia.shop.util.Common).getPhoneMasking(op.opPhone)}">수신번호</b></span>
+                                    </div>
+                                </div>
+                            </div>
+                                <!-- // 반복되는 블록 -->
+                            <!-- // 주문내역(모바일) -->
+                            <!-- 주문내역(웹) -->
+                            <table class="table sm-display-none sm_table_block order_table ie-table-fit">
+                                <thead>
+                                <tr>
+                                    <th style="width:100px">No</th>
+                                    <th style="width:auto">제품 정보</th>
+                                    <th style="width:120px">발행상태</th>
+                                    <th style="width:250px">수신번호</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="op, i : ${order.getOrderProducts()}">
+                                    <td data-title="분류" th:text="${op.shopProduct.product.PType}">상품타입</td>
+                                    <td class="text-left sm_prod_view">
+                                        <div class="prod_box">
+                                            <div class="prod_img">
+                                                <img th:src="${op.shopProduct.product.PThumbnail}" th:alt="${op.shopProduct.spName}">
+                                            </div>
+                                            <div class="prod_detail">
+                                                <p class="text-gray small" th:text="${op.shopProduct.product.brand.bName}">브랜드명</p>
+                                                <p><a th:href="@{|/product/detail/${op.shopProduct.spIdx}|}" th:text="${op.shopProduct.spName}" class="tit">제품명</a></p>
+                                                <p class="text-gray small" th:if="${op.opOption}">옵션: <span th:text="${op.opOption}">옵션명</span></p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <b class="text-red" th:text="${op.opDelState}">주문완료</b>
+                                    </td>
+                                    <td data-title="수신번호">
+                                        <p th:text="${T(galaxia.shop.util.Common).getPhoneMasking(op.opPhone)}"></p>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!-- // 주문내역(웹) -->
+                            <th:block th:if="${order.orderProducts.get(0).opMessage}">
+                                <div class="margin-30-top">
+                                    <p class="table-message">
+                                        <i class="ti-pencil-alt"></i>
+                                        <b class="text" th:utext="${order.orderProducts.get(0).opMessage}">test</b>
+                                    </p>
+                                </div>
+                            </th:block>
+                        </fieldset>
+                    </section>
+                    <section class="padding-section">
+                        <div class="area_title">
+                            <h2>주문자 정보</h2>
+                        </div>
+                        <div class="order_pay_method none input_wrap input_val">
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">이름</div>
+                                    <div class="input_cont" th:text="${T(galaxia.shop.util.Common).getNameMasking(order.oName)}">주문자명</div>
+                                </div>
+                            </div>
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">핸드폰 번호</div>
+                                    <div class="input_cont" th:text="${T(galaxia.shop.util.Common).getPhoneMasking(order.oPhone)}">핸드폰 번호</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="padding-section" th:if="${order.payment.payState.name() == '결제취소' &&  order.payment.payServiceCode.name() == 'DOZN'}">
+                        <div class="area_title">
+                            <h2>환불정보</h2>
+                        </div>
+                        <div class="order_pay_method none input_wrap input_val">
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">예금주</div>
+                                    <div class="input_cont">
+                                        <b th:text="${@sessionInfo.getNameMasking()}">예금주</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">은행</div>
+                                    <div class="input_cont" th:text="${T(galaxia.shop.constant.Bank).returnName(daReq.drw_bank_code)}">은행</div>
+                                </div>
+                            </div>
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">계좌번호</div>
+                                    <div class="input_cont" th:text="${drw_account}">계좌번호</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="padding-section">
+                        <div class="area_title">
+                            <h2>결제정보</h2>
+                        </div>
+                        <div class="order_pay_method none input_wrap input_val">
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">결제상태</div>
+                                    <div class="input_cont" th:text="${order.payment.payState.name()}">결제상태</div>
+                                </div>
+                            </div>
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">결제수단</div>
+                                    <div class="input_cont" th:text="${order.payment.payServiceCode.getName()}">결제수단</div>
+                                </div>
+                            </div>
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">결제일시</div>
+                                    <div class="input_cont" th:text="${order.payment.getPayDateFormat()}">
+                                        <!--                                            <div class="input_cont" th:text="|${order.payment.payDate} ${order.payment.payTime}|">-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="padding-section">
+                        <div class="area_title">
+                            <h2>가격정보</h2>
+                        </div>
+                        <div class="order_pay_method none input_wrap input_val">
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">총 상품금액</div>
+                                    <div class="input_cont">
+                                        <b class="text-large" th:utext="|${#numbers.formatInteger(order.payment.payPrice, 0, 'COMMA')}<small>원</small>|"></b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input_col" th:if="${order.payment.payPriceDiscount != 0}">
+                                <div class="input_row">
+                                    <div class="input_tit">총 기본 할인금액</div>
+                                    <div class="input_cont">
+                                        <b class="text-large" th:utext="|${#numbers.formatInteger(order.payment.payPriceDiscount, 0, 'COMMA')}<small>원</small>|"></b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input_col" th:if="${point != null}">
+                                <div class="input_row">
+                                    <div class="input_tit">포인트 사용</div>
+                                    <div class="input_cont">
+                                        <b class="text-large" th:utext="|${#numbers.formatInteger(point, 0, 'COMMA')}<small>원</small>|"></b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">최종결제금액</div>
+                                    <div class="input_cont">
+                                        <b class="text-red text-large" th:utext="|${#numbers.formatInteger(order.payment.payTotal, 0, 'COMMA')}<small>원</small>|"></b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="padding-section">
+                        <div class="display-flex justify-content-center">
+                            <a th:href="@{|/myPage/order|}" class="btn btn-point width-150px xs-width-120px margin-10-right xs-margin-5-right">주문 목록</a>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+    <th:block th:replace="/part/js.html"></th:block>
+    <script th:inline="javascript">
+        //자동 하이픈 입력 (핸드폰)
+        function autoHipenTel(obj) {
+            var str = $(obj).val();
+            str = str.replace(/[^0-9]/g, '');
+
+            var tmp = '';
+            if( str.length < 4){
+                tmp = str;
+            } else if(str.length < 7){
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3);
+            } else if(str.length == 7){
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3);
+            } else if(str.length == 8){
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3, 4);
+                tmp += '-';
+                tmp += str.substr(7);
+            } else if(str.length == 9){
+                tmp += str.substr(0, 2);
+                tmp += '-';
+                tmp += str.substr(2, 3);
+                tmp += '-';
+                tmp += str.substr(5);
+            } else if(str.length == 10){
+                if(str.indexOf('02') == 0) {
+                    tmp += str.substr(0, 2);
+                    tmp += '-';
+                    tmp += str.substr(2, 4);
+                    tmp += '-';
+                    tmp += str.substr(6);
+                } else {
+                    tmp += str.substr(0, 3);
+                    tmp += '-';
+                    tmp += str.substr(3, 3);
+                    tmp += '-';
+                    tmp += str.substr(6);
+                }
+            } else if(str.length == 12){ //인터넷 팩스번호
+                tmp += str.substr(0, 4);
+                tmp += '-';
+                tmp += str.substr(4, 4);
+                tmp += '-';
+                tmp += str.substr(8);
+            } else {
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3, 4);
+                tmp += '-';
+                tmp += str.substr(7);
+            }
+            $(obj).val(tmp);
+        }
+    </script>
+    <!--/*
+    <script>
+        function reIssue(opIdx){
+            $.ajax({
+                url : '/galaxia/reIssue.rest',
+                type : 'post',
+                data : 'opIdx='+opIdx+'&'+$('form[name=galaxiaForm]').serialize(),
+                success : function(data) {
+                    if(data.message == 'OK'){
+                        alert('완료되었습니다.');
+                        opener.location.reload();
+                        self.close();
+                    }else{
+                        alert(data.message);
+                    }
+                },
+                error : function(data, status, er) {
+                    alert("에러발생, 관리자에게 문의하세요 [" + status + "_" + er + "]");
+                }
+            });
+        }
+    </script>
+    */-->
+</body>
+</html>

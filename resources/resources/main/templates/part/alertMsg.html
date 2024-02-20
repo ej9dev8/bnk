@@ -1,0 +1,96 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<div>
+    <form id="alertForm" name="alertForm">
+        <input type="hidden" id="msg" th:value="${msg}" >
+
+        <input type="hidden" id="locations" th:value="${location}" >
+
+        <input type="hidden" id="opernerLocation" th:value="${opernerLocation}" >
+
+        <input type="hidden" id="confirms" th:value="${confirms}" >
+
+        <input type="hidden" id="closePop" th:value="${closePop}" >
+
+        <input type="hidden" id="toBack" th:value="${toBack}" >
+
+        <input type="hidden" id="toClose" th:value="${toClose}" >
+
+        <input type="hidden" id="closePcBackMobile" th:value="${closePcBackMobile}" >
+
+        <input type="hidden" id="scriptCode" th:value="${scriptCode}" >
+
+        <input type="hidden" id="formSubmit" th:value="${formSubmit}" >
+        <input type="hidden" id="formType" th:value="${formType}" >
+        <input type="hidden" id="formValue" name="formValue" th:value="${formValue}" >
+    </form>
+</div>
+<!--<script type="text/javascript" src="/js/core/jquery.js"></script>-->
+<script th:inline="javascript">
+    var msg  = document.getElementById("msg").value;
+    if(msg != null && msg != ''){
+        alert(msg);
+    }
+
+    var confirms= document.getElementById("confirms").value;
+    var locations = document.getElementById("locations").value;
+    if(confirms != null && confirms != ''){
+        if(confirm(confirms)){
+            document.location.href = locations;
+        }else{
+            history.back();
+        }
+    }else{
+        if(locations != ''){
+            document.location.href = locations;
+        }
+    }
+
+    var opernerLocation = document.getElementById("opernerLocation").value;
+    if(opernerLocation != ''){
+        opener.location.href=opernerLocation;
+    }
+
+
+    var closePop = document.getElementById("closePop").value;
+    if(closePop != null && closePop != ''){
+        self.close();
+    }
+
+    var toClose = document.getElementById("toClose").value;
+    if(toClose != null && toClose != ''){
+        location.href='/toClose?toLocation='+toClose;
+    }
+
+    var back = document.getElementById('toBack').value;
+    if(back != null && back != ''){
+        history.back();
+    }
+
+    //웹은 닫기 모바일은 뒤로
+    var closePcBackMobile = document.getElementById('closePcBackMobile').value;
+    if(closePcBackMobile != null && closePcBackMobile != ''){
+        var filter = "win16|win32|win64|mac";
+        if(filter.indexOf(navigator.platform.toLowerCase())<0) {
+            //모바일
+            history.back();
+        }else{
+            self.close();
+        }
+    }
+
+    var scriptCode = document.getElementById('scriptCode').value;
+    if(scriptCode != null && scriptCode != ''){
+        eval(scriptCode);
+    }
+
+    var formSubmit = document.getElementById("formSubmit").value;
+    var formType = document.getElementById("formType").value;
+    if(formSubmit != null && formSubmit != ''){
+        if(formType == null || formType == ''){
+            formType = 'get';
+        }
+        document.alertForm.method = formType;
+        document.alertForm.action = formSubmit;
+        document.alertForm.submit();
+    }
+</script>

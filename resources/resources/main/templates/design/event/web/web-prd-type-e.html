@@ -1,0 +1,37 @@
+<!-- 이벤트 그룹 관리(WEB) :: 타입 E - 타이틀 + 상품 리스트 (web-prd-type-e) -->
+<div class="sm-display-none pd-ev-type-wrap web-prd-type-e" id="filterSec">
+    <div class="section-title" th:if="${mso.eventGroup.egName}">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1 class="product-group-title color-title" th:text="${ms.msName}">상품그룹명</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="thumb-style thumb-rounded small-rounded thumb-bg gray">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="swiper-container-main-non-auto overflow-hidden circle-btn dp-btn center">
+                                <ul class="swiper-wrapper height-auto" th:id="|${mso.eventGroup.egIdx}_mobile|">
+                                    <li class="swiper-slide layout width-100 height-auto" th:each="egiPage: ${#numbers.sequence(1, __${mso.eventGroup.egiTotalPageMap(4)}__)}">
+                                        <div class="pd_group value_group prod_list_wrap prod_style prod_style_grid">
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event" th:each="sp : ${mso.eventGroup.getListMap(egiPage,4)}">
+                                                    <th:block th:replace="/product/p_block2.html"></th:block>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="swiper-button-prev"><span class="ti-angle-left arrow"></span></div>
+                                <div class="swiper-button-next"><span class="ti-angle-right arrow"></span></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- // 이벤트 그룹 관리(WEB) :: 타입 E -->

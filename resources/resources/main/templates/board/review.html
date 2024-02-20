@@ -1,0 +1,75 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>상품평</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <th:block th:replace="/board/comp/menu.html"></th:block>
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table xs_table_block">
+                            <thead class="xs-display-none">
+                                <tr>
+                                    <th style="width:100px">번호</th>
+                                    <th style="width:150px">이미지</th>
+                                    <th style="width:auto">제목</th>
+                                    <th style="width:120px">작성자</th>
+                                    <th style="width:100px">조회수</th>
+                                    <th style="width:120px">작성일</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="xs-display-none">2</td>
+                                    <td class="xs-padding-5px-top">
+                                        <a href="./reviewView.do?page=1&amp;sp_rb_idx=1083">
+                                            <img src="https://img1.daumcdn.net/thumb/C600x600.q82/?fname=https%3A%2F%2Fst.kakaocdn.net%2Fproduct%2Fgift%2Fproduct%2F20210521111351_2aa4f5953233403c9fbe77d7e7905d62.jpg" alt="" style="max-height: 80px;" data-no-retina=""></a>
+                                    </td>
+                                    <td class="text-left">
+                                        <p class="text-khaki"><b>[스타벅스] e카드 3만원 교환권</b></p>
+                                        <a href="/board/detail/review/{}" class="text-cut">사용해보니 참 좋아요</a>
+                                        <div class="display-none xs-display-block star-rating">
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                        </div>
+                                        <div class="display-none xs-display-block text-extra-small margin-5px-top">
+                                            <span class="text-gray padding-10px-right">2021.09.08</span>
+                                            <span class="text-gray">조회수 0</span>
+                                        </div>
+                                    </td>
+                                    <!-- 이름 -->
+                                    <!-- 이름길이 -->
+                                    <!-- 성 -->
+                                    <td class="xs-display-none">김**</td>
+                                    <td class="xs-display-none">0</td>
+                                    <td class="xs-display-none">2021.09.08</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-center">
+                            <div class="pagination">
+                                <a href="/board/review" class="arrow" id="prevAll"></a>
+                                <a href="/board/review" class="arrow" id="prev"></a>
+                                <a href="/board/review" class="on">1</a>
+                                <a href="/board/review" class="arrow" id="next"></a>
+                                <a href="/board/review" class="arrow" id="nextAll"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+</body>
+</html>

@@ -1,0 +1,64 @@
+
+<!--햄버거 메뉴 사용여부-->
+<div class="all-menu-icon" th:if="${shop.getHeader().isHdMenuOpen()}" >
+    <div class="dropdown-btn">
+        <a><span class="ti-menu menu"></span></a>
+        <div class="menu-all-dropdown-wrap">
+            <div class="menu-all-dropdown">
+                <div class="container">
+                    <ul class="category-menu">
+                        <li th:each="cfs, i : ${cf}" class="menu-list cf_menu" th:attr="cfIdx=|${cfs.CF_IDX}|">
+                            <a class="list-title" th:text="${cfs.CF_NAME}" th:href="@{|/product/list?cfIdx=${cfs.CF_IDX}|}"></a>
+                            <!--<ul class="sub-list">
+                                <li th:each="cs, i : ${cs}" th:if="${cfs.CF_IDX == cs.CS_CF_IDX}">
+                                    <a th:href="@{|/product/list?cfIdx=${cfs.CF_IDX}|}" th:text="${cs.CS_NAME}">내용</a>
+                                </li>
+                            </ul>-->
+                        </li>
+                        <li th:each="pg, i : ${pgTopList}" class="menu-list" th:classappend="${pgIdx} == ${pg.PG_IDX} ? 'active':''">
+                            <a class="list-title" th:text="${pg.PG_NAME}" th:href="@{|/product/group/${pg.PG_IDX}|}"></a>
+                        </li>
+                        <!--<li th:each="eg, i : ${egTopList}" class="menu-list" th:classappend="${egIdx} == ${eg.EG_IDX} ? 'active':''">
+                            <a class="list-title" th:text="${eg.EG_NAME}" th:href="@{|/board/detail/event/${eg.EG_IDX}|}"></a>
+                        </li>-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="menu-category-wrap main-swiper display-flex position-relative" th:classappend="${shop.getHeader().getHdMenuStyle()}">
+    <div class="swiper-container-list-menu circle-btn dp-btn">
+        <ul class="swiper-wrapper">
+            <li th:each="cfs, i : ${cf}" class="swiper-slide cf_menu" th:attr="cfIdx=|${cfs.CF_IDX}|" th:if="${shop.header.hdMenu.name().equals('대분류')}">
+                <a th:href="@{|/product/list?cfIdx=${cfs.CF_IDX}|}">
+                    <span th:text="${cfs.CF_NAME}"></span>
+                </a>
+            </li>
+
+            <li th:each="pg, i : ${pgTopList}" class="swiper-slide" th:classappend="${pgIdx} == ${pg.PG_IDX} ? 'active':''" th:if="${shop.header.hdMenu.name().equals('상품그룹')}">
+                <a th:href="@{|/product/group/${pg.PG_IDX}|}">
+                    <span th:text="${pg.PG_NAME}"></span>
+                </a>
+            </li>
+            <!--<li th:each="eg, i : ${egTopList}" class="swiper-slide" th:classappend="${egIdx} == ${eg.EG_IDX} ? 'active':''">
+                <a th:href="@{|/board/detail/event/${eg.EG_IDX}|}">
+                    <span th:text="${eg.EG_NAME}"></span>
+                </a>
+            </li>-->
+
+            <li class="swiper-slide" th:classappend="${active} == 'community' ? 'active':''">
+                <a href="/board/event">
+                    <span>이벤트</span>
+                </a>
+            </li>
+            <li class="swiper-slide" th:classappend="${active} == 'customerCenter' ? 'active':''">
+                <a href="/board/notice">
+                    <span>고객센터</span>
+                </a>
+            </li>
+        </ul>
+        <div class="swiper-button-prev"><span class="ti-angle-left arrow"></span></div>
+        <div class="swiper-button-next"><span class="ti-angle-right arrow"></span></div>
+    </div>
+</div>

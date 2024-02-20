@@ -1,0 +1,42 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div class="row blog_style3 text-center" th:unless="${#lists.isEmpty(eventList)}">
+  <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 blog_grid" th:each="event, i : ${eventList}">
+    <figure class="border-none">
+      <div class="blog_img">
+        <a th:href="@{/board/detail/event/__${event.EG_IDX}__}" class="display-block position-relative">
+          <img th:src="${event.EG_THUMBNAIL}" th:alt="${event.EG_NAME}" data-no-retina="">
+          <div class="event-closed" th:unless="${isOpen}">
+            <div class="display-table width-100 height-100">
+              <div class="display-table-cell vertical-align-middle text-center">
+                <span class="event-text text-15">종료된 이벤트입니다</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      <figcaption class="list-small">
+        <a th:href="@{/board/detail/event/__${event.EG_IDX}__}" class="display-block">
+          <span class="tit display-block main-font letter-spacing-minus-1" th:text="${event.EG_NAME}">제목</span>
+          <span class="display-block margin-5-top text-13 main-font text-gray letter-spacing-minus-1" th:text="|진행기간 ${event.EG_START} ~ ${event.EG_END}|"></span>
+        </a>
+      </figcaption>
+    </figure>
+  </div>
+  <div class="width-100 text-center">
+    <div class="pagination">
+      <a id="prevAll" class="arrow" onclick="loadEventGroup(1)"></a>
+      <a id="prev" class="arrow" th:attr="onclick=|loadEventGroup(${firstPage-1})|"></a>
+
+      <a th:each="pageidx : ${#numbers.sequence(__${firstPage}__, __${lastPage}__)}" th:text="${pageidx}" th:class="${curPage == pageidx ?'on':''}" th:attr="onclick=|loadEventGroup(${pageidx})|">페이지</a>
+
+      <a id="next" class="arrow" th:attr="onclick=|loadEventGroup(${nextPage})|"></a>
+      <a id="nextAll" class="arrow" th:attr="onclick=|loadEventGroup(${totalPage})|"></a>
+    </div>
+  </div>
+</div>
+
+<div class="row blog_style3 text-center data_none" th:if="${#lists.isEmpty(eventList)}">
+  <p>이벤트가 없습니다.</p>
+</div>
+
+</html>

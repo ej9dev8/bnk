@@ -1,0 +1,192 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>나의 배송주소록 : 추가하기 </title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <section class="padding-section"></section>
+                    <section class="padding-section">
+                        <div class="area_title board">
+                            <h2>주문정보</h2>
+                        </div><div class="payArea bg-light no-margin-top margin-25-bottom padding-15-all small">
+                        <span>주문일자: <b class="margin-5-left text-dark-gray">2022-01-20 10:42:23</b></span>
+                        <i class="margin-15-lr text-gray xs-display-none">|</i>
+                        <span class="xs-display-block xs-margin-10-top">주문번호: <b class="margin-5-left">20220120500098</b></span>
+                    </div>
+
+                        <!-- 주문내역(모바일) -->
+                        <div class="sm_prod_view_wrap display-none sm-display-block">
+                            <!-- 반복되는 블록 -->
+                            <div class="sm_prod_view">
+                                <div class="order_box title_none">
+                                    <p class="order_box_text">
+                                        <span>구분</span>
+                                        <span><b>쿠폰</b></span>
+                                    </p>
+                                </div>
+                                <div class="prod_box">
+                                    <div class="prod_img">
+                                        <img src="https://tpayimg.billgate.net:444/testgxcon/product/thumbnail/100000000000034_74cf739b-aea8-4fd0-8165-b69e5e37d026.jpg" alt="해태 허니버터칩60g" data-no-retina="">
+                                    </div>
+                                    <div class="prod_detail">
+                                        <p class="text-gray small">CU</p>
+                                        <p><a href="/product/detail/100000000000299" class="tit">해태 허니버터칩60g</a></p>
+                                        <p class="text-gray small">옵션: <span>옵션명</span></p>
+                                    </div>
+                                </div>
+                                <div class="order-price-box">
+                                    <b class="val-tit">수량</b>
+                                    <span>
+                                            <b>3</b>
+                                        </span>
+                                </div>
+                                <div class="order-price-box">
+                                    <b class="val-tit">유효기간</b>
+                                    <span>
+                                            <b class="text-black">확인불가</b>
+
+                                        </span>
+                                </div>
+                                <div class="order-price-box">
+                                    <b class="val-tit">수신번호</b>
+                                    <span><b>010-****-5864</b></span>
+                                </div>
+                            </div>
+                            <!-- // 반복되는 블록 -->
+                        </div>
+                        <!-- // 주문내역(모바일) -->
+                        <!-- 주문내역(웹) -->
+                        <table class="table sm-display-none sm_prod_view">
+                            <thead>
+                            <tr>
+                                <th style="width:100px">구분</th>
+                                <th style="width:auto">제품 정보</th>
+                                <th style="width:200px">수량</th>
+                                <th style="width:150px">유효기간</th>
+                                <th style="width:250px">수신번호</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><p>쿠폰</p></td>
+                                <td class="text-left sm_prod_view">
+                                    <div class="prod_box">
+                                        <div class="prod_img">
+                                            <img src="https://tpayimg.billgate.net:444/testgxcon/product/thumbnail/100000000000034_74cf739b-aea8-4fd0-8165-b69e5e37d026.jpg" alt="해태 허니버터칩60g" data-no-retina="">
+                                        </div>
+                                        <div class="prod_detail">
+                                            <p class="text-gray small">CU</p>
+                                            <p><a href="/product/detail/100000000000299" class="tit">해태 허니버터칩60g</a></p>
+                                            <p class="text-gray small">옵션: <span>옵션명</span></p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                            <span>
+     3
+                                            </span>
+                                </td>
+                                <td>
+                                    <p><b>2020-00-00</b></p>
+
+                                </td>
+                                <td data-title="수신번호">
+                                    <span>010-****-5864</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!-- // 주문내역(웹) -->
+                        <div class="margin-30-top">
+                            <h4 class="text-dark-gray font-weight-600  font-style-italic margin-5-bottom">from.<span>김철수</span> </h4>
+                            <p class="table-message">
+                                <i class="ti-pencil-alt"></i>
+                                <b class="text">투명하되 생의 무한한 소리다.이것은 앞이 내는 아름다우냐? 보이는 없는 수 피가 보라. 우는 풀이 피가 위하여서 청춘의 유소년에게서 이것이다. 같으며, 생생하며, 밥을 부패뿐이다. 속에 있는 생명을 이상 사막이다. 그와 능히 없으면, 뼈 길을 하였으며, 황금시대다. 아름답고 그들의 곧 듣기만 것은 거친 아니한 하여도 위하여서 힘있다. 것은 있는 하는 사는가 웅대한 봄바람이다. 사람은 과실이 낙원을 보는 뿐이다. 구하기 따뜻한 힘차게 붙잡아 봄날의 보이는 풀이 때문이다.</b>
+                            </p>
+                            <p class="margin-20-top">
+                                <span class="label label-danger margin-5-right">배송지 입력 및 수정</span>
+                                <small>2020년 00월 00일까지</small></p></div>
+                    </section>
+                    <section class="padding-section">
+                        <div class="area_title">
+                            <h2>배송주소 추가하기</h2>
+                        </div>
+                        <hr>
+                        <div class="payArea bg-light showMyDelivery">
+                            <th:block th:replace="order/comp/delivery.html"></th:block>
+                        </div>
+                        <div class="width-100 text-center margin-30-top">
+                            <button type="button" class="btn btn-lg btn-point width-150px xs-width-100" onclick="">저장</button>
+                        </div>
+                    </section>
+                    <section class="padding-section">
+                        <div class="area_title">
+                            <h2>배송 정보</h2>
+                        </div>
+                        <div class="order_pay_method none input_wrap input_val">
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">배송상태</div>
+                                    <div class="input_cont">배송상태</div>
+                                </div>
+                            </div>
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">택배사</div>
+                                    <div class="input_cont">택배사</div>
+                                </div>
+                            </div>
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">송장번호</div>
+                                    <div class="input_cont">000000000000<button onclick="" class="margin-10-left btn btn-sm btn-transparent-light-gray">배송조회</button></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+                    <section class="padding-section">
+                        <div class="area_title">
+                            <h2>본인확인</h2>
+                        </div>
+                        <div class="order_pay_method none input_wrap input-rounded small-rounded input_val">
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">전화번호</div>
+                                    <div class="input_cont">
+                                        <p class="input-group">
+                                            <input type="tel" class="form-control radius-right-0" id="" name="" onkeyup="" maxlength="13" value="010-0000-0000" readonly="readonly">
+                                            <span class="input-group-btn"><button class="btn btn-default" type="button">인증</button></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">OTP 입력</div>
+                                    <div class="input_cont">
+                                        <p class="input-group">
+                                            <input type="tel" class="form-control radius-right-0" id="" name="" onkeyup="" maxlength="13" value="">
+                                            <span class="input-group-btn"><button class="btn btn-xlg btn-default" type="button">확인</button></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="width-100 text-center margin-30-top">
+                                <button type="button" class="btn btn-xlg btn-point width-150px xs-width-100" onclick="">확인</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+</body>
+</html>

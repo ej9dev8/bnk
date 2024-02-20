@@ -1,0 +1,16 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=2" />
+<th:block th:if="${shop != null}">
+    <meta id="meta_description" name="description" th:content="${shop?.header.getHdMeta().get('META_DESCRIPTION')}">
+    <meta id="meta_keywords" name="keywords" th:content="${shop?.header.getHdMeta().get('META_KEYWORDS')}">
+    <link rel="canonical" th:href="${shop.shopDomain}"  />
+    <meta property="og:type" th:content="${shop?.header.getHdMeta().get('META_TYPE')}">
+    <meta property="og:title" th:content="${shop?.header.getHdMeta().get('META_TITLE')}">
+    <meta property="og:description" th:content="${shop?.header.getHdMeta().get('META_DESCRIPTION')}">
+    <meta property="og:image" th:content="${shop?.header.getHdMeta().get('META_IMAGE')}">
+    <meta property="og:url" th:content="${shop?.header.getHdMeta().get('META_URL')}">
+    <link rel="shortcut icon" th:href="${shop?.header.hdFavicon}">
+
+
+    <script th:if="${not #strings.isEmpty(shop.getShopInfo().siScript)}" th:utext="${shop.getShopInfo().siScript}"></script>
+</th:block>

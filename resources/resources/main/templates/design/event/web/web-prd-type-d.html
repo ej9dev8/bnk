@@ -1,0 +1,67 @@
+<!-- 이벤트 그룹 관리(WEB) :: 타입 D - 타이틀 + 대표 이미지 + 상품 리스트 (web-prd-type-d) -->
+<div class="sm-display-none pd-ev-type-wrap web-type-layout web-prd-type-d" id="filterSec">
+    <div class="section-title" th:if="${mso.eventGroup.egName}">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1 class="product-group-title color-title" th:text="${ms.msName}">이달의 초특가</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="thumb-style thumb-rounded small-rounded thumb-bg gray"> <!-- 개별 클래스 요소 선택란 : 상품 썸네일 -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-left" th:if="${mso.eventGroup.egImage}">
+                    <div class="width-100">
+                        <div class="prod_style prod_style_grid">
+                            <div class="row">
+                                <div class="col-xs-12 prod_event half-banner sm-padding-0-lr">
+                                    <div class="prod_thumb_link main-prd-banner-thumb-wrap">
+                                        <a th:href="@{|/board/detail/event/${mso.eventGroup.egIdx}|}" class="display-block">
+                                            <img th:src="${mso.eventGroup.egImage}" th:alt="${mso.eventGroup.egName}" class="width-100">
+                                            <div class="main-prd-banner-thumb">
+                                                <div class="display-table width-100 height-100">
+                                                    <div class="display-table-cell text-left vertical-align-bottom">
+                                                        <div class="text-wrap">
+                                                            <!--<h4 class="sub-title">브랜드 기획전</h4>-->
+                                                            <h2 class="main-title font-weight-700" th:text="${mso.eventGroup.egMemo}">이미지 내부 타이틀</h2>
+                                                            <!--                                                                        <hr th:if="${mso.eventGroup.egName != null && mso.eventGroup.egMemo != null}">-->
+                                                            <!--                                                                        <h4 class="more-text" th:text="${mso.eventGroup.egMemo}? ${mso.eventGroup.egMemo}:''">메모</h4>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xs-12 col-right padding-0-lr">
+                    <form id="products">
+                        <div class="width-100">
+                            <div class="swiper-container-main-non-auto overflow-hidden circle-btn dp-btn center padding-2-top">
+                                <ul class="swiper-wrapper">
+                                    <li class="col-xs-12 swiper-slide layout width-100" th:each="egiPage: ${#numbers.sequence(1, __${mso.eventGroup.egiTotalPageMap(4)}__)}">
+                                        <div class="prod_style prod_style_grid">
+                                            <div class="row">
+                                                <div class="col-xs-6 prod_event" th:each="sp : ${mso.eventGroup.getListMap(egiPage,4)}">
+                                                    <th:block th:replace="/product/p_block2.html"></th:block>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="swiper-button-prev"><span class="ti-angle-left arrow"></span></div>
+                                <div class="swiper-button-next"><span class="ti-angle-right arrow"></span></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- // 이벤트 그룹 관리(WEB) :: 타입 D -->

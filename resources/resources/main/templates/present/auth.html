@@ -1,0 +1,221 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>선물하기</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop != null ? shop.shopCss.getBodyClass() : ''}">
+<div class="page-container">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <section class="padding-section"></section>
+                <section class="padding-section">
+                    <div class="area_title board">
+                        <h2>주문정보</h2>
+                    </div>
+
+                    <!-- 주문내역(모바일) -->
+                    <div class="sm_prod_view_wrap display-none sm-display-block">
+                        <!-- 반복되는 블록 -->
+                        <div class="sm_prod_view" th:each="op, i: ${prodList}">
+                            <div class="order_box title_none">
+                                <p class="order_box_text">
+                                    <span><b th:text="${order.oProdType.name()}">배송상품</b></span>
+                                </p>
+                            </div>
+                            <div class="prod_box">
+                                <div class="prod_img">
+                                    <img th:src="${op.P_THUMBNAIL}" th:alt="${op.SP_NAME}" data-no-retina="">
+                                </div>
+                                <div class="prod_detail">
+                                    <p class="text-gray small" th:text="${odp.shopProduct.product.brand.bName}">CU</p>
+                                    <p th:text="${op.SP_NAME}">쇼핑몰 상품명</p>
+                                    <p class="text-gray small" th:if="${#maps.containsKey(op, 'OP_OPTION')}">옵션: <span th:text="${op.OP_OPTION}">옵션명</span></p>
+                                </div>
+                            </div>
+                            <div class="order-price-box">
+                                <b class="val-tit">수량</b>
+                                <span>
+                                    <b th:text="${op.PHONE_LEN}">3</b>
+                                </span>
+                            </div>
+                            <div class="order-price-box display-block" th:if="${#maps.isEmpty(odp.shopProduct.product.pOption)}">
+                                <b class="val-tit">옵션</b>
+                                <p th:text="${odp.opOption}">옵션</p>
+                            </div>
+                        </div>
+                        <!-- // 반복되는 블록 -->
+                    </div>
+                    <!-- // 주문내역(모바일) -->
+                    <!-- 주문내역(웹) -->
+                    <table class="table sm-display-none sm_prod_view">
+                        <thead>
+                            <tr>
+                                <th style="width:auto">제품 정보</th>
+                                <th style="width:200px">수량</th>
+                                <th style="width:300px" th:if="${not #maps.isEmpty(odp.shopProduct.product.pOption)}">옵션</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="op, i: ${prodList}">
+                                <td class="text-left sm_prod_view">
+                                    <div class="prod_box">
+                                        <div class="prod_img">
+                                            <img th:src="${op.P_THUMBNAIL}" th:alt="${op.SP_NAME}" data-no-retina="">
+                                        </div>
+                                        <div class="prod_detail">
+                                            <p class="text-gray small" th:if="${not #strings.isEmpty(odp.shopProduct.product.brand.bName)}" th:text="${odp.shopProduct.product.brand.bName}">CU</p>
+                                            <p th:text="${op.SP_NAME}" class="tit">쇼핑몰 상품명</p>
+                                            <p class="text-gray small" th:if="${#maps.containsKey(op, 'OP_OPTION')}">옵션: <span th:text="${op.OP_OPTION}">옵션명</span></p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span th:text="${op.PHONE_LEN}">3</span>
+                                </td>
+                                <td th:if="${not #maps.isEmpty(odp.shopProduct.product.pOption)}">
+                                    <p th:text="${odp.opOption}">옵션</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- // 주문내역(웹) -->
+                    <div class="margin-30-top">
+                        <h4 class="text-dark-gray font-weight-600  font-style-italic margin-5-bottom">
+                            from.<span th:text="${order.oName}">보낸이</span>
+                        </h4>
+                        <p class="table-message" th:if="${odp.opMessage}">
+                            <i class="ti-pencil-alt"></i>
+                            <b class="text" th:text="${odp.opMessage}">메세지</b>
+                        </p>
+                    </div>
+                </section>
+                <section class="padding-section">
+                    <div class="area_title">
+                        <h2>본인확인</h2>
+                    </div>
+                    <div class="order_pay_method none input_wrap input-rounded small-rounded input_val">
+                        <form name="optForm" id="otpForm">
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">전화번호</div>
+                                    <div class="input_cont">
+                                        <p class="input-group">
+                                            <input type="tel" class="form-control radius-right-0" maxlength="13" th:value="${odp.getPhoneMasking()}" readonly>
+                                            <span class="input-group-btn">
+                                            <button class="btn btn-default" type="button" onclick="sendOTP();">인증</button>
+                                        </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input_col">
+                                <div class="input_row">
+                                    <div class="input_tit">OTP 입력</div>
+                                    <div class="input_cont">
+                                        <p class="input-group">
+                                            <input type="tel" class="form-control radius-right-0" name="OTP" onkeyup="onlyNum(this);" maxlength="13">
+                                            <span id="timer" class="timer-text color-point"></span>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-xlg btn-default" type="button" onclick="confirmOTP();">확인</button>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" name="op" th:value="${issueno}">
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="/part/js.html"></th:block>
+<script th:inline="javascript">
+    //OTP 발송
+    function sendOTP(){
+        if(confirm('OTP 문자 받으시겠습니까?')){
+            $.ajax({
+                url : [[@{|/present/auth.rest|}]],
+                type : 'post',
+                data : {
+                    issueno: [[${issueno}]]
+                },
+                success : function(data) {
+                    alert(data.message);
+                    if(data.data.expireTime != null){
+                        expireOtpTime();
+                    }
+                },
+                error : function(data, status, er) {
+                    alert("잠시 후 시도해주세요");
+                }
+            });
+        }
+    }
+
+    //OTP 확인
+    function confirmOTP(){
+        var otp = $("input[name=OTP]");
+        if(otp.val() == ''){
+            alert('OTP 인증번호를 입력해주세요.');
+            otp.focus();
+            return false;
+        }
+
+        $.ajax({
+            url : [[@{|/present/confirm.rest|}]],
+            type : 'post',
+            data : {
+                issueno: [[${issueno}]]
+                , otp : otp.val()
+            },
+            success : function(data) {
+                if(data.message == 'true'){
+                    optSubmit();
+                }else{
+                    alert(data.message);
+                }
+            },
+            error : function(data, status, er) {
+                alert("잠시 후 시도해주세요");
+            }
+        });
+    }
+
+    /**otp 인증시간 만료 처리 - 만료시간 받아서 time 처리하기*/
+    function expireOtpTime(){
+        var min = "";
+        var sec = "";
+        var time = 180;
+
+        var x = setInterval(function() {
+            min = parseInt(time / 60);
+            sec = time % 60;
+
+            document.getElementById("timer").innerHTML = min + "분" + sec + "초";
+            time--;
+
+            if (time < 0) {
+                clearInterval(x);
+                document.getElementById("timer").innerHTML = "시간초과";
+            }
+        } , 1000);
+    }
+
+    function optSubmit(){
+        document.optForm.action=[[@{/present/delivery}]];
+        document.optForm.method='post';
+        document.optForm.submit();
+    }
+</script>
+<script th:inline="javascript">
+    window.load = function () {
+        optSubmit();
+    }
+</script>
+</body>
+</html>

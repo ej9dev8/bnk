@@ -1,0 +1,59 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<div id="filterSec">
+    <div class="thumb-style thumb-rounded small-rounded thumb-bg gray"> <!-- 개별 클래스 요소 선택란 : 상품 썸네일 -->
+        <form id="products">
+                <div class="prod_style prod_style_grid">
+                    <div class="prod_sort_wrap xs-margin-10-bottom clearfix" th:if="${not #lists.isEmpty(list)}">
+                        <p class="result">총 <b th:text="${#numbers.formatInteger(count, 0, 'COMMA')}">0</b>개의 제품이 검색되었습니다.</p>
+                        <div class="select-rounded small-rounded select-bg-gray prod_sort float-right text-0 width-130px xs-width-120px position-relative"><!-- 개별 클래스 요소 선택란 : select -->
+                            <select id="prodOrder" class="custom-select bg-sub color-menu-bg-text" th:onchange="|loadProduct(${page})|">
+                                <option value="1" th:selected="${order} == 1">신상품 순</option>
+                                <option value="2" th:selected="${order} == 2">낮은가격 순</option>
+                                <option value="3" th:selected="${order} == 3">높은가격 순</option>
+                                <option value="4" th:selected="${order} == 4">판매량 높은 순</option>
+                                <option value="5" th:selected="${order} == 5">높은 할인율 순</option>
+                            </select>
+                            <div class="select-custom-arrow"><span class="arrow ti-angle-down color-point-bg-text"></span></div>
+                        </div>
+                    </div>
+                    <div class="prod_list_wrap prod_style prod_style_grid">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6 prod_event" th:each="sp , i : ${list}" th:if="${not #lists.isEmpty(list)}">
+                                <th:block th:replace="/product/p_block2.html"></th:block>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center" th:if="${not #lists.isEmpty(list)}">
+                    <div class="pagination xs-padding-10-top">
+                        <a th:onclick="|loadProduct(1)|" class="arrow" id="prevAll"></a>
+
+                        <th:block th:if="${paging.prevPage} < 0">
+                            <a th:onclick="|loadProduct(1)|" class="arrow" id="prev"></a>
+                        </th:block>
+                        <th:block th:unless="${paging.prevPage} < 0">
+                            <a th:onclick="|loadProduct(${paging.prevPage})|" class="arrow" id="prev"></a>
+                        </th:block>
+
+                        <a th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:onclick="|loadProduct(${i})|" th:class="${paging.page eq i} ? on" th:id="${paging.page eq i} ? pageOn" th:text="${i}">1</a>
+
+                        <th:block th:if="${paging.nextPage} > ${paging.totalPage}">
+                            <a th:onclick="|loadProduct(${paging.totalPage})|" class="arrow" id="next"></a>
+                        </th:block>
+                        <th:block th:unless="${paging.nextPage} > ${paging.totalPage}">
+                            <a th:onclick="|loadProduct(${paging.nextPage})|" class="arrow" id="next"></a>
+                        </th:block>
+
+                        <a th:onclick="|loadProduct(${paging.totalPage})|" class="arrow" id="nextAll"></a>
+                    </div>
+                </div>
+                <div th:unless="${not #lists.isEmpty(list)}" class="data_none"><p>해당하는 상품이 없습니다.</p></div>
+            </form>
+    </div>
+    <script>
+        $("div.pagination a").on('click', function() {
+            document.location.href='#productListDiv';
+        });
+    </script>
+</div>
+</html>

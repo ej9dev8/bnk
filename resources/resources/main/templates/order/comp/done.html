@@ -1,0 +1,30 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>결제완료</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <form name="doneForm">
+            <input type="hidden" name="location" th:value="${location}">
+        </form>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+    <script>
+        complete();
+        function complete(){
+            var location = $("input[name=location]").val();
+            var filter = "win16|win32|win64|mac";
+            if(filter.indexOf(navigator.platform.toLowerCase())<0) {//모바일
+                document.doneForm.action = location;
+                document.doneForm.submit();
+            }else{
+                opener.location.href=location;
+                self.close();
+            }
+        }
+    </script>
+</body>
+</html>

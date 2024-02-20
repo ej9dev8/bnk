@@ -1,0 +1,63 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+    <section class="padding-section page-title-padding">
+        <div class="container">
+            <div class="page-title color-title">
+                <h1>마이 페이지</h1>
+            </div>
+        </div>
+    </section>
+    <section class="padding-section padding-30-bottom">
+        <div>
+            <div class="page-list__container">
+                <div class="page-list__wrap">
+                    <div class="page-list__info">
+                        <div class="page-list__value__box" onclick="location.href='/myPage/modifyCheck'">
+                            <i class="ti-user profile-graphic"></i>
+                            <div class="order-list__info__wrap__content__text">
+                                <span class="order-list__detail" th:text="${#strings.isEmpty(@sessionInfo.cuName) ? @sessionInfo.getEmailMasking() : @sessionInfo.getNameMasking()}">회원명</span>
+                                <span class="order-list__basic">님</span>
+                            </div>
+                        </div>
+                        <div class="page-list__value__box" onclick="location.href='/myPage/order'">
+                            <i class="ti-bag profile-graphic"></i>
+                            <div class="order-list__info__wrap__content__text">
+                                <span class="order-list__basic">주문 </span>
+                                <a class="order-list__detail color-point">
+                                    <span th:text="|${#numbers.formatInteger(myOrderCount, 0, 'COMMA')}|">0 </span>
+                                    <span class="order_after_seal">건</span>
+                                </a>
+                                <!--<span> / </span>
+                                <span class="order-list__basic">배송 </span>
+                                <span class="order-list__detail"><a class=" color-point">0건</a> </span>-->
+                            </div>
+                        </div>
+                        <div class="page-list__value__box" onclick="location.href='/myPage/point'">
+                            <i class="ti-stamp profile-graphic"></i>
+                            <div class="order-list__info__wrap__content__text">
+                                <span class="order-list__basic">포인트 </span>
+                                <a class="order-list__detail color-point">
+                                    <span th:text="|${#numbers.formatInteger(myPoint, 0, 'COMMA')}|">0</span>
+                                    <span class="order_after_seal">P</span>
+                                </a>
+                                <!--<span> / </span>
+                                <span class="order-list__basic">쿠폰 </span>
+                                <span class="order-list__detail"><a class=" color-point">0장</a> </span>-->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <ul class="page_sub_menu mgtr menu5">
+                <li class="li" th:classappend="${active} == 'myOrder' ? active"><a href="/myPage/order" title="주문/배송" >주문/배송</a></li>
+                <li class="li" th:classappend="${active} == 'myClaim' ? active"><a href="/myPage/claim" title="취소/반품">취소/반품</a></li>
+<!--                        <li class="li" th:classappend="${active} == 'myPick' ? active"><a href="/myPage/pick" title="관심상품">관심상품</a></li>-->
+                <li class="li" th:classappend="${active} == 'myPoint' ? active"><a href="/myPage/point" title="포인트">포인트</a></li><!--/**쿠폰/포인트*/-->
+                <li class="li" th:classappend="${active} == 'myQna' ? active"><a href="/myPage/qna" title="문의내역">문의내역</a></li>
+<!--                        <li class="li" th:classappend="${active} == 'myReview' ? active"><a href="/myPage/review" title="상품평">상품평</a></li>-->
+                <li class="li" th:classappend="(${active} == 'modify' or ${active} == 'modifyCheck') ? active"><a th:href="${shop.shopLogin}? '/myPage/modify':'/myPage/modifyCheck'" title="회원정보관리">회원정보관리</a></li>
+            </ul>
+        </div>
+    </section>
+</html>

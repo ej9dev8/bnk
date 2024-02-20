@@ -1,0 +1,205 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>마이페이지 취소/반품</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+<div class="page-container">
+    <th:block th:replace="/header/header.html"></th:block>
+
+    <section class="padding-section">
+        <div class="container">
+            <div class="row">
+                <th:block th:replace="/myPage/comp/menu.html"></th:block>
+                <div class="col-xs-12">
+                    <form method="post" name="dateSearch" id="dateSearch" action="/myPage/claim" class="input-rounded small-rounded date_search bg-light sm-lr-fit">
+                        <fieldset>
+                            <legend class="hidden">기간조회</legend>
+                            <div class="search_box width-100 margin-auto">
+                                <div class="month_btn clearfix sm-margin-10-bottom">
+                                    <button type="button" id="1m6" class="btn" onclick="setMonthDate('1m',this)">1개월</button>
+                                    <button type="button" id="3m6" class="btn" onclick="setMonthDate('3m',this)">3개월</button>
+                                    <button type="button" id="6m6" class="btn" onclick="setMonthDate('6m',this)">6개월</button>
+                                    <button type="submit" class="btn display-none xs-display-block">조회</button>
+                                </div>
+                                <div class="date_input_wrap">
+                                    <!--날짜 7일 기본 값-->
+                                    <div class="date_input start">
+                                        <input type="text" class="form-control datepicker inquiry_datepicker border-color-sub-light-gray" name="date_from" id="date_from" th:value="${#strings.isEmpty(date_from)? '' : date_from}">
+                                        <i class="ti-calendar"></i>
+                                    </div>
+                                    <i class="date_wave">~</i>
+                                    <div class="date_input end">
+                                        <input type="text" class="form-control datepicker border-color-sub-light-gray" name="date_to" id="date_to" th:value="${#strings.isEmpty(date_to)? '' : date_to}">
+                                        <i class="ti-calendar"></i>
+                                    </div>
+                                    <input type="hidden" name="page" th:value="${page}">
+                                    <button type="button" class="btn btn-dark radius-left-0 xs-display-none" onclick="searchOrder(1);">조회</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <fieldset>
+                        <div class="area_title board">
+                            <h2>주문내역</h2>
+                        </div>
+                        <!-- 주문내역(모바일) -->
+                        <div class="sm_prod_view_wrap display-none sm-display-block">
+                            <!-- 반복되는 블록 -->
+                            <div class="sm_prod_view" th:each="order, i : ${orders}">
+                                <div class="order_box title_none">
+                                    <p class="order_box_text">
+                                        <span th:text="${#strings.substring(order.O_DATE, 0, 10)}">0000-00-00</span>
+                                        <a th:href="@{|/myPage/detail/${order.O_CODE}|}">상세보기 <i class="ti-angle-right"></i></a>
+                                    </p>
+                                </div>
+                                <div class="prod_box">
+                                    <div class="prod_img">
+                                        <img th:src="${order.P_THUMBNAIL}" th:alt="${order.SP_NAME}" data-no-retina="">
+                                    </div>
+
+                                    <div class="prod_detail">
+                                        <p class="text-gray small" th:text="${order.O_CODE}">주문번호</p>
+                                        <p th:href="@{|/product/detail/${order.SP_IDX}|}" class="tit">
+                                            <span th:text="${order.SP_NAME}"></span>
+                                            <span th:if="${order.OP_CNT > 1}" th:text="| 외 ${#numbers.formatInteger(order.OP_CNT-1, 0, 'COMMA')}건|"> 외 n건</span>
+                                        </p>
+                                        <p class="text-gray small"th:if="${#maps.containsKey(order, 'OP_OPTION')}">옵션: <span th:text="${order.OP_OPTION}">옵션명</span></p>
+                                    </div>
+                                </div>
+                                <div class="order-price-box">
+                                    <b class="val-tit">주문금액</b>
+                                    <span>
+                                        <b th:text="|${#numbers.formatInteger(order.PAY_TOTAL, 0, 'COMMA')}|"></b>
+                                        <b class="order_after_seal">원</b>
+                                    </span>
+                                </div>
+                                <div class="order-price-box">
+                                    <b class="val-tit">인원</b>
+                                    <span>
+                                        <b class="order_after_seal" th:text="${#numbers.formatInteger(order.OP_PERSON, 0, 'COMMA')}">명</b>
+                                    </span>
+                                </div>
+                                <div class="order-price-box">
+                                    <b class="val-tit">결제상태</b>
+                                    <span>
+                                         <a class="text"><b class="text-red" th:text="${order.PAY_STATE}">결제상태</b></a>
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- // 반복되는 블록 -->
+                        </div>
+                        <!-- // 주문내역(모바일) -->
+                        <!-- 주문내역(웹) -->
+                        <table class="table sm-display-none">
+                            <thead>
+                            <tr>
+                                <th style="width:120px">주문일자</th>
+                                <th style="width:100px">구분</th>
+                                <th style="width:auto">제품 정보</th>
+                                <th style="width:200px">주문금액</th>
+                                <th style="width:80px">인원</th>
+                                <th style="width:100px">결제상태</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="order, i : ${orders}">
+                                <tr>
+                                    <td class="title_none xs-bg-light-gray sm-padding-10-all">
+                                        <p  th:text="${#strings.substring(order.O_DATE, 0, 10)}">0000-00-00</p><!-- 주문날짜 -->
+                                        <p class="overflow-hidden text-center xs-text-left">
+                                            <span class="display-none sm-display-block text-red pull-right"><b th:text="${order.PAY_STATE}" class="text-red">결제상태</b></span>
+                                        </p>
+                                    </td>
+                                    <td class="sm-display-none"><b th:text="${order.O_PROD_TYPE}">분류</b></td>
+                                    <td class="text-left sm_prod_view title_none sm-padding-0-bottom">
+                                        <div class="prod_box">
+                                            <div class="prod_img">
+                                                <img th:src="${order.P_THUMBNAIL}" th:alt="${order.SP_NAME}" data-no-retina="">
+                                            </div>
+                                            <div class="prod_detail">
+                                                <p class="text-gray small" th:text="${order.O_CODE}">주문번호</p>
+                                                <p>
+                                                    <span class="tit">
+                                                        <span th:text="${order.SP_NAME}"></span>
+                                                        <span th:if="${order.OP_CNT > 1}" th:text="| 외 ${#numbers.formatInteger(order.OP_CNT-1, 0, 'COMMA')}건|"> 외 n건</span>
+                                                    </span>
+                                                </p>
+                                                <p class="text-gray small" th:if="${#maps.containsKey(order, 'OP_OPTION')}">옵션: <span th:text="${order.OP_OPTION}">옵션명</span></p>
+                                                <div class="margin-5-top display-none xs-display-block">
+                                                    <span class="text-extra-dark-gray font-weight-600" th:text="|${#numbers.formatInteger(order.PAY_TOTAL, 0, 'COMMA')}원|">주문상품금액</span>
+                                                </div>
+                                                <a class="detail-arrow text-gray small" th:href="@{|/myPage/detail/${order.O_CODE}|}">상세보기</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="sm-display-none">
+                                        <span>
+                                            <b th:text="|${#numbers.formatInteger(order.PAY_TOTAL, 0, 'COMMA')}|">상품결제금액</b>
+                                            <b class="order_after_seal">원</b>
+                                        </span>
+                                    </td>
+                                    <td class="sm-display-none">
+                                        <span>
+                                            <b th:text="${#numbers.formatInteger(order.OP_PERSON, 0, 'COMMA')}">nnn</b>
+                                            <b class="order_after_seal">명</b>
+                                        </span>
+                                    </td>
+                                    <td class="sm-display-none">
+                                        <b class="text-red" th:text="${order.PAY_STATE}">결제상태</b>
+                                    </td>
+
+                                    <td class="display-none xs-display-block">
+                                        <div class="row display-none xs-display-block">
+                                            <div class="col-xs-12">
+                                                <a th:href="@{|/myPage/detail/${order.O_CODE}|}" class="btn btn-sm btn-dark margin-10-top font-weight-600">주문상세보기</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                        <!-- // 주문내역(웹) -->
+                        <div th:if="${#lists.isEmpty(orders)}" class="data_none"><p>주문내역이 없습니다.</p></div>
+                    </fieldset>
+                    <div class="text-center" th:if="${not #lists.isEmpty(orders)}">
+                        <div class="pagination">
+                            <a onclick="searchOrder(1)" class="arrow" id="prevAll"></a>
+
+                            <th:block th:if="${paging.prevPage} < 0">
+                                <a onclick="searchOrder(1)"  class="arrow" id="prev"></a>
+                            </th:block>
+                            <th:block th:unless="${paging.prevPage} < 0">
+                                <a th:onclick="|searchOrder(${paging.prevPage})|" class="arrow" id="prev"></a>
+                            </th:block>
+
+                            <a th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:onclick="|searchOrder(${i})|" th:class="${paging.page eq i} ? on" th:text="${i}">1</a>
+
+                            <th:block th:if="${paging.nextPage} > ${paging.totalPage}">
+                                <a th:onclick="|searchOrder(${paging.totalPage})|" class="arrow" id="next"></a>
+                            </th:block>
+                            <th:block th:unless="${paging.nextPage} > ${paging.totalPage}">
+                                <a th:onclick="|searchOrder(${paging.nextPage})|" class="arrow" id="next"></a>
+                            </th:block>
+
+                            <a th:onclick="|searchOrder(${paging.totalPage})|" class="arrow" id="nextAll"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <th:block th:replace="/part/footer.html"></th:block>
+</div>
+
+<th:block th:replace="/part/js.html"></th:block>
+<script th:inline="javascript">
+    function searchOrder(page){
+        $("input[name=page]").val(page);
+        document.dateSearch.submit();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!-- 2단 검색창+로그인 그룹 선택시 클래스명: middle-search-login-group -->
+<!--검색창-->
+<div class="search_main" th:classappend="${shop.getHeader().getHdSearchStyle()}">
+    <form method="post" name="searchForm" id="searchForm" class="search_form" onsubmit="submitSearch(); return false;">
+        <fieldset class="input position-relative">
+            <input type ="text" id="searchInput" name="input" class="main-search"  placeholder="검색어를 입력해주세요." th:value="${search}">
+            <a type="submit" class="main-search-btn text-16" title="검색하기"><i class="ti-search"></i></a>
+        </fieldset>
+    </form>
+</div>
+
+
+
+<!--로그인 그룹-->
+<div class="login-group">
+    <p class="profile-btn">
+        <button onclick="myToggle()" class="bg-transparent">
+            <i class="group-icon ti-user"></i>
+        </button>
+    </p>
+    <div  id="toggleList"style="visibility: hidden">
+        <ul th:if="${shop.getHeader().getHdLoginType().name() == '문자'}">
+            <th:block th:each="loginStr, i : ${shop.getHeader().getHdLoginGroup()}">
+                <th:block th:unless="${shop.shopLogin}">
+                    <li th:if="${loginStr.equals(T(galaxia.shop.constant.header.HdLoginGroup).LOGIN.name())} and ${@sessionInfo.check()}">
+                        <a href="/customer/login" title="로그인">로그인</a>
+                    </li>
+                    <li th:if="${loginStr.equals(T(galaxia.shop.constant.header.HdLoginGroup).LOGIN.name())} and ${@sessionInfo.check()}">
+                        <a href="/customer/join" title="회원가입">회원가입</a>
+                    </li>
+                    <li th:if="${loginStr.equals(T(galaxia.shop.constant.header.HdLoginGroup).LOGIN.name())} and ${@sessionInfo.check()}">
+                        <a href="/customer/logout.rest" title="로그아웃">로그아웃</a>
+                    </li>
+                </th:block>
+                <li th:if="${loginStr.equals(T(galaxia.shop.constant.header.HdLoginGroup).BASKET.name())}">
+                    <a href="/order/cart" title="장바구니">장바구니</a>
+                </li>
+                <li th:if="${loginStr.equals(T(galaxia.shop.constant.header.HdLoginGroup).MY.name())}">
+                    <a href="/myPage/order" title="마이페이지">마이페이지</a>
+                </li>
+            </th:block>
+        </ul>
+
+        <ul th:if="${shop.getHeader().getHdLoginType().name() == '아이콘'}">
+            <th:block th:each="loginStr, i : ${shop.getHeader().getHdLoginGroup()}">
+                <th:block th:unless="${shop.shopLogin}">
+                    <li th:if="${loginStr.equals(T(galaxia.shop.constant.header.HdLoginGroup).LOGIN.name())} and ${#strings.isEmpty(@sessionInfo.getCuId())}">
+                        <a href="/customer/login" title="로그인">로그인</a>
+                    </li>
+                    <li th:if="${loginStr.equals(T(galaxia.shop.constant.header.HdLoginGroup).LOGIN.name())} and ${#strings.isEmpty(@sessionInfo.getCuId())}">
+                        <a href="/customer/join" title="회원가입">회원가입</a>
+                    </li>
+                    <li th:if="${loginStr.equals(T(galaxia.shop.constant.header.HdLoginGroup).LOGIN.name())} and ${not #strings.isEmpty(@sessionInfo.getCuId())}">
+                        <a href="/customer/logout.rest" title="로그아웃">로그아웃</a>
+                    </li>
+                </th:block>
+                <li th:if="${loginStr.equals(T(galaxia.shop.constant.header.HdLoginGroup).BASKET.name())}">
+                    <a href="/order/cart" title="장바구니">장바구니</a>
+                </li>
+                <li th:if="${loginStr.equals(T(galaxia.shop.constant.header.HdLoginGroup).MY.name())}">
+                    <a href="/myPage/order" title="마이페이지">마이페이지</a>
+                </li>
+            </th:block>
+        </ul>
+    </div>
+</div>

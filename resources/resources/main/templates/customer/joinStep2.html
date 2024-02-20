@@ -1,0 +1,346 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>회원가입</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <section class="padding-section page-title-padding">
+            <div class="container">
+                <div class="page-title color-title">
+                    <h1>회원가입</h1>
+                </div>
+            </div>
+        </section>
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class=" col-xs-12 center-col">
+                        <div class="action_process">
+                            <ul class="step3">
+                                <li><i><img src="/image/icon/information.png" alt="1.약관동의"></i><span class="process-text">1.약관동의</span></li>
+                                <li class="active"><i><img src="/image/icon/edit.png" alt="2.정보입력"></i><span class="process-text">2.정보입력</span></li>
+                                <li><i><img src="/image/icon/check-mark.png" alt="3.가입완료"></i><span class="process-text">3.가입완료</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-7 col-sm-12 col-xs-12 center-col">
+                        <div class="width-100">
+                            <form method="post" name="joinStep2Form" id="joinStep2Form">
+                                <fieldset class="margin-50-bottom">
+                                    <h2 class="input_wrap_tit">필수 정보</h2>
+                                    <div class="input_wrap input-rounded small-rounded input-line-gray">
+                                        <input type="hidden" name="agree1" th:value="${agree1}">
+                                        <input type="hidden" name="agree2" th:value="${agree2}">
+                                        <input type="hidden" name="phoneCheck" th:value="${phoneCheck}">
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">이메일</div>
+                                                <div class="input_cont clearfix">
+                                                    <input type="text" class="form-control notHangul" id="CU_ID" name="CU_ID" placeholder="아이디" onkeyup="autoEmail('CU_ID', this.value)" autocomplete="off">
+                                                    <p id="idCheck" class="text-12 text-red"></p>
+                                                    <div class="chk_styled float-left width-100 margin-10-top">
+                                                        <input type="checkbox" id="CU_MARKETING_MAIL" name="CU_MARKETING_MAIL">
+                                                        <label for="CU_MARKETING_MAIL">이메일 수신동의</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">비밀번호</div>
+                                                <div class="input_cont">
+                                                    <input type="password" class="form-control" id="CU_PW" name="CU_PW" onkeyup="pwCheck();" placeholder="비밀번호 (영문, 숫자 조합  8자 이상)">
+                                                    <p class="text-12 text-gray">※ 영문, 숫자, 특수문자 조합의 10~20자 사용 가능합니다.</p>
+                                                    <p id="pwCheck" class="text-12 text-red"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">비밀번호 확인</div>
+                                                <div class="input_cont">
+                                                    <input type="password" class="form-control" id="CU_PW_CHECK" name="CU_PW_CHECK" onkeyup="pwCheck();" placeholder="비밀번호 확인">
+                                                    <p id="pwCheck2" class="text-12 text-red"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">이름</div>
+                                                <div class="input_cont">
+                                                    <input type="text" class="form-control" id="CU_NAME" name="CU_NAME" th:value="${cuName}"><!-- th:value="${cuName}" -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">핸드폰 번호</div>
+                                                <div class="input_cont clearfix">
+                                                    <input type="tel" class="form-control" id="CU_PHONE" name="CU_PHONE" onkeyup="autoHipenTel(this);" maxlength="13" th:value="${cuPhone}">
+                                                    <div class="chk_styled float-left width-100 margin-10-top">
+                                                        <input type="checkbox" id="CU_MARKETING_SMS" name="CU_MARKETING_SMS">
+                                                        <label for="CU_MARKETING_SMS">핸드폰 수신동의</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">생년월일</div>
+                                                <div class="input_cont clearfix">
+                                                    <input type="text" class="form-control datepicker" name="CU_BIRTH" id="CU_BIRTH" placeholder="yyyy-MM-dd" maxlength="10"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">주소</div>
+                                                <div class="input_cont clearfix">
+                                                    <div>
+                                                        <p class="input-group">
+                                                            <input type="tel" class="form-control radius-right-0" id="CU_POST" name="CU_POST" placeholder="우편번호" readonly />
+                                                            <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" onclick="Common.postCode(this, 'CU')">찾기</button>
+                                    </span>
+                                                        </p>
+                                                    </div>
+                                                    <div class="addr_basic"><input type="text" class="form-control" id="CU_FULLADDR" name="CU_FULLADDR" placeholder="기본주소" readonly /></div>
+                                                    <div class="addr_detail"><input type="text" class="form-control" id="CU_ADDR5" name="CU_ADDR5" placeholder="나머지주소" /></div>
+                                                    <input type="hidden" name="CU_ADDR1" id="CU_ADDR1">
+                                                    <input type="hidden" name="CU_ADDR2" id="CU_ADDR2">
+                                                    <input type="hidden" name="CU_ADDR3" id="CU_ADDR3">
+                                                    <input type="hidden" name="CU_ADDR4" id="CU_ADDR4">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <h2 class="input_wrap_tit">추가 정보</h2>
+                                    <div class="input_wrap">
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">회사명</div>
+                                                <div class="input_cont">
+                                                    <input type="text" class="form-control" id="1" name="" placeholder="회사명 입력" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="input_col">
+                                            <div class="input_row">
+                                                <div class="input_tit">법인코드</div>
+                                                <div class="input_cont">
+                                                    <input type="text" class="form-control" id="2" name="" placeholder="법인코드 입력" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </form>
+                            <div class="text-center margin-40-top">
+                                <button type="button" onclick="joinCustomer()" class="btn btn-point width-150px xs-width-100">가입완료</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+    <script type="text/javascript" src="/js/customer.js"></script>
+    <script th:inline="javascript">
+        //한글입력불가
+        $(".notHangul").keyup(function(event){
+            if (!(event.keyCode >=37 && event.keyCode<=40)) {
+                if(event.keyCode!=16 && event.keyCode!=50 && event.keyCode!=110){
+                    var inputVal = $(this).val();
+                    $(this).val(inputVal.replace(/[^a-z0-9@.]/gi,''));
+                }
+            }
+        });
+    </script>
+    <script th:inline="javascript">
+        //자동 하이픈 입력 (핸드폰)
+        function autoHipenTel(obj) {
+            var str = $(obj).val();
+            str = str.replace(/[^0-9]/g, '');
+
+            var tmp = '';
+            if( str.length < 4){
+                tmp = str;
+            } else if(str.length < 7){
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3);
+            } else if(str.length == 7){
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3);
+            } else if(str.length == 8){
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3, 4);
+                tmp += '-';
+                tmp += str.substr(7);
+            } else if(str.length == 9){
+                tmp += str.substr(0, 2);
+                tmp += '-';
+                tmp += str.substr(2, 3);
+                tmp += '-';
+                tmp += str.substr(5);
+            } else if(str.length == 10){
+                if(str.indexOf('02') == 0) {
+                    tmp += str.substr(0, 2);
+                    tmp += '-';
+                    tmp += str.substr(2, 4);
+                    tmp += '-';
+                    tmp += str.substr(6);
+                } else {
+                    tmp += str.substr(0, 3);
+                    tmp += '-';
+                    tmp += str.substr(3, 3);
+                    tmp += '-';
+                    tmp += str.substr(6);
+                }
+            } else if(str.length == 12){ //인터넷 팩스번호
+                tmp += str.substr(0, 4);
+                tmp += '-';
+                tmp += str.substr(4, 4);
+                tmp += '-';
+                tmp += str.substr(8);
+            } else {
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3, 4);
+                tmp += '-';
+                tmp += str.substr(7);
+            }
+            $(obj).val(tmp);
+        }
+    </script>
+    <script type="text/javascript">
+        function idCheck(){
+            var msg;
+            $.ajax({
+                url : '/customer/idUseCheck.rest',
+                type : 'post',
+                async: false,
+                data : 'cuId='+$("#CU_ID").val(),
+            }).done(function(data){
+                msg = data.message;
+                if(msg == 'OK'){
+                    $("#idCheck").text('');
+                }else{
+                    $("#idCheck").text(msg);
+                }
+            });
+            return msg;
+        }
+
+        function joinCustomer(){
+            var id_check = idCheck();
+            ('id_check == ' + id_check);
+            if(id_check!='OK'){
+                alert(id_check);
+                return false;
+            }
+
+            var pw_check = pwCheck();
+            ('pw_check == ' + pw_check);
+            if(pw_check!='OK'){
+                alert(pw_check);
+                return false;
+            }
+
+            var name = $('input[name=CU_NAME]');
+            if(name.val()==''){
+                alert('이름을 입력해주세요.');
+                name.focus();
+                return false;
+            }
+
+            var phone = $('input[name=CU_PHONE]');
+            if(phone.val()==''){
+                alert('핸드폰 번호를 입력해주세요.');
+                phone.focus();
+                return false;
+            }
+
+            var birth = $('input[name=CU_BIRTH]');
+            if(birth.val()==''){
+                alert('생년월일을 정확히 입력해주세요.');
+                birth.focus();
+                return false;
+            }
+
+
+            var formData = $('form[name=joinStep2Form]').serialize();
+            $.ajax({
+                url : '/customer/joinStep2.rest',
+                type : 'post',
+                data : formData,
+            }).done(function(data){
+                if(data.message != 'OK'){
+                    alert(data.message);
+                }
+                if(data.location != null){
+                    document.joinStep2Form.action = data.location;
+                    document.joinStep2Form.submit();
+                }
+            });
+        }
+    </script>
+    <script th:inline="javascript">
+    //이메일 autocomplete
+    function autoEmail(a,b){
+        /*
+            a : input의 ID
+            b : 입력되는 input의 값
+        */
+        var mailId = b.split('@'); // 메일계정의 ID만 받아와서 처리하기 위함
+        var mailList = [
+            '@naver.com'
+            , '@gmail.com'
+            , '@daun.net'
+            , '@nate.com'
+            , '@hotmail.com'
+            , '@yahoo.com'
+            , '@empas.com'
+            , '@korea.com'
+            , '@dreamwiz.com'
+        ]; // 메일목록
+
+        for(var i=0; i < mailList.length; i++ ){
+            var email = mailId[0] +mailList[i]
+            mailList[i] = email;
+        }
+
+        $('#'+a).autocomplete({
+            source : mailList,
+            select : function(event, ui){
+                ('ui == ' + ui.item.label);
+                ('ui == ' + ui.item.value);
+                ('ui == ' + ui.item.test);
+            }, focus : function(event, ui){
+                return false;
+            }
+        }).autocomplete('instance')._renderItem = function(ul, item) { // UI 변경 부
+            return $('<li>') //기본 tag가 li
+                .append('<div>' + item.value + '</div>') // 원하는 모양의 HTML 만들면 됨
+                .appendTo(ul);
+        };
+    }
+    </script>
+</body>
+</html>

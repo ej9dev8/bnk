@@ -1,0 +1,76 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>회원가입</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <section class="padding-section page-title-padding">
+            <div class="container">
+                <div class="page-title color-title">
+                    <h1>회원가입 완료</h1>
+                </div>
+            </div>
+        </section>
+        <!--<section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class=" col-xs-12 center-col">
+                        <div class="action_process">
+                            <ul class="step3">
+                                <li><i><img src="/image/icon/information.png" alt="1.약관동의"></i><span class="process-text">1.약관동의</span></li>
+                                <li><i><img src="/image/icon/edit.png" alt="2.정보입력"></i><span class="process-text">2.정보입력</span></li>
+                                <li class="active"><i><img src="/image/icon/check-mark.png" alt="3.가입완료"></i><span class="process-text">3.가입완료</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>-->
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-7 col-sm-12 col-xs-12 center-col">
+                        <div class="width-100">
+                            <h3 class="text-center">
+                                <span class="font-weight-800 " th:text="${shop.shopName}"></span>에 오신 걸 환영합니다.
+                            </h3>
+                        </div>
+                        <div class="text-center margin-40-top" th:if="${auth == 'auth'}">
+                            <button type="button" onclick="joinSubmit();" class="btn btn-xlg btn-point width-150px xs-width-100">본인 인증하기</button>
+                        </div>
+                        <div class="text-center margin-20-top" th:classappend="${shop.shopMallType.name() != '코드몰' ? 'margin-40-top':''}">
+                            <button type="button" onclick="location.href='/index'" class="btn btn-xlg btn-point width-150px xs-width-100">홈으로</button>
+                        </div>
+                        <form method="post" id="welcomeForm" name="welcomeForm" th:action="@{/customer/auth/req}">
+                            <input type="hidden" name="bsType" value="코드본인인증">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+
+    <script type="text/javascript" src="/js/common.js"></script>
+    <script type="text/javascript" src="/js/order.js"></script>
+
+    <script th:inline="javascript">
+        function joinSubmit(){
+            var PCC_window = window.open('', 'PCCV3Window', 'width=400, height=630, resizable=1, scrollbars=no, status=0, titlebar=0, toolbar=0, left=300, top=200' );
+
+            // iframe형식으로 개발하시지 말아주십시오. iframe으로 개발 시 나오는 문제는 개발지원해드리지 않습니다.
+            if(PCC_window == null){
+                alert(" ※ 윈도우 XP SP2 또는 인터넷 익스플로러 7 사용자일 경우에는 \n    화면 상단에 있는 팝업 차단 알림줄을 클릭하여 팝업을 허용해 주시기 바랍니다. \n\n※ MSN,야후,구글 팝업 차단 툴바가 설치된 경우 팝업허용을 해주시기 바랍니다.");
+            }
+
+            document.welcomeForm.target = 'PCCV3Window';
+            document.welcomeForm.submit();
+        }
+    </script>
+</body>
+</html>

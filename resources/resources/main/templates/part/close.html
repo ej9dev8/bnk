@@ -1,0 +1,13 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<input type="hidden" id="toLocation" th:value="${toLocation}">
+<script th:if="javascript">
+    var toLocation = document.getElementById("toLocation").value;
+    if(toLocation == 'reload') {
+        opener.location.reload();
+    }else if(toLocation != ''){
+        opener.location.href = toLocation;
+    }else if(toLocation == ''){
+
+    }
+    window.close();
+</script>

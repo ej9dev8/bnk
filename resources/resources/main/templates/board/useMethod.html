@@ -1,0 +1,55 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>이용안내</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <th:block th:replace="/board/comp/menu.html"></th:block>
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table">
+                            <thead class="xs-display-none">
+                                <tr>
+                                    <th style="width:100px">번호</th>
+                                    <th style="width:auto">제목</th>
+                                    <th style="width:120px">작성일</th>
+                                    <th style="width:100px">조회수</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="xs-display-none">1</td>
+                                    <td class="text-left">
+                                        <a href="/board/detail/useMethod" class="text-cut">이용안내 제목</a>
+                                        <div class="display-none xs-display-block text-11 margin-5-top">
+                                            <span class="text-gray padding-10-right">2019-01-21</span>
+                                            <span class="text-gray">조회수  1983</span>
+                                        </div>
+                                    </td>
+                                    <td class="xs-display-none">2019-01-21</td>
+                                    <td class="xs-display-none">1983</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination">
+                        <a href="/board/useMethod" class="arrow" id="prevAll"></a>
+                        <a href="/board/useMethod" class="arrow" id="prev"></a>
+                        <a href="/board/useMethod" class="on">1</a>
+                        <a href="/board/useMethod" class="arrow" id="next"></a>
+                        <a href="/board/useMethod" class="arrow" id="nextAll"></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+</body>
+</html>

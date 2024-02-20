@@ -1,0 +1,45 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>아이디 확인</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+<div class="page-container">
+    <section class="padding-section page-title-padding">
+        <div class="page-title color-title">
+            <h1>아이디 확인</h1>
+        </div>
+    </section>
+    <section class="padding-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 col-sm-12 col-xs-12 center-col">
+                    <div class="width-100">
+                        <fieldset class="margin-25-bottom">
+                            <div class="input_wrap input-rounded small-rounded text-center">
+                                <h4 class="margin-10-bottom">고객님의 아이디는</h4>
+                                <h4 class="font-weight-600" th:text="${CU_ID}"></h4>
+                                <h4>입니다.</h4>
+                            </div>
+                        </fieldset>
+                        <div class="text-center">
+                            <button type="button" onclick="toLogin();" class="btn btn-point width-150px">로그인</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<th:block th:replace="/part/js.html"></th:block>
+<script type="text/javascript" src="/js/customer.js"></script>
+
+<script th:inline="javascript">
+    function toLogin(){
+        location.href = [[@{/customer/login}]]
+    }
+</script>
+</body>
+</html>

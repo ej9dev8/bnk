@@ -1,0 +1,1157 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>/결제</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/pinpad.css">
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <section class="padding-section page-title-padding">
+            <div class="container">
+                <div class="page-title color-title">
+                    <h1>주문/결제</h1>
+                </div>
+            </div>
+        </section>
+        <section class="padding-section sm-display-none">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12 padding-0-lr">
+                        <div class="bg-light">
+                            <div class="action_process custom">
+                                <ul class="step3">
+                                    <li><i><span class="icon ti-shopping-cart"></span></i><span class="process-text"><a class="">장바구니</a></span></li>
+                                    <li class="active"><i><span class="icon ti-pencil-alt"></span></i><span class="process-text"><a class="">주문/결제</a></span></li>
+                                    <li><i><span class="icon ti-check-box"></span></i><span class="process-text"><a class="">주문완료</a></span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <form name="orderForm" method="POST" class="order_form" id="orderForm" th:action="@{/order/payment}" onsubmit="return false;" target="pgFrame">
+                        <input type="hidden" id="isDelivery" th:value="${delivery}">
+                        <input type="hidden" name="sp" th:value="${sp}">
+                        <input type="hidden" id="orderPw" name="caPw">
+                        <input type="hidden" name="caIdx">
+                        <!-- 구매방식 -->
+                        <section class="padding-section">
+                            <div class="area_title">
+                                <h2>구매 방식</h2>
+                            </div>
+                            <div class="tab-display type-rdo">
+                                <ul class="tab-list">
+                                    <li class="tab-item">
+                                        <label class="custom-tab-rdo-wrap">
+                                            <input type="radio" name="sendTo" onclick="sendToOther(false)" value="me" class="custom-rdo" checked/>
+                                            <span class="custom-tab-rdomark">
+                                                <a class="icon-deco">
+                                                <span class="title">본인구매</span>
+                                                </a>
+                                            </span>
+                                        </label>
+                                    </li>
+                                    <li class="tab-item">
+                                        <label class="custom-tab-rdo-wrap">
+                                            <input type="radio" name="sendTo" onclick="sendToOther(true)" value="other" class="custom-rdo">
+                                            <span class="custom-tab-rdomark">
+                                                <a class="icon-deco">
+                                                    <span class="title">선물하기</span>
+                                                </a>
+                                            </span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- [배송상품] 선물하기 / [상품권&쿠폰] 구매, 선물하기 사용시에 표시 -->
+                            <div class="payArea bg-light hideMyDelivery bg-light border-default">
+                                <div class="row">
+                                    <!-- 휴대폰 번호 -->
+                                    <div class="col-md-6 col-sm-12 xs-margin-30-bottom">
+                                        <fieldset class="">
+                                            <div class="area_title">
+                                                <h2 class="font-weight-400">핸드폰 번호</h2>
+                                                <a type="button" id="addPhoneBtn" class="btn btn-sm btn-transparent-light-gray" onclick="makePhoneDiv()" th:unless="${delivery}"><i class="ti-plus" th:unless="${delivery}"></i>번호추가</a>
+                                            </div>
+                                            <div class="input_wrap input-rounded small-rounded send-message">
+                                                <div class="width-100 xs-float-none phone-number">
+                                                    <div class="phoneDiv width-100">
+                                                        <!-- 반복 필요 -->
+                                                        <p class="input-group tel-box display-block">
+                                                            <input type="tel" class="form-control width-100" id="firstPhone" name="phone" onkeyup="autoHipenTel(this);" placeholder="핸드폰번호 ('-' 제외하고 숫자만 입력)" maxlength="13" th:value="${cuPhoneMask}">
+                                                        </p>
+                                                        <!-- 반복 필요 -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <!-- // 휴대폰 번호 -->
+                                    <!-- 발송 메세지 -->
+                                    <div class="col-md-6 col-sm-12">
+                                        <fieldset class="">
+                                            <div class="area_title">
+                                                <h2 class="font-weight-400">발송 메세지</h2>
+                                            </div>
+                                            <div class="input_wrap input-rounded small-rounded send-message">
+                                                <div class="no-margin-bottom" id="diffPhoneDivLine">
+                                                    <div class="">
+                                                        <div class="select-rounded small-rounded">
+                                                            <select class="form-control reason width-100" id="smsTemplate" onchange="choiceSmsTemplate()">
+                                                                <option value="">직접입력</option>
+                                                                <option>생일축하해요</option>
+                                                                <option>고마워요</option>
+                                                                <option>사랑해요</option>
+                                                                <option>힘내세요</option>
+                                                                <option>아프지마세요</option>
+                                                                <option>부탁해요</option>
+                                                                <option>보고싶어요</option>
+                                                                <option>수고했어요</option>
+                                                                <option>건강하세요</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="display-block input_cont width-100 margin-10-tb">
+                                                        <textarea class="form-control margin-0-bottom line-height-20" placeholder="발송메세지 입력 (250byte 제한, 250byte 초과시 메세지 전송 오류 발생)" maxlength="250"
+                                                                id="OP_MESSAGE"  name="OP_MESSAGE" onkeyup="byteLimit(this, 250);" style="resize: vertical; min-height: 80px;"></textarea>
+                                                        </div>
+
+                                                        <span class="byte_text_wrap">
+                                                            <span class="byteLimit">0</span>
+                                                             /
+                                                            <span>250 Byte</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <!-- // 발송 메세지 -->
+                                </div>
+                            </div>
+
+                            <div class="payArea bg-light showMyDelivery" th:if="${delivery}">
+                                <th:block th:replace="order/comp/delivery.html"></th:block>
+                            </div>
+                        </section>
+                        <!-- // 구매방식 -->
+
+                        <!-- 제품정보 -->
+                        <section class="padding-section">
+                            <div class="area_title">
+                                <h2>제품정보 <span class="label label-default margin-5-left" th:text="${pType.name()}">상품분류명</span></h2>
+                            </div>
+                            <!-- 주문내역(모바일) -->
+                            <div class="sm_prod_view_wrap display-none sm-display-block">
+                                <!-- 반복되는 블록 -->
+                                <div class="sm_prod_view" th:each="sp, i : ${spList}" th:classappend="|prod_${i.index}|">
+                                    <div class="order_box sm-lr-fit border-default">
+                                        <p class="order_box_text justify-content-flex-end">
+                                            <i class="ti-close" th:onclick="|deleteProd(${i.index});|"></i>
+                                        </p>
+                                    </div>
+                                    <div class="prod_box">
+                                        <div class="prod_img">
+                                            <img th:src="${sp.shopProduct.product.pThumbnail}" th:alt="${sp.shopProduct.spName}" data-no-retina="">
+                                        </div>
+
+                                        <div class="prod_detail">
+                                            <p class="text-gray small" th:text="${sp.shopProduct.product.brand?.bName}">브랜드명</p>
+                                            <p th:href="@{|/product/detail/${sp.shopProduct.spIdx}|}" class="tit" th:text="${sp.shopProduct.spName}">제품명</p>
+                                            <p class="text-gray small"th:if="${sp.option}">옵션: <span th:utext="${sp.option}">옵션명</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="order-price-box">
+                                        <b>수량</b>
+                                        <div class="count_control">
+                                            <button type="button" th:onclick="|cntControl(${i.index},-1);|" class="minus"><i class="ti-minus"></i></button>
+                                            <input type="text" class="" th:classappend="|opCnt_${i.index}|" th:value="${sp.cnt}"
+                                                   th:pPrice="${sp.shopProduct.product.pPrice}" th:spPrice="${sp.shopProduct.spPrice}" th:max="${sp.getMax()}" readonly>
+                                            <button type="button" th:onclick="|cntControl(${i.index},1);|" class="plus"><i class="ti-plus"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="order-price-box">
+                                        <b>상품금액</b>
+                                        <p>
+                                            <span th:if="${sp.shopProduct.product.pPrice != sp.shopProduct.spPrice}" class="text-medium-gray font-weight-100 xs-margin-2-right text-decoration-line-through">
+                                                <th:block>
+                                                    <span th:text="|${#numbers.formatInteger(sp.shopProduct.product.pPrice, 0, 'COMMA')}|">할인 전 금액</span>
+                                                </th:block>
+                                                <span class="order_after_seal">원</span>
+                                            </span>
+                                            <span>
+                                                <b th:text="|${#numbers.formatInteger(sp.shopProduct.spPrice, 0, 'COMMA')}|">상품금액</b>
+                                                <b class="order_after_seal">원</b>
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="order-price-box">
+                                        <b>주문금액</b>
+                                        <span class="text-red">
+                                            <b th:classappend="|spPrice_${i.index}|" th:text="|${#numbers.formatInteger(sp.shopProduct.spPrice * sp.cnt, 0, 'COMMA')}|">상품금액</b>
+                                            <b class="order_after_seal">원</b>
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- // 반복되는 블록 -->
+                            </div>
+                            <!-- // 주문내역(모바일) -->
+
+                            <!-- 주문내역(웹) -->
+                            <table class="table sm-display-none sm_table_block order_table ie-table-fit" id="prodTableWeb">
+                                <thead class="sm-display-none ">
+                                <tr>
+                                    <th style="width:auto">제품 정보</th>
+                                    <th style="width:100px">수량</th>
+                                    <th style="width:150px">상품금액</th>
+                                    <th style="width:150px">주문금액</th>
+                                    <th style="width:100px">삭제</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="input-rounded small-rounded input-line-gray sm-padding-15-bottom" th:each="sp, i : ${spList}" th:classappend="|prod_${i.index}|">
+                                    <td class="text-left sm_prod_view title_none">
+                                        <div class="prod_box">
+                                            <div class="prod_img">
+                                                <img th:src="${sp.shopProduct.product.pThumbnail}" th:alt="${sp.shopProduct.spName}" data-no-retina="">
+                                            </div>
+                                            <div class="prod_detail">
+                                                <p class="text-gray small" th:text="${sp.shopProduct.product.brand?.bName}">브랜드명</p>
+                                                <p><a th:href="@{|/product/detail/${sp.shopProduct.spIdx}|}" class="tit" th:id="|${i.index}_name|" th:text="${sp.shopProduct.spName}" >제품명</a></p>
+                                                <p class="text-gray small" th:if="${sp.option}">옵션: <span th:utext="${sp.option}">옵션명</span></p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td data-title="수량" class="sm-padding-8-lr sm-padding-8-bottom">
+                                        <div class="count_control">
+                                            <button type="button" th:onclick="|cntControl(${i.index},-1);|" class="minus"><i class="ti-minus"></i></button>
+                                            <input class="padding-0-lr radius-0 line-height-1" type="text" th:classappend="|opCnt_${i.index}|" th:id="${sp.getSpIdxOption()}" name="opCnt" th:value="${sp.cnt}"
+                                                   th:pPrice="${sp.shopProduct.product.pPrice}" th:spPrice="${sp.shopProduct.spPrice}" th:max="${sp.getMax()}" th:idx="${i.index}" readonly>
+                                            <button type="button" th:onclick="|cntControl(${i.index},1);|" class="plus"><i class="ti-plus"></i></button>
+                                        </div>
+                                    </td>
+                                    <td data-title="상품 금액" class="order-price-box">
+                                        <span class="sm-float-right">
+                                            <th:block th:if="${sp.shopProduct.product.pPrice != sp.shopProduct.spPrice}">                                          <span class="text-medium-gray text-14 font-weight-100 display-block sm-display-inline-block xs-margin-2-right text-decoration-line-through">
+                                                    <span th:classappend="|pPrice_${i.index}|" th:text="|${#numbers.formatInteger(sp.shopProduct.product.pPrice, 0, 'COMMA')}|">할인 전 금액
+                                                    </span>
+                                                    <span class="order_after_seal">원</span>
+                                                </span>
+                                            </th:block>
+                                            <span class="text-gray">
+                                                <b class="price" th:text="|${#numbers.formatInteger(sp.shopProduct.spPrice, 0, 'COMMA')}|">상품금액</b>
+                                                <b class="order_after_seal">원</b>
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td data-title="주문 금액" class="order-price-box">
+                                        <span class="sm-float-right">
+                                            <b class="price" th:classappend="|spPrice_${i.index}|" th:text="|${#numbers.formatInteger(sp.shopProduct.spPrice * sp.cnt, 0, 'COMMA')}|">상품금액</b>
+                                            <b class="order_after_seal">원</b>
+                                        </span>
+                                    </td>
+                                    <td data-title="삭제" class="order-price-box">
+                                        <span class="sm-float-right">
+                                            <button type="button" class="btn btn-sm btn-transparent-dark-gray width-100 sm-width-49 margin-5-bottom sm-no-margin-bottom" th:onclick="|deleteProd(${i.index});|">삭제</button>
+                                        </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!-- // 주문내역(웹) -->
+                            <div class="data_none" th:if="${#lists.isEmpty(spList)}">제품정보가 없습니다.</div>
+                        </section>
+                        <!-- //제품정보 -->
+
+                        <!-- 결제 예상 금액 : 선물하기 인원 ver -->
+                        <section class="padding-section">
+                            <div class="area_title">
+                                <h2>결제 예상금액</h2>
+                            </div>
+                            <div class="order_bill_box width-flex-around">
+                                <div class="order-package first point-first bg-light">
+                                    <p class="label">총 상품금액</p>
+                                    <p class="value">
+                                        <b class="salesVal" id="salesVal">총 상품금액</b>
+                                        <b class="order_after_seal">원</b>
+                                    </p>
+                                </div>
+                                <div class="order-package last point-minus bg-light">
+                                    <p class="label">총 기본 할인금액</p>
+                                    <p class="value">
+                                        <b class="discountVal mo-valc mo-point-minus" id="discountVal">총 기본 할인금액</b>
+                                        <b class="order_after_seal">원</b>
+                                    </p>
+                                </div>
+                                <hr class="display-none xs-display-block margin-10-tb">
+                                <div class="display-none xs-display-block">
+                                    <p class="label">합계</p>
+                                    <p class="value">
+                                        <b class="mo-valc" id="subTotal">합계</b>
+                                        <b class="order_after_seal">원</b>
+                                    </p>
+                                </div>
+                                <div class="point-double">
+                                    <p class="label">선물하기 대상인원</p>
+                                    <p class="value">
+                                        <b class="mo-point-double" id="phoneCntVal">인원</b>
+                                        <b class="order_after_seal">명</b>
+                                    </p>
+                                </div>
+
+                                <hr class="display-none xs-display-block margin-10-tb">
+                                <div class="point-equal">
+                                    <p class="label">최종결제예상금액</p>
+                                    <p class="value text-red">
+                                        <b id="buyVal">결제예상금액</b>
+                                        <b class="order_after_seal">원</b>
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- //결제 예상 금액 : 선물하기 인원 ver -->
+
+                        <!-- 결제 예상 금액 : 본인구매 ver -->
+                        <!--<section class="padding-section">
+                            <div class="area_title">
+                                <h2>결제 예상금액</h2>
+                            </div>
+                            <div class="order_bill_box width-flex-around">
+                                <div class="order-package first point-first bg-light">
+                                    <p class="label">총 상품금액</p>
+                                    <p class="value">
+                                        <b class="salesVal" id="salesVal">총 상품금액</b>
+                                        <b class="order_after_seal">원</b>
+                                    </p>
+                                </div>
+                                <div class="order-package last point-minus bg-light">
+                                    <p class="label">총 기본 할인금액</p>
+                                    <p class="value">
+                                        <b class="discountVal mo-valc mo-point-minus" id="discountVal">총 기본 할인금액</b>
+                                        <b class="order_after_seal">원</b>
+                                    </p>
+                                </div>
+                                <hr class="display-none xs-display-block margin-10-tb">
+                                <div class="display-none xs-display-block">
+                                    <p class="label">합계</p>
+                                    <p class="value">
+                                        <b class="mo-valc" id="subTotal">합계</b>
+                                        <b class="order_after_seal">원</b>
+                                    </p>
+                                </div>
+                                <div class="point-double">
+                                    <p class="label">선물하기 대상인원</p>
+                                    <p class="value">
+                                        <b class="mo-point-double" id="phoneCntVal">인원</b>
+                                        <b class="order_after_seal">명</b>
+                                    </p>
+                                </div>
+
+                                <hr class="display-none xs-display-block margin-10-tb">
+                                <div class="point-equal">
+                                   f <p class="label">최종결제예상금액</p>
+                                    <p class="value text-red">
+                                        <b id="buyVal">결제예상금액</b>
+                                        <b class="order_after_seal">원</b>
+                                    </p>
+                                </div>
+                            </div>
+                        </section>-->
+                        <!-- 결제 예상 금액 : 본인구매 ver -->
+                        <section class="padding-section" >
+                            <div class="row">
+                               <div class="col-lg-6 col-md-12">
+                                   <!-- 포인트 적용 -->
+                                   <fieldset class="margin-50-bottom pointArea" th:if="${shop.shopPoint}">
+                                       <th:block th:if="${shop.pg == null && shop.dozn == null}">
+                                           <input type="radio" name="PAY_METHOD" value="POINT" checked="checked" style="display: none;">
+                                           <input type="hidden" name="point">
+                                       </th:block>
+
+                                       <div class="area_title">
+                                           <h2>포인트 적용</h2>
+                                       </div>
+                                       <div class="order_pay_method input_wrap input-rounded small-rounded">
+                                           <div class="box">
+                                               <div class="text">
+                                                   <p>
+                                                       <b class="margin-5-right">사용 가능 포인트</b>
+                                                       <span id="hasPoint" class="color-point" th:text="${#numbers.formatInteger(point, 0, 'COMMA')}">포인트 숫자 표시</span>
+                                                       <span class="color-point">P</span>
+                                                   </p>
+                                               </div>
+
+                                               <th:block th:unless="${shop.pg == null && shop.dozn == null}">
+                                               <div class="input_cont">
+                                                   <div class="select-rounded small-rounded xs-width-100 display-inline-flex justify-content-space-between">
+                                                       <input type="text" class="form-control border-color-sub-light-gray width-250px xs-width-100 text-right" id="point" name="point" onkeyup="setPoint(this);" placeholder="입력">
+                                                       <input type="radio" name="PAY_METHOD" style="display:none;" value="POINT">
+                                                       <button type="button" class="btn btn-dark margin-10-left" onclick="setAllPoint();calMoney();">전액 사용</button>
+                                                   </div>
+                                               </div>
+                                               </th:block>
+
+                                           </div>
+                                       </div>
+                                   </fieldset>
+                                   <!-- // 포인트 적용 -->
+
+                                   <!-- 결제 수단 -->
+                                   <fieldset class="md-margin-50-bottom" th:if="${shop.pg != null || shop.dozn != null}">
+                                       <div class="area_title">
+                                           <h2 class="sm-margin-5-bottom">결제수단 선택</h2>
+                                           <span>포인트로만 결제시 결제수단을 선택할 필요가 없습니다.</span>
+                                       </div>
+                                       <ul class="input_wrap order_pay_method radio_styled" id="payMethodRadio">
+                                           <th:block th:if="${shop.pg != null}">
+                                               <li>
+                                                   <label class="custom-rdo-wrap" for="pay_method1">신용/체크카드
+                                                       <input type="radio"  id="pay_method1" name="PAY_METHOD" value="credit" onchange="checkPayemthod()" class="custom-rdo" />
+                                                       <span class="custom-rdomark"></span>
+                                                   </label>
+                                               </li>
+                                               <li class="pay_method_account">
+                                                   <label class="custom-rdo-wrap" for="pay_method2" >계좌이체
+                                                       <input type="radio"  id="pay_method2" name="PAY_METHOD" value="account" onchange="checkPayemthod()" class="custom-rdo"/>
+                                                       <span class="custom-rdomark"></span>
+                                                   </label>
+                                               </li>
+                                               <!--/**<li>
+                                                   <input type="radio" id="pay_method3" name="PAY_METHOD" value="vaccount" onchange="checkPayemthod()" />
+                                                   <label for="pay_method3">가상계좌</label>
+                                               </li>*/-->
+                                           </th:block>
+                                           <li th:if="${shop.dozn != null}">
+                                               <label class="custom-rdo-wrap" for="pay_method4">실시간 계좌이체
+                                                   <input type="radio" id="pay_method4" name="PAY_METHOD" value="DOZN" onchange="checkPayemthod()" class="custom-rdo" />
+                                                   <span class="custom-rdomark"></span>
+                                               </label>
+                                           </li>
+                                       </ul>
+                                       <ul class="order_pay_method_guide">
+                                           <th:block th:if="${shop.pg != null}">
+                                               <li style="display: none;">
+                                                   <p>※ 신용카드 결제수단 안내</p>
+                                               </li>
+                                               <li style="display: none;" class="pay_method_account">
+                                                   <p>※ 계좌이체 결제수단 안내</p>
+                                               </li>
+                                               <!--/**<li style="display: none;">
+                                                   <p>※ 결제수단 안내</p>
+                                               </li>*/-->
+                                           </th:block>
+                                           <th:block th:if="${shop.dozn != null}">
+                                               <li style="display: none;">
+                                                   <p>※ 실시간 계좌이체 서비스는 갤럭시아머니트리에서 운영하는 간편송금/결제 서비스이며, 등록된 경남은행 계좌로 쉽게 결제가 가능합니다.</p>
+                                                   <p>※ 실시간 계좌이체 결제 시 부분취소가 불가하며 부분 취소를 원하실 경우 전체 취소후 재결제 하시기 바랍니다.</p>
+                                                   <p>※ 실시간 계좌이체 서비스는 송금을 통한 결제서비스로, 갤럭시아콘이 제공하는 할부 혜택과는 무관합니다.</p>
+                                                   <p>※ 결제 및 사용관련 문의는 갤럭시아머니트리(주) 고객센터 (<span th:text="${shop.shopInfo.siCsTel}"></span>/<span th:text="${shop.shopInfo.siCsTime}"></span>)를 이용 바랍니다.</p>
+                                               </li>
+                                           </th:block>
+                                       </ul>
+                                       <!-- // 결제 수단 -->
+                                   </fieldset>
+                               </div>
+                               <div class="col-lg-6 col-md-12">
+                                   <!-- 최종결제 금액 -->
+                                   <fieldset class="">
+                                       <div class="area_title">
+                                           <h2>최종결제금액</h2>
+                                       </div>
+                                       <div class="oreder_pay_method order_final_pay bg-light">
+                                           <div class="display-flex justify-content-space-between" th:if="${shop.shopPoint}">
+                                               <h4 class="title">포인트 사용</h4>
+                                               <span>
+                                                    <b class="point">- <span id="pointVal">0</span></b>
+                                                    <b class="order_after_seal">P</b>
+                                                </span>
+                                           </div>
+                                           <div class="display-flex justify-content-space-between">
+                                               <h4 class="title">결제하실 금액</h4>
+                                               <span class="text-red">
+                                                    <b id="totalVal">0,000</b>
+                                                    <b class="order_after_seal">원</b>
+                                                </span>
+                                           </div>
+                                       </div>
+                                   </fieldset>
+                                   <!-- // 최종결제 금액 -->
+
+                                   <!-- 유의사항 -->
+                                   <fieldset>
+                                       <div class="area_title">
+                                           <h2>유의사항</h2>
+                                       </div>
+                                       <div class="order_pay_method input_wrap input-rounded small-rounded">
+                                           <div class="box">
+                                               <div class="text">
+                                                   <p class="margin-10-bottom">
+                                                       - 갤럭시아머니트리(주)는 전자금융거래법에 따라 금융위원회에 전자금융업자로 등록하였으며, 결제 대금예치업 등록번호는 02-006-00026입니다.
+                                                   </p>
+                                                   <p>
+                                                       - 등록여부는 금융감독원 홈페이지 [전자금융업 등록현황]에서 확인하실 수 있습니다.
+                                                   </p>
+                                               </div>
+
+                                           </div>
+                                       </div>
+                                   </fieldset>
+                                   <!-- // 유의사항 -->
+
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 약관 동의 -->
+                        <section class="padding-section">
+                            <div>
+                                <div class="chk-styled agr-chk width-100 clearfix margin-25-bottom">
+                                    <div class="chk-wrap">
+                                        <p class="chk-text">
+                                            <label class="custom-chk-wrap" for="agreeAll"><b class="text-14">전체동의</b>
+                                                <input type="checkbox" class="custom-input all-chk" id="agreeAll" name="agreeAll">
+                                                <span class="chk_agr custom-checkmark"></span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="chk-styled agr-chk width-100 margin-15-top clearfix">
+                                    <div class="chk-wrap">
+                                        <p class="chk-text">
+                                            <label class="custom-chk-wrap font-weight-500" for="O_TERMS_SALE"><b class="text-red-orange">[필수]</b> 위 상품의 정보를 확인하셨으며, 구매에 동의하십니까? <br>(전자상거래법 제8조 2항에 의거)
+                                                <input type="checkbox" class="custom-input" id="O_TERMS_SALE" name="O_TERMS_SALE">
+                                                <span class="chk_agr custom-checkmark"></span>
+                                            </label>
+                                            <!--<a><input type="checkbox" id="O_TERMS_SALE" name="O_TERMS_SALE"></a>
+                                            <a>
+                                                <label for="O_TERMS_SALE" class="line-height-18 margin-5-left margin-5-bottom">
+                                                        <span class="chk_agr text-sm-medium font-weight-500 height-auto">
+                                                            <b class="text-red-orange">[필수]</b> 위 상품의 정보를 확인하셨으며, 구매에 동의하십니까? <br>(전자상거래법 제8조 2항에 의거)
+                                                        </span>
+                                                </label>
+                                            </a>-->
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="chk-styled agr-chk width-100 margin-15-top clearfix">
+                                    <div class="chk-wrap">
+                                        <p class="chk-text">
+                                            <label class="custom-chk-wrap font-weight-500" for="O_TERMS_1"> <b class="text-red-orange">[필수]</b> 1. <span th:text="${T(galaxia.shop.constant.agreement.AgmType).PAY1.getName()}"></span>
+                                                <input type="checkbox" class="custom-input" id="O_TERMS_1" name="O_TERMS_1">
+                                                <span class="chk_agr custom-checkmark"></span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <p class="chk-btn"><button type="button" onclick="agreement('PAY1')" class="btn btn-sm btn-dark float-right">전문보기</button></p>
+                                </div>
+                                <div class="chk-styled agr-chk width-100 margin-10-top clearfix">
+                                    <div class="chk-wrap">
+                                        <p class="chk-text">
+                                            <label class="custom-chk-wrap font-weight-500" for="O_TERMS_2"><b class="text-red-orange">[필수]</b> 2. <span th:text="${T(galaxia.shop.constant.agreement.AgmType).PAY2.getName()}"></span>
+                                                <input type="checkbox" class="custom-input" id="O_TERMS_2" name="O_TERMS_2">
+                                                <span class="chk_agr custom-checkmark"></span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <p class="chk-btn"><button type="button" onclick="agreement('PAY2')" class="btn btn-sm btn-dark float-right">전문보기</button></p>
+                                </div>
+                                <div class="chk-styled agr-chk width-100 margin-10-top clearfix">
+                                    <div class="chk-wrap">
+                                        <p class="chk-text">
+                                            <label class="custom-chk-wrap font-weight-500" for="O_TERMS_3"><b class="text-red-orange">[필수]</b> 3. <span th:text="${T(galaxia.shop.constant.agreement.AgmType).PAY3.getName()}"></span>
+                                                <input type="checkbox" class="custom-input" id="O_TERMS_3" name="O_TERMS_3">
+                                                <span class="chk_agr custom-checkmark"></span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <p class="chk-btn"><button type="button" onclick="agreement('PAY3')" class="btn btn-sm btn-dark float-right">전문보기</button></p>
+                                </div>
+                                <div class="chk-styled agr-chk width-100 margin-10-top clearfix" th:if="${shop.dozn != null}">
+                                    <div class="chk-wrap">
+                                        <p class="chk-text">
+                                            <label class="custom-chk-wrap font-weight-500" for="O_TERMS_4"><b class="text-red-orange">[필수]</b> 4. <span th:text="${T(galaxia.shop.constant.agreement.AgmType).DOZN.getName()}"></span>
+                                                <input type="checkbox" class="custom-input" id="O_TERMS_4" name="O_TERMS_4">
+                                                <span class="chk_agr custom-checkmark"></span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <p class="chk-btn"><button type="button" onclick="agreement('DOZN')" class="btn btn-sm btn-dark float-right">전문보기</button></p>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- // 약관 동의 -->
+                    </form>
+                    <!-- 구매버튼 -->
+                    <section class="padding-section text-center">
+                        <button type="button" onclick="toPayment();" class="btn btn-point submit-btn">주문하기</button>
+                    </section>
+                    <!-- // 구매버튼 -->
+                    <div id="paymentForm">
+                        <form style="display: none;" name="payment" method="post">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:replace="/part/footer.html"></th:block>
+        <th:block th:replace="/part/loading.html"></th:block>
+        <th:block th:replace="/dozn/accountChoiceModal.html"></th:block>
+        <div id="Agreement"></div>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+    <th:block th:replace="/pg/pg_iframe.html"></th:block>
+
+
+    <script type="text/javascript" src="/js/order.js"></script>
+    <script th:inline="javascript">
+        //본인구매, 선물하기
+        function sendToOther(toOther){
+            //첫 전화번호 빼고 삭제
+            $('.phoneTo').remove();
+
+            var isDelivery=$('#isDelivery').val() == 'true';
+            if(toOther){
+                $('.showMyDelivery').hide();
+                $('.hideMyDelivery').show();
+                $('#addPhoneBtn').show();
+
+                $("input[name=phone]").val('');
+            }else{
+                $('.showMyDelivery').show();
+                if(isDelivery){
+                    $('.hideMyDelivery').hide();
+                }
+                $('#addPhoneBtn').hide();
+
+                var phone = [[${cuPhoneMask}]];
+                $("input[name=phone]").val(phone);
+            }
+        }
+
+        function makePhoneDiv(){
+            var sendTo=$('input[name=sendTo]:checked').val();
+            if(sendTo!='other'){
+                return;
+            }
+
+            var check = true;
+            $.each($("input[name=opCnt]"), function (){
+                var spIdx = $(this).attr('id').replace(/[^0-9]/gi, '');
+                var phoneLen = $("input[name=phone]").length;
+                var opMax = Number($(this).attr('max'));
+                var opCnt = $(this).val();
+                if( (opCnt * phoneLen) >= opMax){
+                    spIdx = $(this).attr('idx');
+                    var name = $("#"+spIdx+"_name").text();
+                    alert(name+'의 최대 구매 가능 수량은 '+opMax+'개 입니다.');
+                    check = false;
+                    return false;
+                }
+            });
+
+            if(check){
+                var phoneInput='<p class="input-group tel-box phoneTo">' +
+                    '<input type="tel" class="form-control xs-width-100 radius-right-0" name="phone" onkeyup="autoHipenTel(this);" placeholder="핸드폰번호 (\'-\' 제외하고 숫자만 입력)" maxlength="13">' +
+                    '<span class="input-group-btn "><button class="btn btn-default" type="button" onclick="deletePhone(this);">삭제</button></span></p>';
+                $('.phoneDiv').append(phoneInput);
+            }
+
+            calMoney();
+        }
+        //번호 삭제
+        function deletePhone(obj){
+
+            $.each($("input[name=opCnt]"), function(){
+                var spIdx = $(this).attr('id');
+                var opCnt=Number($('.opCnt_'+spIdx).val());
+
+                var phoneLen = $("input[name=phone]").length;
+                var opMax = Number($('.opCnt_'+spIdx).attr('max'));
+                if( (opCnt * phoneLen) > opMax){
+                    var name = $("#"+spIdx+"_name").text();
+                    alert(name+'의 최대 구매 가능 수량은 '+opMax+'개 입니다.');
+                    return false;
+                }
+            });
+            $(obj).parent().parent().remove();
+            calMoney();
+        }
+
+        //전화번호 길이 체크. 10자리 이상으로
+        function phoneNumCheck(phoneNum){
+            phoneNum=phoneNum.replace(/[^0-9]/gi, '');
+            if(phoneNum.length > 9){
+                return true;
+            }
+            return false;
+        }
+        //약관 동의 체크
+        function checkAgm(){
+            var O_TERMS_SALE = $("#O_TERMS_SALE");
+            if(O_TERMS_SALE.prop('checked')){
+                O_TERMS_SALE.val('Y');
+            }else{
+                O_TERMS_SALE.val('');
+                alert('구매동의 약관에 동의해주세요.');
+                return false;
+            }
+            var O_TERMS_1 = $("#O_TERMS_1");
+            if(O_TERMS_1.prop('checked')){
+                O_TERMS_1.val('Y');
+            }else{
+                O_TERMS_1.val('');
+                alert('제 3자 정보제공 동의에 동의해주세요.');
+                return false;
+            }
+            var O_TERMS_2 = $("#O_TERMS_2");
+            if(O_TERMS_2.prop('checked')){
+                O_TERMS_2.val('Y');
+            }else{
+                O_TERMS_2.val('');
+                alert('개인정보 수집이용동의에 동의해주세요.');
+                return false;
+            }
+            var O_TERMS_3 = $("#O_TERMS_3");
+            if(O_TERMS_3.prop('checked')){
+                O_TERMS_3.val('Y');
+            }else{
+                O_TERMS_3.val('');
+                alert('결제취소 및 환불 관련 동의에 동의해주세요.');
+                return false;
+            }
+
+            var O_TERMS_4 = $("#O_TERMS_4");
+            var pay_method = $('input[name="PAY_METHOD"]:checked').val();
+            if(pay_method == 'DOZN'){
+                if(O_TERMS_4 != null && O_TERMS_4.prop('checked')){
+                    O_TERMS_4.val('Y');
+                }else{
+                    O_TERMS_4.val('');
+                    alert('오픈뱅킹 공동업무 출금이체 동의에 동의해주세요.');
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        //배송정보 체크
+        var prefix = [[${prefix}]]
+        var prefix_person = [[${prefix_person}]]
+        function deliveryInfo(){
+            var name = $("input[name="+prefix_person+"_NAME");
+            if(name.val() == ''){
+                alert('받는 분 이름을 입력해주세요.');
+                name.focus();
+                return false;
+            }
+            var phone = $("input[name="+prefix_person+"_PHONE");
+            if(phone.val() == ''){
+                alert('받는 분 핸드폰 번호를 입력해주세요.');
+                phone.focus();
+                return false;
+            }
+
+            var post = $("input[name="+prefix+"_POST");
+            var detailAddr = $("input[name="+prefix+"_ADDR5");
+            if(post.val() == '' || detailAddr.val() == ''){
+                alert('주소를 입력해주세요.');
+                detailAddr.focus();
+                return false;
+            }
+            return true;
+        }
+
+        //주문하기
+        function toPayment(){
+            //휴대폰 체크
+            var sendTo=$('input[name=sendTo]:checked').val();
+            if(sendTo !='me'){
+                var opPhoneArr=$("input[name=phone]");
+                for(var opp=0;opp<opPhoneArr.length;opp++){
+                    var phone = $(opPhoneArr[opp]);
+                    if( !phoneNumCheck(phone.val()) ){
+                        alert('수신자 번호를 정확히 입력해주세요.');
+                        phone.focus();
+                        return false;
+                    }
+                }
+            }else if(sendTo == 'me'){//본인구매시
+                //배송상품만
+                var isDelivery = $("#isDelivery").val();
+                if(isDelivery){
+                    if( !deliveryInfo()){
+                        return ;
+                    }
+                }
+            }
+
+
+            //결제수단 체크
+            var pointCheck = false;
+            if( $("input[name=point]").length != 0){
+                var buyVal = $("#buyVal").text().replace(/[^0-9]/gi, '');
+                var point = $("input[name=point]").val().replace(/[^0-9]/gi, '');
+                if(buyVal == point){
+                    $("input[name=PAY_METHOD]").prop('checked', false);
+                    $.each($("input[name=PAY_METHOD]"), function(){
+                        var obj = $(this);
+                        if(obj.val() == 'POINT'){
+                            pointCheck = true;
+                            obj.prop('checked', true);
+                        }
+                    });
+                }
+            }
+            if(!pointCheck){
+                if($("input[name=PAY_METHOD]:checked").val() == null){
+                    alert('결제 수단을 선택해주세요.');
+                    return false;
+                }
+            }
+
+            //약관 동의 체크
+            if( !checkAgm() ){
+                return;
+            }
+
+            var opCntLen = $("input[name=opCnt]").length;
+            if( opCntLen == 0 ){
+                alert('주문상품이 없습니다.');
+                return false;
+            }else{
+                //다시 주문버튼 누른 경우를 위해 삭제
+                $(".spCnt").remove();
+                $.each($("input[name=opCnt]"), function(){
+                    var opCnt = $(this);
+                    $("input[name=sp]").after('<input type="hidden" class="spCnt" name="'+opCnt.attr('id')+'" value="'+opCnt.val()+'">');
+                });
+            }
+
+
+            var pay_method = $('input[name="PAY_METHOD"]:checked').val();
+            if(pay_method == 'DOZN'){
+                accountChoiceModal();
+            }else{
+                //PG
+                if(pay_method != 'POINT'){
+                    $('#pgModal').modal('show');
+                }
+                document.orderForm.submit();
+                event.preventDefault();
+            }
+        }
+
+        //결제 계좌 선택
+        function selectCa(caIdx){
+            $('#doznModal').modal('hide');
+
+            $('#orderForm input[name=caIdx]').val(caIdx);
+
+            // 가상키패드 설정
+            orderPwPinShow();
+        }
+
+
+        //발송메세지 입력 byte확인
+        function byteLimit(obj, maxByte) {
+            var str = obj.value;
+            var str_len = str.length;
+            var rbyte = 0;
+            var rlen = 0;
+            var one_char = "";
+            var str2 = "";
+
+
+            for(var i=0; i<str_len; i++) {
+                one_char = str.charAt(i);
+                if(escape(one_char).length > 4) {
+                    rbyte += 2;                                         //한글2Byte
+                }else{
+                    rbyte++;                                            //영문 등 나머지 1Byte
+                }
+                if(rbyte <= maxByte){
+                    rlen = i+1;                                          //return할 문자열 갯수
+                }
+            }
+            if(rbyte > maxByte){
+                str2 = str.substr(0,rlen);                                  //문자열 자르기
+                obj.value = str2;
+                byteLimit(obj, maxByte);
+            }else {
+                $(".byteLimit").text(rbyte);
+            }
+        }
+        // 발송메세지 템플릿 선택
+        function choiceSmsTemplate(){
+            var template = $('#smsTemplate').val();
+            $('textarea[name="OP_MESSAGE"]').val(template);
+            byteLimit(document.getElementById('OP_MESSAGE'), 250);
+        }
+        //수량 조절
+        function cntControl(spIdx, cnt){
+            var opCnt=Number($('.opCnt_'+spIdx).val());
+            opCnt+=cnt;
+            if(opCnt <= 0){
+                opCnt=1;
+            }
+
+            var phoneLen = $("input[name=phone]").length;
+            var opMax = Number($('.opCnt_'+spIdx).attr('max'));
+            if( (opCnt * phoneLen) > opMax){
+                var name = $("#"+spIdx+"_name").text();
+                alert(name+'의 최대 구매 가능 수량은 '+opMax+'개 입니다.');
+                return false;
+            }
+
+            $('.opCnt_'+spIdx).val(opCnt);
+
+            var spPrice = $('.opCnt_'+spIdx).attr('spPrice');
+
+            $(".spPrice_"+spIdx).text(comma(spPrice*opCnt));
+
+            calMoney();
+        }
+
+        //결제 금액 계산
+        function calMoney(){
+            var total_pPrice = 0;//총 상품금액
+            var total_spPrice = 0;//총 할인된 상품금액
+
+            //상품주문금액 합계
+            $.each($("input[name=opCnt]"), function(){
+                var opCnt = $(this).val();
+                var pPrice = $(this).attr('pPrice');
+                var spPrice = $(this).attr('spPrice');
+
+                total_pPrice += (opCnt * pPrice);
+                total_spPrice += (opCnt * spPrice);
+            });
+
+            //예상결제금액(발송번호 수 * 상품금액)
+            $('#salesVal').html( comma(total_pPrice) );
+            $('#discountVal').html( comma(total_pPrice-total_spPrice) );
+            $("#subTotal").html( comma(total_spPrice));
+
+            var phoneLen = $("input[name=phone]").length;//발송 번호 수
+            $("#phoneCntVal").html(phoneLen);
+
+
+            //전체금액(상품주문금액 * 발송인원)
+            var totalPrice = 0;
+            //포인트 적용
+            var salesVal = $("#salesVal").text().replace(/[^0-9]/g, '');
+            var discountVal = $("#discountVal").text().replace(/[^0-9]/g, '');
+            totalPrice = parseInt(salesVal - discountVal);//총결제예상금액
+            totalPrice = totalPrice * phoneLen;
+
+            //최종결제예상금액
+            $('#buyVal').html( comma(totalPrice) );
+
+            var point = 0;
+            if($("input[name=point]").length != 0){
+                //PG, DOZN 없을 때 포인트 전체적용처리
+                if( $('input[name="PAY_METHOD"]').length == 1){
+                    if( $('input[name="PAY_METHOD"]').val() == 'POINT' ){
+                        setAllPoint();
+                    }
+                }
+
+                //사용가능 포인트 세팅
+                var hasPoint = [[${point}]];
+                var usablePoint = 0;
+                if(hasPoint > 0){
+                    if(totalPrice == 0){
+                        usablePoint = 0;
+                    }else{
+                        usablePoint = Math.min(totalPrice, hasPoint);
+                    }
+                }
+
+                point = parseInt($("input[name=point]").val().replace(/[^0-9]/gi, ''));
+                if(isNaN(point)){
+                    point = 0;
+                }
+
+                if(point > totalPrice){
+                    point = totalPrice;
+                }
+
+                $("input[name=point]").val( comma(point) );
+                $("#pointVal").text( comma(point));
+            }
+
+            //최종결제금액
+            totalPrice = totalPrice - point;
+            $('#totalVal').html( comma(totalPrice) );
+        }
+
+        //포인트 적용 (입력시 바로 적용)
+        function setPoint(obj){
+            inputNumberFormat(obj);
+
+            var salesVal = $("#salesVal").text().replace(/[^0-9]/g, '');
+            var discountVal = $("#discountVal").text().replace(/[^0-9]/g, '');
+            var phoneLen = $("input[name=phone]").length;
+            var totalPrice = parseInt(salesVal - discountVal);//총결제예상금액
+                totalPrice = totalPrice * phoneLen;
+
+            var hasPoint = parseInt($("#hasPoint").text().replace(/[^0-9]/g, ''));
+            var point = parseInt($(obj).val().replace(/[^0-9]/g, ''));
+            var usablePoint = Math.min(totalPrice, hasPoint);
+            // $('#hasPoint').html(comma(usablePoint));
+
+            if(isNaN(point)){
+                $(obj).val(0);
+                calMoney();
+                return false;
+            }else if(point > usablePoint){
+                alert('사용 가능 포인트 : '+ comma(usablePoint) +'P');
+                $(obj).val(0);
+                $(obj).focus();
+
+                calMoney();
+                return false;
+            }
+
+            $(obj).val(comma(point));
+            calMoney();
+        }
+
+        function setAllPoint(){
+            //최종결제예상금액
+            var buyVal = parseInt($("#buyVal").text().replace(/[^0-9]/g, ''));
+            //잔여포인트
+            var usablePoint = parseInt($("#hasPoint").text().replace(/[^0-9]/g, ''));
+
+            $("input[name=point]").val(comma(Math.min(buyVal,usablePoint)));
+        }
+
+        function deleteProd(idx){
+            if(confirm('해당 상품을 삭제하시겠습니까?')){
+                $(".prod_"+idx).remove();
+
+            }
+            if($("input[name=opCnt]").length == 0){
+                $("#prodTableWeb").after('<div class="data_none">제품정보가 없습니다.</div>');
+                $("input[name=point]").val(0);
+            }
+            calMoney();
+        }
+
+        //배송지 선택
+        function popAddress(){
+            var url = [[@{|/myPage/address|}]];
+            window.open(url, 'address', 'width=1070, height=650, resizable=1, scrollbars=no, status=0, titlebar=0, toolbar=0, left=300, top=200' );
+        }
+
+        //결제수단 선택
+        function checkPayemthod(){
+            $.each($('input[name=PAY_METHOD]'), function(key, val){
+                if($(this).prop('checked') == true){
+                    $('.order_pay_method_guide > li').eq(key).show().siblings().hide();
+                }
+            });
+        }
+    </script>
+    <!-- 가상 키패드 -->
+    <script type="text/javascript" src="/js/pinpad.js"></script>
+    <script th:inline="javascript">
+        var orderPwPin=null;
+        function orderPwPinShow(){
+            orderPwPin=new pinpad({
+                ref : {
+                    el : $('#orderPw')
+                },
+                skin : 'basic',
+                passcode : true,
+                immediate : true,
+                maxLength : 6,
+                desc : '비밀번호 6자리 입력',
+                letterReplace : {
+                    'del' : '<i class="fa fa-long-arrow-left" data-toggle="tooltip" title="fa fa-long-arrow-left"></i>',
+                    'done' : '<i class="fa fa-check" data-toggle="tooltip" title="fa fa-check"></i>'
+                },
+                oncomplete : function(){
+                    $('#loadDiv').fadeIn(1500);
+                    //결제 결과 요청 화면 띄우기
+                    $.ajax({
+                        url:[[@{/dozn/payment.ajax}]]
+                        ,type: 'post'
+                        ,data:$('#orderForm').serialize()
+                    }).done(function(res){
+                        if(res.message != null){
+                            alert(res.message);
+                        }
+                        if(res.location != null){
+                            location.replace(res.location);
+                        }else if( res.data.daIdx != null){
+                            location.href = [[@{/dozn/result}]]+'?daIdx='+res.data.daIdx;
+                        }
+                    }).fail(function(jqXHR, textStatus, errorThrown){
+                        if(jqXHR.responseJSON.message != null){
+                            alert(jqXHR.responseJSON.message);
+                        }
+                    }).always(function(){
+                        $('#loadDiv').hide();
+                    });
+                }
+            });
+            orderPwPin.show();
+        }
+
+        //dozn만 사용하는 경우 자동 선택
+        if( $('input[name=PAY_METHOD]').length == 1 ){
+            $('input[name=PAY_METHOD]').trigger('click');
+        }
+
+        $('#agreeAll').change(function(){
+            if($(this).prop('checked') == true){
+                $('input[name="O_TERMS_SALE"]').prop('checked',true);
+                $('input[name="O_TERMS_1"]').prop('checked',true);
+                $('input[name="O_TERMS_2"]').prop('checked',true);
+                $('input[name="O_TERMS_3"]').prop('checked',true);
+                $('input[name="O_TERMS_4"]').prop('checked',true);
+            }else{
+                $('input[name="O_TERMS_SALE"]').prop('checked',false);
+                $('input[name="O_TERMS_1"]').prop('checked',false);
+                $('input[name="O_TERMS_2"]').prop('checked',false);
+                $('input[name="O_TERMS_3"]').prop('checked',false);
+                $('input[name="O_TERMS_4"]').prop('checked',false);
+            }
+        });
+
+        $('input[name^="O_TERMS_"]').change(function(){
+            var input = $('input[name^="O_TERMS_"]').length;
+            var chkInput = $('input[name^="O_TERMS_"]:checked').length;
+
+            if(input == chkInput){
+                $('#agreeAll').prop('checked',true);
+            }else{
+                $('#agreeAll').prop('checked',false);
+            }
+        });
+
+        //한글만 가능
+        $(".onlyHangul").keyup(function(event){
+            if (!(event.keyCode >=37 && event.keyCode<=40)) {
+                var inputVal = $(this).val();
+                $(this).val(inputVal.replace(/[a-z0-9]/gi,''));
+            }
+        });
+
+        sendToOther(false);
+        calMoney();
+
+    </script>
+</body>
+</html>

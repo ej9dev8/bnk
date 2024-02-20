@@ -1,0 +1,42 @@
+<th:block th:each="mso, j : ${ms.getMainSectionOrders()}" th:if="${mso.productGroup != null}">
+<div class="group-wrap" >
+    <!--WEB-->
+<!--    <div th:if="${mso.productGroup.pgDesign != null && mso.productGroup.pgDesign == '타입A'}">-->
+<!--        <th:block th:replace="/design/product/web/web-prd-type-a.html"></th:block>-->
+<!--    </div>-->
+    <div th:if="${mso.productGroup.pgDesign != null && mso.productGroup.pgDesign == '타입B'}">
+        <th:block th:replace="/design/product/web/web-prd-type-b.html"></th:block>
+    </div>
+    <div th:if="${mso.productGroup.pgDesign != null && mso.productGroup.pgDesign == '타입C'}">
+        <th:block th:replace="/design/product/web/web-prd-type-c.html"></th:block>
+    </div>
+    <div th:if="${mso.productGroup.pgDesign != null && mso.productGroup.pgDesign == '타입D'}">
+        <th:block th:replace="/design/product/web/web-prd-type-d.html"></th:block>
+    </div>
+    <div th:if="${mso.productGroup.pgDesign != null && mso.productGroup.pgDesign == '타입E'}">
+        <th:block th:replace="/design/product/web/web-prd-type-e.html"></th:block>
+    </div>
+    <div th:if="${mso.productGroup.pgDesign != null && mso.productGroup.pgDesign == '타입F'}">
+        <th:block th:replace="/design/product/web/web-prd-type-f.html"></th:block>
+    </div>
+    <!--/WEB-->
+
+    <!--MOBILE-->
+    <div th:if="${mso.productGroup.pgDesignMobile != null && mso.productGroup.pgDesignMobile == '타입A'}">
+        <th:block th:replace="/design/product/mobile/mo-prd-type-a.html"></th:block>
+    </div>
+    <div th:if="${mso.productGroup.pgDesignMobile != null && mso.productGroup.pgDesignMobile == '타입B'}">
+        <th:block th:replace="/design/product/mobile/mo-prd-type-b.html"></th:block>
+    </div>
+    <div th:if="${mso.productGroup.pgDesignMobile != null && mso.productGroup.pgDesignMobile == '타입C'}">
+        <th:block th:replace="/design/product/mobile/mo-prd-type-c.html"></th:block>
+    </div>
+    <div th:if="${mso.productGroup.pgDesignMobile != null && mso.productGroup.pgDesignMobile == '타입D'}">
+        <th:block th:replace="/design/product/mobile/mo-prd-type-d.html"></th:block>
+    </div>
+    <div th:if="${mso.productGroup.pgDesignMobile != null && mso.productGroup.pgDesignMobile == '타입E'}">
+        <th:block th:replace="/design/product/mobile/mo-prd-type-e.html"></th:block>
+    </div>
+    <!--/MOBILE-->
+</div>
+</th:block>

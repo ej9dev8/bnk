@@ -1,0 +1,29 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${shop.shopName}">갤럭시아</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <section class="bridge-wrapper">
+            <p class="padding-30-top padding-30-bottom"><img src="/image/logo/galaxia_moneytree_logo.png" class="display-block margin-auto width-200px"></p>
+            <h3 class="text-center"><b>갤럭시아 머니트리</b>로<br>이동 중입니다.</h3>
+        </section>
+        <section class="bridge-text-wrapper">
+            <ul class="text-15">
+                <li>선물하기는 <th:block th:text="${shop.shopInfo.siName}"></th:block>의 제휴사인 갤럭시아머니트리에서 제공합니다.</li>
+                <li class="padding-10-top padding-10-bottom">
+                    <b><th:block th:text="${shop.shopInfo.siName}"></th:block>은 갤럭시아 머니트리에서 운영하는 페이지에 연결하는 역할만 하는 통신판매중개자이며, 서비스의 제공과 그 책임은 제휴사인 갤럭시아 머니트리에 있습니다.</b>
+                </li>
+                <p class="bg-light margin-15-top padding-10-all">
+                    <b>문의처</b>
+                    <span class="margin-10-left margin-10-right">|</span>
+                    갤럭시아머니트리 고객센터 <span th:text="${shop.shopInfo.siCsTel}">고객센터 전화번호</span>
+                </p>
+            </ul>
+        </section>
+    </div>
+</body>
+</html>

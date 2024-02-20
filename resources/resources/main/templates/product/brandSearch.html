@@ -1,0 +1,197 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div class="container">
+  <div class="tab-content" id="brandSearchDiv">
+    <div class="prod-detail-wrap">
+      <div class="tab-list-content">
+        <div class="display-inline-flex">
+          <h4 class="font-weight-700 xs-text-16 margin-20-top xs-margin-3-bottom">브랜드</h4>
+          <!--<div class="search-select-btn">
+            <a class="all-btn all-chk" onclick="selectAllBrands(true)">전체선택</a>
+            <a class="all-btn all-unchk" onclick="selectAllBrands(false)">전체해제</a>
+          </div>-->
+        </div>
+        <div class="swiper1 brand-search-slide">
+          <div class="swiper-container-list swiper-container-btn">
+            <ul class="swiper-wrapper" id="brandUl">
+              <!--상품그룹에서 사용. 대분류는 ajax로 load-->
+              <!--<li class="swiper-slide thumb-slide active" onclick="brandSearchAll();" id="brandAll">
+                <div class="thumb-box">
+                  <p class="thumb-img">
+                    <img src="/image/icon/all.png">
+                  </p>
+                  <p class="thumb-text color-point">전체보기</p>
+                </div>
+              </li>
+
+              <li class="swiper-slide thumb-slide brandSearchLi" onclick="brandSearch(this)" th:each="brand : ${brandList}" th:attr="b_idx=|${brand.B_IDX}|" >
+                <div class="thumb-box">
+                  <p class="thumb-img">
+                    <img th:src="${brand.B_THUMBNAIL}" th:alt="${brand.B_NAME}">
+                  </p>
+                  <p class="thumb-text" th:text="${brand.B_NAME}"></p>
+                </div>
+              </li>-->
+              <!--상품그룹에서 사용. 대분류는 ajax로 load -->
+            </ul>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <button class="search-accordion">
+          <h4 class="search-btn font-weight-700 xs-text-16 margin-10-top xs-margin-3-bottom">가격설정
+            <span class="angle angle-down ti-angle-down"></span>
+            <span class="angle angle-up ti-angle-up"></span>
+          </h4>
+      </button>
+      <div class="search-panel padding-0">
+        <div class="prod-detail-wrap">
+          <div class="tab-list-content">
+            <div class="filter_wrap">
+                <div class="filter_col">
+                  <div class="filter_row">
+                    <div class="filter_cont filter_category">
+                      <ul class="filter_list filter_list1">
+                        <li class="priceLi active" onclick="priceSearch(this)" min="-1" max="-1">
+                          <a>전체보기</a>
+                        </li>
+
+                        <li class="priceLi" onclick="priceSearch(this)" min="0" max="3000">
+                          <a>3천원 이하</a>
+                        </li>
+
+                        <li class="priceLi" onclick="priceSearch(this)" min="3000" max="5000">
+                          <a>3천원 ~ 5천원</a>
+                        </li>
+
+                        <li class="priceLi" onclick="priceSearch(this)" min="5000" max="10000">
+                          <a>5천원 ~ 1만원</a>
+                        </li>
+
+                        <li class="priceLi" onclick="priceSearch(this)" min="10000" max="20000">
+                          <a>1만원 ~ 2만원</a>
+                        </li>
+                        <li class="priceLi" onclick="priceSearch(this)" min="20000" max="30000">
+                          <a>2만원 ~ 3만원</a>
+                        </li>
+                        <li class="priceLi" onclick="priceSearch(this)" min="30000" max="50000">
+                          <a>3만원 ~ 5만원</a>
+                        </li>
+                        <li class="priceLi" onclick="priceSearch(this)" min="50000" max="-1">
+                          <a>5만원 이상</a>
+                        </li>
+                        <li class="price_enter priceLi" id="customPriceLi" min="-1" max="-1" onclick="priceSearch(this)">
+                          <a class="wrap padding-0">
+                            <form id="priceSearchForm" class="price_search" onkeyup="if(event.keyCode == 13) customPriceSearch();" onsubmit="return false;">
+                              <input type="text" id="priceSearch1" class="price_query text-right" placeholder="최소금액" onblur="customPriceSearch();">
+                              <span class="wavecon">~</span>
+                              <input type="text" id="priceSearch2" class="price_query text-left" placeholder="최대금액" onblur="customPriceSearch();">
+                            </form>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:none;" id="brandSearchBtn">
+        <div class="padding-20-top text-center">
+          <a onclick="clickBrandSearch()" class="btn btn-xlg btn-point">검색하기</a>
+        </div>
+    </div>
+  </div>
+</div>
+
+  <script>
+  //function loadProduct index에서는 사용X. list에서는 사용
+
+    function brandSearchAll(){
+      $(".brandSearchLi").removeClass('active');
+      $("#brandAll").addClass('active');
+      if(typeof loadProduct =='function'){
+        loadProduct(1);
+      }
+    }
+
+    function brandSearch(obj){
+        $("#brandAll").removeClass('active');
+        $(obj).toggleClass('active');
+
+        if(typeof loadProduct =='function'){
+          loadProduct(1);
+        }
+    }
+    //가격 설정
+    function priceSearch(obj){
+        $('.priceLi').removeClass('active');
+        $(obj).addClass('active');
+
+        if(typeof loadProduct =='function'){
+          loadProduct(1);
+        }
+    }
+    //수동 가격 검색
+    function customPriceSearch(){
+        $('.priceLi').removeClass('active');
+        $('#customPriceLi').addClass('active');
+
+        var min=$('#priceSearch1').val();
+        min=min.replace(/[^0-9\.\,\-]/gi, '');
+        if(min==''){
+            min=-1;
+        }
+        $('#customPriceLi').attr('min',min);
+
+        var max=$('#priceSearch2').val();
+        max=max.replace(/[^0-9]/gi, '');
+        if(max==''){
+            max=-1;
+        }
+        $('#customPriceLi').attr('max',max);
+
+        if(typeof loadProduct =='function'){
+          loadProduct(1);
+        }
+    }
+
+    function clickBrandSearch(){
+        if(typeof loadProduct =='function'){
+          loadProduct(1);
+        }
+    }
+    //전체선택, 전체해제
+    function selectAllBrands(bool){
+      if(bool){
+        $('.brandSearchLi').addClass('active');
+      }else{
+        $('.brandSearchLi').removeClass('active');
+      }
+
+      if(typeof loadProduct =='function'){
+        loadProduct(1);
+      }
+    }
+  </script>
+  <script th:inline="javascript">
+        var acc = document.getElementsByClassName("search-accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+          acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+              panel.style.display = "none";
+            } else {
+              panel.style.display = "block";
+            }
+          });
+        }
+    </script>
+</html>

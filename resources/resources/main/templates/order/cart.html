@@ -1,0 +1,393 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>장바구니</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <section class="padding-section page-title-padding">
+            <div class="container">
+                <div class="page-title color-title">
+                    <h1>장바구니</h1>
+                </div>
+            </div>
+        </section>
+        <section class="padding-section sm-display-none">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12 padding-0-lr">
+                        <div class="bg-light">
+                            <div class="action_process custom">
+                                <ul class="step3">
+                                    <li class="active"><i><span class="icon ti-shopping-cart"></span></i><span class="process-text"><a class="">장바구니</a></span></li>
+                                    <li><i><span class="icon ti-pencil-alt"></span></i><span class="process-text"><a class="">주문/결제</a></span></li>
+                                    <li><i><span class="icon ti-check-box"></span></i><span class="process-text"><a class="">주문완료</a></span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="padding-section half-padding-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="gift">
+                            <form name="basketForm" method="POST" class="cart_form">
+                                <fieldset class="" id="componentCart">
+                                    <div class="area_title">
+                                        <h2>제품정보 <span class="label label-default margin-5-left">쿠폰</span></h2>
+                                    </div>
+                                    <!-- 주문내역(웹) -->
+                                    <table class="table sm_table_block sm-display-none" id="componentTable">
+                                        <thead>
+                                            <tr>
+                                                <th class="width-50px sm-width-100 table-chk">
+                                                    <label for="partAllChk" class="custom-chk-wrap display-inline-block margin-mi-8-top sm-margin-10-top sm-margin-18-bottom">
+                                                        <input type="checkbox" class="custom-input" id="partAllChk" name="allChk" checked="checked" />
+                                                        <span class="chk_agr custom-checkmark sm-margin-2-left">
+                                                            <span class="display-none sm-display-block sm-margin-20-left">전체선택<b class="text-red" id="chkLen">(1)</b></span>
+                                                        </span>
+                                                    </label>
+                                                </th>
+                                                <th class="sm-display-none" style="width:auto">제품 정보</th>
+                                                <th class="sm-display-none" style="width:100px">수량</th>
+                                                <th class="sm-display-none" style="width:120px">상품금액</th>
+                                                <th class="sm-display-none" style="width:120px">주문금액</th>
+                                                <th class="sm-display-none" style="width:120px">주문/삭제</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody th:if="${not #lists.isEmpty(carts)}">
+                                            <tr th:each="cart, i : ${carts}" th:class="|cart_${cart.SP_IDX}|">
+                                                <td class="chk_styled title_none chk">
+                                                    <label class="custom-chk-wrap font-weight-500">
+                                                        <input type="checkbox" class="custom-input cartChk" th:classappend="|cartChk_${cart.SP_IDX}|" th:attr="spIdx=${cart.SP_IDX}" th:id="|cart_check_${cart.SP_IDX}|" name="chkIdx" th:value="${cart.SP_IDX}" checked/>
+                                                        <span class="chk_agr custom-checkmark"></span>
+                                                    </label>
+                                                    <p class="prod_delete display-none sm-display-block">
+                                                        <i class="ti-close" th:onclick="|cartDelete('each',${cart.SP_IDX})|"></i>
+                                                    </p>
+                                                </td>
+                                                <td class="text-left sm_prod_view title_none">
+                                                    <div class="prod_box">
+                                                        <div class="prod_img">
+                                                            <a th:href="@{|/product/detail/${cart.SP_IDX}|}">
+                                                                <img th:src="${cart.P_THUMBNAIL}" th:if="${not #strings.isEmpty(cart.P_THUMBNAIL)}" th:alt="${cart.SP_NAME}" />
+                                                            </a>
+                                                        </div>
+                                                        <div class="prod_detail">
+                                                            <p class="text-gray small" th:text="${cart.B_NAME}">브랜드명</p>
+                                                            <p><a class="tit" th:href="@{|/product/detail/${cart.SP_IDX}|}" th:text="${cart.SP_NAME}" th:id="|sp_name_${cart.SP_IDX}|">제품명</a></p>
+                                                            <p class="text-gray small">옵션: <span>옵션명</span></p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td data-title="수량">
+                                                    <div class="count_control sm-float-right">
+                                                        <button type="button" onclick="Cart.countControl('-', this)" th:attr="pType=${cart.P_TYPE},spIdx=${cart.SP_IDX}" class="minus"><i class="ti-minus"></i></button>
+                                                        <input type="text" th:class="|count ctCount_${cart.SP_IDX}|" th:id="|cart_count_${cart.SP_IDX}|" name="ctCount" th:attr="pType=${cart.P_TYPE},spIdx=${cart.SP_IDX},spOnce=${cart.SP_QUOTA_ONCE},spDay=${cart.SP_QUOTA_DAY}" th:value="${cart.CT_COUNT}" readonly="readonly" />
+                                                        <button type="button" onclick="Cart.countControl('+', this)" th:attr="pType=${cart.P_TYPE},spIdx=${cart.SP_IDX}" class="plus"><i class="ti-plus"></i></button>
+                                                        <input type="hidden" th:id="|cart_price_${cart.SP_IDX}|" name="ctSpIdx" th:value="${cart.SP_PRICE}" th:pPrice="${cart.P_PRICE}"><!---->
+                                                    </div>
+                                                </td>
+                                                <td data-title="상품금액">
+                                                    <span class="sm-float-right price">
+                                                        <span th:if="${cart.P_PRICE != cart.SP_PRICE}" class="text-medium-gray font-weight-100 display-block sm-display-inline-block xs-margin-2-right text-decoration-line-through pPrice_1">
+                                                            <span th:text="${#numbers.formatInteger(cart.P_PRICE, 0, 'COMMA')}">P_PRICE</span>
+                                                            <span class="order_after_seal">원</span>
+                                                        </span>
+                                                        <span>
+                                                            <b class ="text-dark-gray" th:id="|cart_product_price_${cart.SP_IDX}|" th:text="|${#numbers.formatInteger(cart.SP_PRICE, 0, 'COMMA')}|">상품금액</b>
+                                                            <b class="order_after_seal">원</b>
+                                                        </span>
+                                                    </span>
+                                                </td>
+                                                <td data-title="주문금액">
+                                                    <span class="sm-float-right price">
+                                                        <b th:class="|cart_order_price_${cart.SP_IDX}|"  th:text="|${#numbers.formatInteger(cart.SP_PRICE * cart.CT_COUNT, 0, 'COMMA')}|">주문금액</b>
+                                                        <b class="order_after_seal">원</b>
+                                                    </span>
+                                                </td>
+                                                <td class="title_none">
+                                                    <button type="button" th:onclick="|cartDelete('each',${cart.SP_IDX})|" class="btn btn-xs btn-transparent-dark-gray width-100 margin-5-bottom">삭제</button>
+                                                    <button type="button" th:onclick="|toOrder('each', ${cart.SP_IDX})|"class="btn btn-xs btn-dark width-100">바로구매</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- //주문내역(웹) -->
+
+                                    <!-- 주문내역(모바일) -->
+                                    <div class="sm_prod_view_wrap display-none sm-display-block" th:if="${not #lists.isEmpty(carts)}">
+                                        <div class="width-100 padding-20-bottom table-chk">
+                                            <label class="custom-chk-wrap display-inline-block margin-mi-8-top sm-margin-10-top sm-margin-18-bottom">
+                                                <input type="checkbox" class="custom-input" name="allChk" checked="checked" />
+                                                <span class="chk_agr custom-checkmark sm-margin-2-left">
+                                                    <span class="display-block width-80px sm-margin-25-left">전체선택<b class="text-red">(1)</b></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <!-- 반복되는 블록 -->
+                                        <div class="sm_prod_view prod_0" th:each="cart, i : ${carts}" th:classappend="|cart_${cart.SP_IDX}|">
+                                            <div class="order_box sm-lr-fit border-default">
+                                                <label class="custom-chk-wrap font-weight-500">
+                                                    <input type="checkbox" class="custom-input cartChk" th:classappend="|cartChk_${cart.SP_IDX}|" th:attr="spIdx=${cart.SP_IDX}" th:value="${cart.SP_IDX}" checked/>
+                                                    <span class="chk_agr custom-checkmark"></span>
+                                                </label>
+                                                <p class="order_box_text width-auto">
+                                                    <i class="ti-close" th:onclick="|cartDelete('each',${cart.SP_IDX})|"></i>
+                                                </p>
+                                            </div>
+                                            <div class="prod_box">
+                                                <div class="prod_img">
+                                                    <a th:href="@{|/product/detail/${cart.SP_IDX}|}">
+                                                        <img th:src="${cart.P_THUMBNAIL}" th:if="${not #strings.isEmpty(cart.P_THUMBNAIL)}" th:alt="${cart.SP_NAME}" />
+                                                    </a>
+                                                </div>
+                                                <div class="prod_detail">
+                                                    <p class="text-gray small" th:text="${cart.B_NAME}">브랜드명</p>
+                                                    <p><a class="tit" th:href="@{|/product/detail/${cart.SP_IDX}|}" th:text="${cart.SP_NAME}" th:id="|sp_name_${cart.SP_IDX}|">제품명</a></p>
+                                                    <p class="text-gray small">옵션: <span>옵션명</span></p>
+
+                                                </div>
+                                            </div>
+                                            <div class="order-price-box">
+                                                <b>수량</b>
+                                                <div class="count_control">
+                                                    <button type="button" onclick="Cart.countControl('-', this)" th:attr="pType=${cart.P_TYPE},spIdx=${cart.SP_IDX}" class="minus"><i class="ti-minus"></i></button>
+                                                    <input type="text" th:class="|count ctCount_${cart.SP_IDX}|" th:attr="pType=${cart.P_TYPE},spIdx=${cart.SP_IDX},spOnce=${cart.SP_QUOTA_ONCE},spDay=${cart.SP_QUOTA_DAY}" th:value="${cart.CT_COUNT}" readonly="readonly" />
+                                                    <button type="button" onclick="Cart.countControl('+', this)" th:attr="pType=${cart.P_TYPE},spIdx=${cart.SP_IDX}" class="plus"><i class="ti-plus"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="order-price-box">
+                                                <b>상품금액</b>
+                                                <p>
+                                                    <span class="price text-gray">
+                                                        <span th:if="${cart.P_PRICE != cart.SP_PRICE}" class="text-medium-gray font-weight-100 display-block sm-display-inline-block xs-margin-2-right text-decoration-line-through pPrice_1">
+                                                            <span th:text="${#numbers.formatInteger(cart.P_PRICE, 0, 'COMMA')}">P_PRICE</span>
+                                                            <span class="order_after_seal">원</span>
+                                                        </span>
+                                                        <span>
+                                                            <b th:id="|cart_product_price_${cart.SP_IDX}|" th:text="|${#numbers.formatInteger(cart.SP_PRICE, 0, 'COMMA')}|">상품금액</b>
+                                                            <b class="order_after_seal">원</b>
+                                                        </span>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                            <div class="order-price-box">
+                                            <b>주문금액</b>
+                                            <span class="price">
+                                                    <b th:class="|cart_order_price_${cart.SP_IDX}|"  th:text="|${#numbers.formatInteger(cart.SP_PRICE * cart.CT_COUNT, 0, 'COMMA')}|">주문금액</b>
+                                                    <b class="order_after_seal">원</b>
+                                                </span>
+                                        </div>
+                                        <div class="order-price-box">
+                                            <button type="button" th:onclick="|toOrder('each', ${cart.SP_IDX})|"class="btn btn-xs btn-dark margin-10-top">바로구매</button>
+                                        </div>
+                                        </div>
+                                        <!-- // 반복되는 블록 -->
+                                    </div>
+                                    <!-- // 주문내역(모바일) -->
+                                    <div th:if="${#lists.isEmpty(carts)}" class="data_none">
+                                        <p>장바구니에 담긴 상품이 없습니다.</p>
+                                    </div>
+                                    <div class="cart_bill component_bill sm-lr-fit border-top border-default padding-15-all bg-light text-right" th:if="${not #lists.isEmpty(carts)}" >
+                                        <span>총 <b id="cartsSize" th:text="${#lists.size(carts)}">1</b>개</span>
+                                        <span class="margin-5-left">
+                                            <b id="totalProduct" th:text="${#numbers.formatInteger(productPriceSum, 0 , 'COMMA')}">상품금액</b>
+                                            <b class="order_after_seal">원</b>
+                                        </span>
+                                        <!--<span class="xs-display-block">＋ 배송비&nbsp;<b id="totalDelivery">0</b>원</span>-->
+                                        <span class="margin-5-left">＝</span>
+                                        <span class="margin-5-left">총 합계</span>
+                                        <span class="margin-5-left">
+                                            <b class="text-red price" id="totalOrder" th:text="${#numbers.formatInteger(orderPriceSum, 0 , 'COMMA')}">주문금액</b>
+                                            <b class="order_after_seal">원</b>
+                                        </span><!--총 주문금액-->
+                                    </div>
+                                </fieldset>
+                            </form>
+                            <div class="margin-20-top">
+                                <button type="button" onclick="cartDelete('check', '')" class="btn btn-sm btn-transparent-gray margin-20-right"><i class="ti-close"></i> 선택삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="padding-section half-padding-section" th:if="${not #lists.isEmpty(carts)}" >
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <ul class="order_bill_box width-flex-around">
+                            <div class="point-first">
+                                <p class="label">총 상품금액</p>
+                                <p class="value">
+                                    <span>
+                                        <b id="totalProductSum" th:text="${#numbers.formatInteger(productPriceSum, 0, 'COMMA')}">0</b>
+                                        <b class="order_after_seal">원</b>
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="point-minus">
+                                <p class="label">할인금액</p>
+                                <p class="value">
+                                    <span>
+                                        <b id="totalDiscountSum">0</b>
+                                        <b class="order_after_seal">원</b>
+                                    </span>
+                                </p>
+                            </div>
+                            <hr class="display-none xs-display-block margin-10-tb">
+                            <div class="point-equal">
+                                <p class="label">결제예상금액</p>
+                                <p class="value">
+                                    <span class="text-red">
+                                        <b id="totalOrderSum" th:text="${#numbers.formatInteger(orderPriceSum, 0, 'COMMA')}">0</b>
+                                        <b class="order_after_seal">원</b>
+                                    </span>
+                                </p>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="padding-section" th:if="${not #lists.isEmpty(carts)}" >
+            <div class="display-flex justify-content-center">
+                <button type="button" onclick="toOrder('check', '')" class="btn btn-xlg btn-point-outline margin-10-right">선택상품 주문</button>
+                <button type="button" onclick="toOrder('all', '')" class="btn btn-xlg btn-point">전체상품 주문</button>
+            </div>
+        </section>
+        <form name="cartForm" id="cartForm" method="post" action="/order/order">
+        </form>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+    <script type="text/javascript" src="/js/order.js"></script>
+    <script th:inline="javascript">
+        //주문
+        function toOrder(type, sp_idx){
+            //기존에 담아놓았던 상품제거
+            $("#cartForm input").remove();
+
+            if(type == 'each'){//개별
+                $("#cartForm").append('<input type="hidden" name="sp" value="'+sp_idx+'">');
+                $("#cartForm").append('<input type="hidden" name="'+sp_idx+'" value="'+$("#cart_count_"+sp_idx).val()+'">');
+            }else{//선택/전체
+                var sp = '';
+                $.each($('input[name="chkIdx"]'), function() {
+                    //선택일 때는 선택된 상품만
+                    if(type == 'check' && !$(this).prop('checked')){
+                        return true;
+                    }
+                    sp_idx = $(this).val();
+                    sp += sp_idx+',';
+                    $("#cartForm").append('<input type="hidden" name="'+sp_idx+'" value="'+$("#cart_count_"+sp_idx).val()+'">');
+
+                });
+                $("#cartForm").append('<input type="hidden" name="sp" value="'+sp+'">');
+            }
+            document.cartForm.submit();
+        }
+
+        //삭제
+        var delBool = true;
+        function cartDelete(type, idx){
+            var formData = '';
+            var confirmMsg = '해당 상품을 삭제하시겠습니까?';
+            if(type == 'each'){//개별
+                formData = idx;
+            }else{
+                if(type == 'check'){
+                    confirmMsg = '선택한 상품을 삭제하시겠습니까?';
+                }else{
+                    confirmMsg = '전체 상품을 삭제하시겠습니까?';
+                }
+                $.each($('input[name="chkIdx"]'), function(key, val) { // 테이블
+                    //선택일 때는 선택된 상품만
+                    if(type == 'check' && !$(this).prop('checked')){
+                        return true;
+                    }
+                    formData += $(this).val()+',';
+                });
+            }
+
+            if(formData == ''){
+                alert('삭제하실 상품을 선택해주세요.');
+                return false;
+            }
+
+            if (confirm(confirmMsg) && delBool) {
+                delBool = false;
+                $.ajax({
+                    url : "/order/cart/delete.rest",
+                    data : {"cartSpIdx":formData},
+                    type : 'POST',
+                    success : function(data) {
+                        if(data == 'OK'){
+                            //해당 상품 블락 제거
+                            if(type == 'each'){
+                                $(".cart_"+formData).remove();
+                            }else{
+                                var idxArr = formData.split(',');
+                                for(var i=0; i<idxArr.length; i++){
+                                    $(".cart_"+idxArr[i]).remove();
+                                }
+                            }
+                            //삭제 후 상품 없으면 data_none 노출
+                            if($('input[name=chkIdx]').length == 0){
+                                $("#cartTable").after('<div class="data_none"><p>장바구니에 담긴 상품이 없습니다.</p>');
+                            }
+                        }
+                        //가격 재설정
+                        Cart.orderPrice();
+                        Cart.totalPrice();
+                        Cart.totalPriceSum();
+                    },
+                    error : function(data, status, er) {
+                        alert("에러발생, 관리자에게 문의하세요 [" + status + "_" + er + "]");
+                    }
+                }).always(function(){
+                    delBool = true;
+                });
+            }
+        }
+    </script>
+    <script>
+        $(document).ready(function() {
+            //전체 체크박스 선택시
+            $('input[name=allChk]').on('click', function() {
+                if ( $(this).prop('checked') ) {
+                    $('.cartChk').prop('checked', true);
+                } else {
+                    $('.cartChk').prop('checked', false);
+                }
+            });
+            //개별 체크박스 선택시
+            $('.cartChk').change(function(){
+               var chk = $(this);
+               var chkState = $(this).prop('checked');
+               var spIdx = $(this).attr('spIdx');
+               $('.cartChk_'+spIdx).prop('checked', chkState);
+
+                var chkLen = $('.cartChk:checked').length;
+                var len = $('.cartChk').length;
+                if(chkLen==len){
+                    $('input[name=allChk]').prop('checked', true);
+                }else{
+                    $('input[name=allChk]').prop('checked', false);
+                }
+            });
+
+            Cart.orderPrice();
+            Cart.totalPrice();
+            Cart.totalPriceSum();
+        });
+    </script>
+</body>
+</html>

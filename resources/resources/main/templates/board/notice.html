@@ -1,0 +1,85 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>공지사항</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <th:block th:replace="/board/comp/menu.html"></th:block>
+                    <section class="padding-section">
+                        <table class="table">
+                            <caption class="hidden">공지사항 게시판</caption>
+                            <thead class="xs-display-none">
+                                <tr>
+                                    <th style="width:100px">번호</th>
+                                    <th style="width:auto">제목</th>
+                                    <th style="width:120px">작성일</th>
+                                </tr>
+                            </thead>
+                            <tbody th:if="${not #lists.isEmpty(noticeTop)}">
+                                <tr class="bg-light" th:each="nt, i : ${noticeTop}">
+                                    <td class="xs-display-none"><i class="ti-announcement"></i></td>
+                                    <td class="text-left">
+                                        <a th:href="@{|/board/detail/notice/${nt.ntIdx}|}" class="text_cut" th:text="${nt.ntTitle}">제목</a>
+                                        <div class="display-none xs-display-block text-11 margin-5-top">
+                                            <span class="text-gray padding-10-right" th:text="${#temporals.format(nt.createdDate, 'yyyy-MM-dd')}">날짜</span>
+            <!--                                            <span class="text-gray padding-10-right" th:text="${nt.createdDate}">날짜</span>-->
+                                        </div>
+                                    </td>
+                                    <td class="xs-display-none" th:text="${#temporals.format(nt.createdDate, 'yyyy-MM-dd')}">날짜</td>
+            <!--                                    <td class="xs-display-none" th:text="${nt.createdDate}">날짜</td>-->
+                                </tr>
+                            </tbody>
+                            <tbody th:if="${not #lists.isEmpty(notice.getContent())}">
+                                <tr th:each="nt, i : ${notice.getContent()}">
+                                    <td class="xs-display-none" th:text="${paging.totalCount}-(${paging.listCount}*(${paging.page}-1))-${i.index}">IDX</td>
+                                    <td class="text-left">
+                                        <a th:href="@{|/board/detail/notice/${nt.ntIdx}|}" class="text_cut" th:text="${nt.ntTitle}">제목</a>
+                                        <div class="display-none xs-display-block text-11 margin-5-top">
+                                            <span class="text-gray padding-10-right" th:text="${#temporals.format(nt.createdDate, 'yyyy-MM-dd')}">날짜</span>
+            <!--                                            <span class="text-gray padding-10-right" th:text="nt.createdDate">날짜</span>-->
+                                        </div>
+                                    </td>
+                                    <td class="xs-display-none" th:text="${#temporals.format(nt.createdDate, 'yyyy-MM-dd')}">날짜</td>
+            <!--                                    <td class="xs-display-none" th:text="${nt.createdDate}">날짜</td>-->
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div th:if="${#lists.isEmpty(notice.getContent())}" class="data_none"><p>공지사항이 없습니다.</p></div>
+                        <div class="text-center" th:if="${not #lists.isEmpty(notice.getContent())}">
+                            <div class="pagination">
+                                <a href="/board/notice?page=1" class="arrow" id="prevAll"></a>
+
+                                <th:block th:if="${paging.prevPage} < 0">
+                                    <a href="/board/notice?page=1"  class="arrow" id="prev"></a>
+                                </th:block>
+                                <th:block th:unless="${paging.prevPage} < 0">
+                                    <a th:href="@{|/board/notice?page=${paging.prevPage}|}"  class="arrow" id="prev"></a>
+                                </th:block>
+
+                                <a th:each="i : ${#numbers.sequence(paging.startPage, paging.endPage)}" th:href="@{|/board/notice?page=${i}|}" th:class="${paging.page eq i} ? on" th:text="${i}">1</a>
+
+                                <th:block th:if="${paging.nextPage} > ${paging.totalPage}">
+                                    <a th:href="@{|/board/notice?page=${paging.totalPage}|}" class="arrow" id="next"></a>
+                                </th:block>
+                                <th:block th:unless="${paging.nextPage} > ${paging.totalPage}">
+                                    <a th:href="@{|/board/notice?page=${paging.nextPage}|}" class="arrow" id="next"></a>
+                                </th:block>
+
+                                <a th:href="@{|/board/notice?page=${paging.totalPage}|}" class="arrow" id="nextAll"></a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+    <th:block th:replace="/part/js.html"></th:block>
+</body>
+</html>

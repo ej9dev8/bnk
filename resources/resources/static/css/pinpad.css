@@ -1,0 +1,234 @@
+.pinpad-dimmed .low *,
+.pinpad-dimmed .low *::before,
+.pinpad-dimmed .low *::after {
+  box-sizing: border-box;
+}
+
+.pinpad-dimmed {
+	width:100%;
+	min-height:100%;
+	position: absolute;
+	display:grid;
+	/* footer 보이고싶으면 top 주석처리 */
+	top : 0;
+	left:0;
+	/* background-color: #fff; */
+	background-color: rgb(0, 0, 0, 0.5);
+	margin:0;
+	padding:0;
+	z-index:9998;
+	bottom: 50px;
+	align-items: end;
+	
+	/* width: 100%;
+    min-height: 100%;
+    position: absolute;
+    z-index: 10;
+    align-items: end;
+    background-color: rgb(0, 0, 0, 0.5); */
+}
+
+body.pinpad-noscroll {
+	overflow-y : hidden;
+}
+
+.outer_wrapper {
+    width: 100%;
+    height: 50%;
+    display: block;
+    position: fixed;
+    min-height: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+
+.pinpad-dimmed .inner_wrapper {
+/* 	display:grid;
+	width:100%;
+	min-height:100%;
+    grid-template-rows: 2fr 2fr; */
+	display: block;
+    width: 100%;
+    min-height: 0;
+    position: fixed;
+	bottom: 0;
+}
+
+.wrapper{
+	position: absolute;
+	height: 100%;
+}
+
+.pinpad-dimmed .inner_wrapper > div {
+	width :100%;
+	height : 100%;
+	min-height : 100px;
+	display:table;
+	background-color: #fff;	
+}
+
+/* 데스크탑 */
+.pinpad-dimmed.window {
+	display:table;
+	top : 0;
+	background-color: rgb(0, 0, 0, 0.5);
+}
+.pinpad-dimmed.window .wrapper {
+/* 	display: table-cell;
+	vertical-align: middle;
+	text-align: center; */
+	
+	position: absolute;
+    height: 100%;
+}
+.pinpad-dimmed.window .inner_wrapper {
+/* 	display:inline-block;
+	width: 100%;
+    max-width: 340px; */
+    
+	display: block;
+    position: fixed;
+    min-height: 0;
+    bottom: 0;
+    max-width: 768px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+.pinpad-dimmed.window .high {
+	height: 150px !important;
+	position: relative;
+}
+
+
+.pin-board {
+	vertical-align: top;
+	display:table-cell;
+	width:100%;
+	vertical-align: middle;
+	text-align:center;
+	/* border:1px solid #fff; */
+}
+.pin-board .pin {
+	font-size: 25px;
+	max-height: 25px;
+	letter-spacing: 0.3em;
+	width : 100%;
+	color: #2476EE;
+	word-break: break-all;
+}
+
+.pin-board .pin-close {
+    font-size: 21px;
+    background: #fff;
+    position: absolute;
+    right: 3%;
+    top: 13%;
+}
+
+.pin-board .pin-desc {
+	font-size:20px;
+	min-height:30px;
+	max-height:30px;
+	margin: 5px 0;
+}
+
+.pinpad {
+	left:0;
+	width: 100%;
+	vertical-align: bottom;
+	display:table-cell;
+	margin:0;
+	padding:0;
+}
+
+.pinpad .toolbar {
+	border-top: 1px solid rgb(199, 199, 199);
+	border-bottom: 1px solid rgb(199, 199, 199);
+}
+.pinpad .toolbar .button {
+	padding:3px 5px;
+	font-size:22px;
+	font-weight:400;
+}
+
+.pinpad .pads {
+	border-top: 1px solid rgb(199, 199, 199);
+}
+.pinpad .number {
+	background-color: #fff;
+	width : 33.33%;
+	text-align:center;
+	float:left;
+	cursor: pointer;
+	border-bottom: 1px solid rgb(199, 199, 199);
+	user-select: none;
+	padding-bottom: 3px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.pinpad .number.x3:nth-last-child(3),
+.pinpad .number.x3:nth-last-child(2),
+.pinpad .number.x3:last-child{
+    min-height: 66.41px;
+}
+
+.pinpad .number.x4 {
+	width : 25%;
+}
+.pinpad .number.x5 {
+	width : 20%;
+}
+.pinpad .number span {
+	vertical-align: middle;
+	font-size:26px;
+	font-weight:400;
+	color : #333;
+}
+.pinpad .number.x3:nth-child(3n+2) { /* 2, 5, 8 ... */
+	border-left: 1px solid rgb(199, 199, 199);
+	border-right: 1px solid rgb(199, 199, 199);
+}
+.pinpad .number.x4:nth-child(2n+1) { /* 1, 3, 5, 7, 9 ... */
+	border-left: 1px solid rgb(199, 199, 199);
+	border-right: 1px solid rgb(199, 199, 199);
+}
+.pinpad .number.x5:nth-child(5n+2) { /* 2, 7 ... */
+	border-left: 1px solid rgb(199, 199, 199);
+	border-right: 1px solid rgb(199, 199, 199);
+}
+.pinpad .number.x5:nth-child(5n+4) { /* 4, 9 ... */
+	border-left: 1px solid rgb(199, 199, 199);
+	border-right: 1px solid rgb(199, 199, 199);
+}
+
+
+/**** gray skin ****/
+.pinpad-dimmed.gray {
+	/* background-color: #eee; */
+}
+.pinpad-dimmed.gray .pinpad .number {
+	background-color: #666;
+}
+.pinpad-dimmed.gray .pinpad .number > span {
+	color:#ddd;
+}
+.pinpad-dimmed.gray .inner_wrapper > div {
+	background-color: #eee;
+}
+
+/**** blue skin ****/
+.pinpad-dimmed.blue {
+	/* background-color: #e4efff; */
+}
+.pinpad-dimmed.blue .pinpad .number {
+	background-color: rgb(74, 89, 177);
+}
+.pinpad-dimmed.blue .pinpad .number > span {
+	color:#ddd;
+}
+.pinpad-dimmed.blue .inner_wrapper > div {
+	background-color: rgb(228, 239, 255);
+}

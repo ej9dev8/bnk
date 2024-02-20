@@ -1,0 +1,72 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>1:1문의</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+
+            <div class="container">
+                <div class="row">
+                    <th:block th:replace="/myPage/comp/menu.html"></th:block>
+                    <div class="col-xs-12">
+                        <section class="padding-section">
+                            <table class="table table_view">
+                                <thead>
+                                    <tr>
+                                        <th class="view_tit event-title-wrap">
+                                            <h1 class="event-title">
+                                                <p class="title" th:text="${qna.qnaTitle}">제목</p>
+                                                <span class="date" th:utext="${'작성일 : '+ #strings.substring(qna.createdDate, 0,10)}">작성일</span>
+                                                <!--<span style="float: right; font-weight: 300; font-size: 15px;" th:text="|작성일 : ${qna.createdDate}|"></span>-->
+                                            </h1>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-left view_value" th:utext="${'문의 구분 : ' + qna.qnaType}"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="view_content text-left">
+                                            <div class="content" th:utext="${qna.qnaContent}">본문내용</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table_view answ" th:if="${qna.qnaAnswer != null}">
+                                <thead>
+                                    <tr>
+                                        <th class="view_tit">
+                                            <p class="view_tit">답변제목</p>
+                                            <p class="date" th:utext="${qna.qnaAnswer}? ${'답변일 : '+ #strings.substring(qna.qnaAnswer.createdDate, 0,10)}"></p>
+    <!--                                        <span style="float: right; font-weight: 300; font-size: 15px;" th:text="|답변일 : ${qna.qnaAnswer.createdDate}|"></span>-->
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="view_content text-left">
+                                            <div class="content" th:utext="${qna.qnaAnswer}? ${qna.qnaAnswer.qaContent}"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="width-100 text-center margin-30-top">
+                                <a href="/myPage/qna" class="btn btn-point submit-btn">목록</a>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+
+    <th:block th:replace="/part/js.html"></th:block>
+    <script type="text/javascript" src="/js/board.js"></script>
+</body>
+</html>

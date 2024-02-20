@@ -1,0 +1,19 @@
+<fieldset class="margin-50-bottom" id="auth">
+    <div class="area_title">
+        <h2>인증코드</h2>
+    </div>
+    <div class="input_wrap input-rounded small-rounded input-line-gray ">
+        <div class="input_col">
+            <div class="input_row">
+                <div class="input_cont">
+                    <h2 id="auth_no" class="text-red" th:text="${result.auth_no}"></h2>
+                    <span class="help-block">※ ARS 인증시 위 코드를 입력해주시기 바랍니다.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="request_at" th:value="${result.request_at}">
+    <input type="hidden" name="natv_tr_no" th:value="${result.natv_tr_no}">
+    <input type="hidden" name="org_telegram_no" th:value="${daNum}">
+    <button type="button" onclick="authDone();" class="btn btn-red-orange">인증완료</button>
+</fieldset>

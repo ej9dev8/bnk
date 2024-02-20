@@ -1,0 +1,25 @@
+<!-- 모달 페이지 시작 -->
+<div class="modal z-index-9999 scroll-y bg-black-op-5" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModal" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="cancelModal" aria-hidden="true" onclick="$('#cancelModal').hide();">x</button>
+        <h4 class="modal-title" id="myModalLabel">반품시 유의사항</h4>
+      </div>
+      <div class="modal-body">
+        <ul class="padding-20-all xs-padding-15-all list-style-disc line-height-26 xs-line-height-22">
+          <li>구매자는 <b class="text-red">최초 유효기간 이내</b>에 [마이 페이지 > 주문내역  > 주문상세] 에서 결제 취소를 요청할 수 있습니다.</li>
+          <li>유효기간 이후 환불 요청을 원할 경우 고객센터로 연락 바랍니다. </li>
+          <li>주문 상태가 ‘<b class="text-red">발행 취소완료</b>’ 또는 ‘<b class="text-red">반품완료</b>’로 변경되면 구매자가 결제한 수단에 따라 환불 소요일 이후에 환불이 됩니다.</li>
+          <li>실시간 계좌이체의 경우 취소/반품 완료 일로부터  약2~3영업일 이내 <b class="text-red">등록된 본인 명의 계좌로 입금</b> 됩니다.</li>
+          <li>기존 등록된 계좌 변경 및 삭제 후 재 등록 하는 경우 ARS 계좌 인증을 먼저 진행해야 취소 / 환불 처리가 가능합니다.</li>
+          <li><b class="text-red" th:text="|자세한 문의는 갤럭시아머니트리㈜  고객센터 (${shop.shopInfo.siCsTel}/${shop.shopInfo.siCsTime}) 주말 및 공휴일 휴무|"></b> </li>
+        </ul>
+      </div>
+      <div class="modal-footer text-center">
+        <button type="button" class="btn btn-point" onclick="refundApply();">반품요청</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 모달 페이지 끝 -->

@@ -1,0 +1,112 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title th:text="|${shop.getShopName()} - 상품|"></title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <!--<section class="padding-section"></section>-->
+                    <section class="padding-section half-padding-section">
+                        <th:block th:replace="/product/categorySearch.html" />
+                        <th:block th:replace="/product/brandSearch.html" />
+                    </section>
+                    <section class="padding-section">
+                        <div name="productListDiv"></div>
+                        <div id="productListDiv"></div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+    <th:block th:replace="/part/js.html"></th:block>
+
+
+    <script th:inline="javascript">
+    function loadProduct(page){
+        var order = $("#prodOrder option:selected").val();
+        if(order==null){
+            order = 4;
+        }
+        var dataParam="page="+page+"&order="+order;
+
+        //브랜드 검색 조건
+        var brandIdxs=$('.brandSearchLi.active');
+        for(var b=0;b<brandIdxs.length;b++){
+            dataParam+='&b_idx='+$(brandIdxs[b]).attr('b_idx');
+        }
+
+        //가격 설정
+        var priceLi=$('.priceLi.active')[0];
+        dataParam+='&min='+$(priceLi).attr('min');
+        dataParam+='&max='+$(priceLi).attr('max');
+
+        //상품그룹에서 검색 시 cf Idx
+        var cfIdx=$($('.cfLi.active')[0]).attr('cf_idx')
+        dataParam+='&cfIdx='+cfIdx;
+
+        $.ajax({
+            url: location.pathname+'/load.load',
+            type: "POST",
+            data : dataParam,
+            success: function(data) {
+                $("#productListDiv").html(data);
+            },
+            error: function(jqXHR, exception,data) {
+
+            }
+        });
+      }
+    </script>
+    <script th:inline="javascript">
+    $(document).ready(function(){
+        //인덱스 간편 검색에서 넘어온 경우 최초 검색 조건 세팅
+        var cfIdx=getParameterByName('cfIdx')
+        if(cfIdx==''){
+            cfIdx=-1;
+        }
+        var b_idxs=[[${b_idxs}]];
+
+        var param_min=[[${param.min}]];
+        if(param_min==null){
+            param_min=[-1];
+        }
+        var param_max=[[${param.max}]];
+        if(param_max==null){
+            param_max=[-1];
+        }
+
+        var priceLi=$('.priceLi[min='+param_min[0]+'][max='+param_max[0]+']');
+
+        if(priceLi.length == 2){
+            //전체보기인경우 원래 active이므로 넘어감
+            //직접입력도 -1,-1이므로 length==2
+        }else{
+            $('.priceLi').removeClass('active');
+
+            if(priceLi.length == 1){
+                priceLi.addClass('active');
+            }else{
+                $('#customPriceLi').addClass('active');
+                $('#customPriceLi').attr('min', param_min);
+                $('#customPriceLi').attr('max', param_max);
+                if(param_min!=-1){
+                    $('#priceSearch1').val(param_min);
+                }
+                if(param_max!=-1){
+                    $('#priceSearch2').val(param_max);
+                }
+            }
+        }
+
+        clickCategoryFirst(cfIdx, b_idxs);
+    });
+    </script>
+</body>
+</html>

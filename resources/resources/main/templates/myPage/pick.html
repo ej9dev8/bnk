@@ -1,0 +1,94 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>마이페이지 - 관심상품</title>
+    <th:block th:replace="/part/meta.html"></th:block>
+    <th:block th:replace="/part/css.html"></th:block>
+</head>
+<body th:classappend="${shop.shopCss.getBodyClass()}">
+    <div class="page-container">
+        <th:block th:replace="/header/header.html"></th:block>
+        <section class="padding-section">
+            <div class="container">
+                <div class="row">
+                    <th:block th:replace="/myPage/comp/menu.html"></th:block>
+                    <div class="col-xs-12">
+                        <div>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="width-100 text-left">
+                                            <div class="margin-20-bottom">
+                                                <button type="button" onclick="Cart.chkDelete()" class="btn btn-sm btn-transparent-gray"><i class="ti-close"></i> 선택삭제</button>
+                                                <button type="button" onclick="Cart.allDelete()" class="btn btn-sm btn-transparent-gray"><i class="ti-close"></i> 전체삭제</button>
+                                            </div>
+                                            <form name="basketForm" method="POST" class="cart_form">
+                                                <fieldset class="margin-50-bottom" id="componentCart">
+                                                    <table class="table sm_table_block" id="componentTable">
+                                                        <thead class="xs-bg-transparent">
+                                                            <tr>
+                                                                <th class="chk_styled width-50px sm-width-100">
+                                                                    <input type="checkbox" id="partAllChk" name="allChk" checked="checked">
+                                                                    <label for="partAllChk" class="display-none sm-display-inline-block">전체선택 <b class="text-red">(2)</b></label>
+                                                                </th>
+                                                                <th class="sm-display-none" style="width:auto">제품 정보</th>
+                                                                <th class="sm-display-none" style="width:100px">수량</th>
+                                                                <th class="sm-display-none" style="width:120px">상품금액</th>
+                                                                <th class="sm-display-none" style="width:120px">주문금액</th>
+                                                                <th class="sm-display-none" style="width:120px">주문/삭제</th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="chk_styled title_none">
+                                                                    <input type="checkbox" id="stock_99" name="chkBox" checked="checked" value="99" pro="99" buy="Y">
+                                                                </td>
+                                                                <td class="text-left sm_prod_view title_none">
+                                                                    <div class="prod_box">
+                                                                        <div class="prod_img">
+                                                                            <a href="/product/detail/200"><img src="/file/product/thumbnail/1588755286377_추가-네이처스톤.jpg" alt="샤르텐 네이쳐스톤" data-no-retina=""></a>
+                                                                        </div>
+                                                                        <div class="prod_detail">
+                                                                            <p class="tit text_cut"><a href="/product/detail/200">롭스 모바일금액권 1만원권 (잔액관리형)(60일)</a></p>
+                                                                            <p class="text-12 text-gray">[브랜드명: 롭스 / 제품명: 롭스 모바일금액권 1만원권 (잔액관리형)(60일) ]</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td data-title="수량">
+                                                                    <div class="count_control sm-float-right">
+                                                                        <form name="prodForm" id="prodForm" method="post">                                                                        <button type="button" onclick="Cart.countControl('-');" class="minus"><i class="ti-minus"></i></button>
+                                                                            <input type="text" class="form-control count" id="count_num_99" value="1" st_idx="99" readonly="readonly">
+                                                                            <button type="button" onclick="Cart.countControl('+');" class="plus"><i class="ti-plus"></i></button>
+                                                                        </form>
+                                                                    </div>
+                                                                </td>
+                                                                <td data-title="상품금액"><b class="sm-float-right price sales" data-sales="14900">14,900</b></td>
+                                                                <td data-title="주문금액"><b class="sm-float-right price purchase" data-purchase="14900">14,900</b></td>
+                                                                <td class="title_none">
+                                                                    <button type="button" onclick="Cart.oneDelete('99', '99')" class="btn btn-sm btn-transparent-dark-gray width-100 sm-width-49 margin-5-bottom sm-no-margin-bottom">삭제</button>
+                                                                    <button type="button" onclick="Cart.nowBuy(this, '99', '99')" class="btn btn-xs btn-dark width-100 sm-width-49">바로구매</button>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </fieldset>
+                                                <input type="hidden" name="empl" id="empl" value="-1">
+                                            </form>
+                                        </div>
+                                        <div class="width-100 margin-50-top text-center">
+                                            <button type="button" onclick="Cart.cartOrder()" class="btn btn-xlg btn-point-outline width-150px xs-width-49">선택상품 주문</button>
+                                            <button type="button" onclick="Cart.cartOrderAll()" class="btn btn-xlg btn-point width-150px xs-width-49">전체상품 주문</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <th:block th:replace="/part/footer.html"></th:block>
+    </div>
+    <th:block th:replace="/part/js.html"></th:block>
+</body>
+</html>
